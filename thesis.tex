@@ -1,0 +1,57 @@
+\documentclass[11pt,a4paper,oneside]{report}
+
+\input{include/packages}
+
+\newcommand{\vikszerzoVezeteknev}{Ghadri}
+\newcommand{\vikszerzoKeresztnev}{Najib}
+
+\newcommand{\vikkonzulensAMegszolitas}{}
+\newcommand{\vikkonzulensAVezeteknev}{Szemenyei}
+\newcommand{\vikkonzulensAKeresztnev}{Márton}
+
+\newcommand{\vikkonzulensBMegszolitas}{}
+\newcommand{\vikkonzulensBVezeteknev}{}
+\newcommand{\vikkonzulensBKeresztnev}{}
+
+\newcommand{\vikcim}{Self-supervised Scene Deep-Understanding with
+Energy-based concept models
+    based on 
+    CNN synergies and
+    stereo imaging} % Cím
+\newcommand{\viktanszek}{\bmeiit} % Tanszék
+\newcommand{\vikdoktipus}{\msc} % Dokumentum típusa (\bsc vagy \msc)
+\newcommand{\vikmunkatipusat}{szakdolgozatot} % a "hallgató nyilatkozat" részhez: szakdolgozatot vagy diplomatervet
+
+\newcommand{\szerzoMeta}{\vikszerzoVezeteknev{} \vikszerzoKeresztnev}
+
+\input{include/thesis-en}
+\input{include/preamble}
+
+\begin{document}
+
+
+%\pagenumbering{gobble}
+%\include{include/project}
+
+\selectthesislanguage
+
+\include{include/titlepage}
+
+\tableofcontents\vfill
+
+%\include{include/declaration} %TODO Hallgatói nyilatkozat
+%\include{content/abstract} %TODO 
+
+
+\pagenumbering{arabic}
+
+%CONTENT
+
+%\include{content/acknowledgement}
+
+\addcontentsline{toc}{chapter}{\bibname}
+\bibliography{bib/mybib}
+
+%\include{content/appendices}
+
+\end{document}
