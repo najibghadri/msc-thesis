@@ -4,6 +4,20 @@ Department of Control Engineering and Information Technolog
 
 Najib Ghadri's research in autonomous driving
 
+Artifacts:
+ - Code
+ - Montage of some drives
+ - Montage yolo detections
+ - Montage depthmaps
+ - Montage All
+ - Measurements on my and cloud GPU
+ - 3D webviz coupled with montage and data
+ - Difference between ground truth and results
+<br/>
+<br/>
+ - Thesis structure
+   - 
+
 # Driving Scene Understanding based on exsitsting Deep CNN combinations and stereo imaging
 
 The concept is the following: I use modern CNNs suchs as YOLOv4, Deep SORT, R-CNN or others to perform object detection, semantic segmentation, and additional
@@ -18,17 +32,6 @@ After extensive research I stumbled upon [CARLA Simulator](http://carla.org/). T
 
 The following is the sensor architecture in my system; Only 10 90° FOV RGB cameras, Front stereo, left/right 45° angled corner stereos and left/right side stereos.
 Here you can see how it looks like with one image for each side:
-
-  <video
-    loop
-    muted
-    autoplay
-    preload="auto"
-    poster="/media/thesis/montage.jpg"
-    >
-    <source src="/media/thesis/montage2.webm" type="video/webm">
-    <source src="/media/thesis/montage2.mp4" type="video/mp4">
-  </video>
 
 With the output combination of CNNs and other algorithms I will then perform ”self-supervised” deep-learning
 with continuous energy-based method to learn the latent space of generic driving scene scenarios.
