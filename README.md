@@ -29,6 +29,7 @@ Artifacts:
        - The unkown problem (hint to energy based models and unsupervised learning)
        - broad - narrow problem
      - Short Proposed solution
+     - All code and thesis available at https://github.com/najibghadri/msc-thesis
      - Short summary of results
      - Structure of Thesis
    - Kind of perceptions
@@ -48,6 +49,7 @@ Artifacts:
      - Odometry
      - Lidaring
    - All related work
+     - Datasets - KITTI, MARS, COCO, Waymo, nuScenes
      - (AlexNet, LeNet, VGG)
      - YOLO
      - R-CNN
@@ -57,20 +59,37 @@ Artifacts:
      - ...
    - Assumptions made to simplify the task
      - Later will talk about improvements
+     - Plane assumption: The objects and road has ~0 pitch and ~0 roll (valid for most of the time)
+     - Time is not important
+     - Human pose does not matter
+     - Day light situation
+
    - Design
      - Which of the algorithms described in the Related Work chapter we chose and why
      - What frameworks are available and how are they different and why we chose the one we chose
      - What hardware components we chose and why (if applies)
      - The simulation idea for dataset and ground truth
-     - Software design (if there is one)
+     - Software design
+       - Python, Scripts, Colab
+     - No training
+     - 
    - Implementation 
      - Tools
-   - Results
-   - Improvements:
-     - The biggest improvements in my opinion are unsupervised learning energy based methods
-   - Conclusion good bye bye
+     - Orientation problematic results with ...
 
-# Driving Scene Understanding based on Stereo Imaging and trained Deep CNN synergy and 
+   - Results
+     - Results I am proud of
+     - precision, recall acc, danger
+     - Dangerousness
+   - Improvements:
+     - Orientation
+     - The biggest improvements in my opinion are unsupervised learning energy based methods
+     - Anti object detection: foreign objects - White list based - difficult problem! (https://link.springer.com/article/10.1186/s13640-018-0261-2)
+
+   - Conclusion good bye bye
+     - My prediction: only an open commond ever-growing AI could qualify as a super driving AI
+
+# Driving Scene Understanding with RGB cameras based on Stereo Imaging and trained Deep CNN synergy
 
 The concept is the following: I use modern CNNs suchs as YOLOv4, Deep SORT, R-CNN or others to perform object detection, semantic segmentation, and additional
 feature detections with classical methods to achieve lane detection such as Hough transform and perform distance estimation using stereo imaging.
@@ -91,7 +110,10 @@ with continuous energy-based method to learn the latent space of generic driving
 
 This is going to be the next part of my thesis that I am still working on.
 
-# References
+
+![image](https://user-images.githubusercontent.com/11639734/82202036-93afa400-9901-11ea-94c7-41fb4bd87bdf.png)
+
+# Bibliography
 
 [Yann LeCun: "Energy-Based Self-Supervised Learning"](https://www.youtube.com/watch?v=A7AnCvYDQrU&list=PL00LRaU8KFs46LT27W0SEMOW34j3N5-bJ&index=12&t=0s)
 
@@ -158,3 +180,5 @@ http://www.rfpro.com/
 ## Courses
 https://selfdrivingcars.mit.edu/
 
+
+# References
