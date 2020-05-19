@@ -16,9 +16,61 @@ Artifacts:
 <br/>
 <br/>
  - Thesis structure
-   - 
+  (before each section list parts)
+   - Abstract:
+     - Subject placement, importance of topic
+     - Related work for comapnies, recent news
+     - Quick summary of what was done and why
+     - How it turned out
+   - Introduction
+     - What is needed for perception to work (problem):
+       - Localization, understanding the surrounding etc
+       - Data set problem
+       - The unkown problem (hint to energy based models and unsupervised learning)
+       - broad - narrow problem
+     - Short Proposed solution
+     - Short summary of results
+     - Structure of Thesis
+   - Kind of perceptions
+     - Object Detection
+     - Classification
+     - Localization
+     - Bounding boxes
+     - Segmentation
+     - Depth estimation
+     - Orientation
+     - 3D detection
+     - Tracking
+     - Vidar Stereo imaging
+     - Road detection:
+     - Lane detection
+     - Driveable Road
+     - Odometry
+     - Lidaring
+   - All related work
+     - (AlexNet, LeNet, VGG)
+     - YOLO
+     - R-CNN
+     - PointNet
+     - VoxelNet
+     - Segmentation Networks
+     - ...
+   - Assumptions made to simplify the task
+     - Later will talk about improvements
+   - Design
+     - Which of the algorithms described in the Related Work chapter we chose and why
+     - What frameworks are available and how are they different and why we chose the one we chose
+     - What hardware components we chose and why (if applies)
+     - The simulation idea for dataset and ground truth
+     - Software design (if there is one)
+   - Implementation 
+     - Tools
+   - Results
+   - Improvements:
+     - The biggest improvements in my opinion are unsupervised learning energy based methods
+   - Conclusion good bye bye
 
-# Driving Scene Understanding based on exsitsting Deep CNN combinations and stereo imaging
+# Driving Scene Understanding based on Stereo Imaging and trained Deep CNN synergy and 
 
 The concept is the following: I use modern CNNs suchs as YOLOv4, Deep SORT, R-CNN or others to perform object detection, semantic segmentation, and additional
 feature detections with classical methods to achieve lane detection such as Hough transform and perform distance estimation using stereo imaging.
