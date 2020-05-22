@@ -21,7 +21,7 @@ Artifacts:
      - Subject placement, importance of topic
      - Related work for comapnies, recent news
      - Quick summary of what was done and why
-     - How it turned out
+     - How it turned out - read more exact on ng.com/msc-thesis
    - Introduction
      - What is needed for perception to work (problem):
        - Localization, understanding the surrounding etc
@@ -52,7 +52,9 @@ Artifacts:
      - Datasets - KITTI, MARS, COCO, Waymo, nuScenes
      - (AlexNet, LeNet, VGG)
      - YOLO
-     - R-CNN
+     - R-CNN, Fast, Faster
+     - Mask R-CNN
+     - Detectron
      - PointNet
      - VoxelNet
      - Segmentation Networks
@@ -65,6 +67,7 @@ Artifacts:
      - Day light situation
 
    - Design
+     - Simulation imaging: HD 720p, Camera matrix, noise, reality, distortion, focus, etc
      - Which of the algorithms described in the Related Work chapter we chose and why
      - What frameworks are available and how are they different and why we chose the one we chose
      - What hardware components we chose and why (if applies)
@@ -73,18 +76,31 @@ Artifacts:
        - Python, Scripts, Colab
      - No training
      - 
-   - Implementation 
+   - Implementation and details
      - Tools
      - Orientation problematic results with ...
-
+     - Projective Camera Model
+     - Camera Calibration
+     - Stereo Block Matching Algorithm
    - Results
      - Results I am proud of
      - precision, recall acc, danger
      - Dangerousness
    - Improvements:
-     - Orientation
+     - Orientation, keypoint detection, wheel, etc detection
+     - Drivable area reconstruction from other actors
+     - Voxel reconstruction of actors
+     - Size based depth correction
+     - Parallax motion based depth correction
+     - Traffic light understanding
+     - Car position and velocity based path detection
+     - Foreign object detection - White list based - difficult problem! (https://link.springer.com/article/10.1186/s13640-018-0261-2)
      - The biggest improvements in my opinion are unsupervised learning energy based methods
-     - Anti object detection: foreign objects - White list based - difficult problem! (https://link.springer.com/article/10.1186/s13640-018-0261-2)
+     - Energy based method - Yann LeCun
+       - Latent space for possible outcomes
+       - Traffic situation understanding
+       - Surrounding understanding
+     - Dark situations: solution: night detectors, different models
 
    - Conclusion good bye bye
      - My prediction: only an open commond ever-growing AI could qualify as a super driving AI
