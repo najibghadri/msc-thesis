@@ -17,11 +17,13 @@ Artifacts:
 <br/>
  - Thesis structure
   (before each section list parts)
+  (highligh in bold the essential parts)
+  (figures will be mentioned)
    - Abstract:
      - Subject placement, importance of topic
      - Related work for comapnies, recent news
      - Quick summary of what was done and why
-     - How it turned out - read more exact on ng.com/msc-thesis
+     - How it turned out - read more exact on najibghadri.com/msc-thesis
    - Introduction
      - What is needed for perception to work (problem):
        - Localization, understanding the surrounding etc
@@ -30,7 +32,8 @@ Artifacts:
        - broad - narrow problem
      - Short Proposed solution
      - All code and thesis available at https://github.com/najibghadri/msc-thesis
-     - Short summary of results
+     - Short summary of results: ...,  detector which uses: state of the art ...
+     - Detector can be used like a plug in
      - Structure of Thesis
    - Kind of perceptions
      - Object Detection
@@ -66,40 +69,52 @@ Artifacts:
      - Human pose does not matter
      - Day light situation
 
-   - Design
-     - Simulation imaging: HD 720p, Camera matrix, noise, reality, distortion, focus, etc
+   - Design and implementation
+     - The simulation idea for dataset and ground truth
+     - Tools used
+       - Linux Ubuntu
+       - VS Code
+       - Python, Scripts, Colab
+       - No training
+     - Stereo imaging
+     - Simulation imaging: HD 720p, Camera matrix, noise, reality, distortion, focus, etc, cropping, occlusion, etc
+     - Two coordinate systems
      - Which of the algorithms described in the Related Work chapter we chose and why
      - What frameworks are available and how are they different and why we chose the one we chose
+     - Depth estimation
+       - Camera Calibration
+       - Projective Camera Model
+       - Stereo Block Matching Algorithm (newer)
+     - Detector - the final solution
+       - Peudo code - the algorithm
+     - Detectron2
+       - About
+       - Why Instance segm
+       - Comparisons
      - What hardware components we chose and why (if applies)
-     - The simulation idea for dataset and ground truth
-     - Software design
-       - Python, Scripts, Colab
-     - No training
-     - 
-   - Implementation and details
-     - Tools
+   - Experimental results
      - Orientation problematic results with ...
-     - Projective Camera Model
-     - Camera Calibration
-     - Stereo Block Matching Algorithm
    - Results
      - Results I am proud of
      - precision, recall acc, danger
      - Dangerousness
-   - Improvements:
-     - Orientation, keypoint detection, wheel, etc detection
-     - Drivable area reconstruction from other actors
-     - Voxel reconstruction of actors
-     - Size based depth correction
-     - Parallax motion based depth correction
-     - Traffic light understanding
-     - Car position and velocity based path detection
-     - Foreign object detection - White list based - difficult problem! (https://link.springer.com/article/10.1186/s13640-018-0261-2)
-     - The biggest improvements in my opinion are unsupervised learning energy based methods
+   - Future improvements
+     - Better scene understanding: road segmentation, path regression
+     - The biggest improvements in my opinion are unsupervised learning energy based methods - for PHD
      - Energy based method - Yann LeCun
        - Latent space for possible outcomes
        - Traffic situation understanding
        - Surrounding understanding
+     - Drivable area reconstruction from other actors
+     - Orientation, keypoint detection, wheel, etc detection
+     - Voxel reconstruction of actors
+     - Car position, tilt, velocity detection and correction, odometric correction
+     - Size based depth correction
+     - Parallax motion based depth correction
+     - Traffic light understanding
+     - Foreign object detection - White list based - difficult problem! (https://link.springer.com/article/10.1186/s13640-018-0261-2)
+
+     
      - Dark situations: solution: night detectors, different models
 
    - Conclusion good bye bye
@@ -127,7 +142,7 @@ with continuous energy-based method to learn the latent space of generic driving
 This is going to be the next part of my thesis that I am still working on.
 
 
-![image](https://user-images.githubusercontent.com/11639734/82202036-93afa400-9901-11ea-94c7-41fb4bd87bdf.png)
+![image](/figures/carla.png)
 
 # Bibliography
 
