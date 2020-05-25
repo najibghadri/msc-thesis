@@ -70,6 +70,7 @@ Artifacts:
      - Day light situation
 
    - Design and implementation
+     - Task flow: simulation, extraction, imaging, 
      - The simulation idea for dataset and ground truth
      - Tools used
        - Linux Ubuntu
@@ -77,7 +78,7 @@ Artifacts:
        - Python, Scripts, Colab
        - No training
      - Stereo imaging
-     - Simulation imaging: HD 720p, Camera matrix, noise, reality, distortion, focus, etc, cropping, occlusion, etc
+     - Simulation imaging: HD 720p, Camera matrix, compression, noise, reality, distortion, focus, etc, cropping, occlusion, etc, throughoutput
      - Two coordinate systems
      - Which of the algorithms described in the Related Work chapter we chose and why
      - What frameworks are available and how are they different and why we chose the one we chose
@@ -91,13 +92,13 @@ Artifacts:
        - About
        - Why Instance segm
        - Comparisons
-     - What hardware components we chose and why (if applies)
    - Experimental results
      - Orientation problematic results with ...
    - Results
      - Results I am proud of
      - precision, recall acc, danger
      - Dangerousness
+     - Hardware requirements
    - Future improvements
      - Better scene understanding: road segmentation, path regression
      - The biggest improvements in my opinion are unsupervised learning energy based methods - for PHD
@@ -142,7 +143,7 @@ with continuous energy-based method to learn the latent space of generic driving
 This is going to be the next part of my thesis that I am still working on.
 
 
-![image](/figures/carla.png)
+![image](/latek/figures/carla.png)
 
 # Bibliography
 
