@@ -145,6 +145,17 @@ This is going to be the next part of my thesis that I am still working on.
 
 ![image](/latek/figures/carla.png)
 
+![image](/latek/figures/3dmodel1.png)
+
+![image](/latek/figures/3dmodel2.png)
+
+![image](/latek/figures/335DP.jpg)
+
+![image](/latek/figures/335DET.jpg)
+
+![image](/latek/figures/335merged.jpg)
+
+
 # Bibliography
 
 [Yann LeCun: "Energy-Based Self-Supervised Learning"](https://www.youtube.com/watch?v=A7AnCvYDQrU&list=PL00LRaU8KFs46LT27W0SEMOW34j3N5-bJ&index=12&t=0s)

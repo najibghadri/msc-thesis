@@ -16,8 +16,8 @@ var len = 0;
 
 var actorColor = {
   t: {
-    walker: { r: 1, g: 1, b: 0, a: 0.5 },
-    vehicle: { r: 1, g: 0.8, b: 1, a: 0.5 },
+    walker: { r: 1, g: 1, b: 0, a: 0.3 },
+    vehicle: { r: 1, g: 0.8, b: 1, a: 0.3 },
   },
   d: {
     walker: { r: 1, g: 1, b: 0, a: 1 },
@@ -117,9 +117,9 @@ function load(frameList, truthOrDet, counter, texts, cylinders, points) {
       pose: {
         orientation: { x: 0, y: 0, z: 0, w: 1 },
         position: {
-          x: actor.relative_position.x + (truthOrDet === "d"? -0.3: 0),
-          y: -(actor.relative_position.y + (truthOrDet ===" d"? 0.4: 0)),
-          z: actor.relative_position.z + (truthOrDet === "d"? -1: 0),
+          x: actor.relative_position.x,
+          y: -actor.relative_position.y,
+          z: actor.relative_position.z,
         },
       },
       scale: actorScale[supertype],
@@ -144,6 +144,7 @@ export default function WebViz() {
       file.text().then((text) => {
         truthFrameList = JSON.parse(text);
         len = Math.max(truthFrameList.length, detectionFrameList.length);
+        console.log(truthFrameList.length)
         setPlaying(false);
         setTLoaded(true);
         setLoaded(true);
@@ -159,6 +160,7 @@ export default function WebViz() {
       file.text().then((text) => {
         detectionFrameList = JSON.parse(text);
         len = Math.max(truthFrameList.length, detectionFrameList.length);
+        console.log(detectionFrameList.length)
         setPlaying(false);
         setDLoaded(true);
         setLoaded(true);
