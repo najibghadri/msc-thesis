@@ -93,13 +93,25 @@ Artifacts:
        - Why Instance segm
        - Comparisons
    - Experimental results
+     - Key point detection - orientation
+     - 3D bounding box detection
+     - YOLO
+     - Dark results
+     - Tracking
+     - Lane detection
      - Orientation problematic results with ...
    - Results
+     - Fine tuning:
+       - Depth mean vs mode
+       - FPS of one side vs all sides
+       - FPS of one side my computer vs Titan X
+       - Different models and their accuracy and FPS one side
      - Results I am proud of
      - precision, recall acc, danger
      - Dangerousness
      - Hardware requirements
    - Future improvements
+     - Less sensors: rectified cameras - exo stereo
      - Better scene understanding: road segmentation, path regression
      - The biggest improvements in my opinion are unsupervised learning energy based methods - for PHD
      - Energy based method - Yann LeCun
