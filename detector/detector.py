@@ -132,8 +132,6 @@ from PIL import Image
 import time
 
 def process(frame, frame_id, imgL, imgR, transform_M, baseline, save=False, label=None):
-    if(imgL is None or imgR is None):
-        return;
     # Calculate disparity with stereo block matching algorithm
     grayL = cv2.cvtColor(imgL, cv2.COLOR_BGR2GRAY)
     grayR = cv2.cvtColor(imgR, cv2.COLOR_BGR2GRAY)
@@ -211,7 +209,7 @@ while(os.path.exists((subpath + str(frame_id) + 'FL.jpg'))):
     if(imgL is not None and imgR is not None):
         imgL[620:H, 360:W] = [0,0,0]
         imgR[620:H, 0:900] = [15,15,15]
-        process(frame, frame_id, imgL, imgR, transform_F, baseline_F, True, "F")
+        process(frame, frame_id, imgL, imgR, transform_F, baseline_F, False, "F")
 
     # Left corner stereo images
     imgL = cv2.imread(subpath + str(frame_id) + 'LC2.jpg')
@@ -219,7 +217,7 @@ while(os.path.exists((subpath + str(frame_id) + 'FL.jpg'))):
     if(imgL is not None and imgR is not None):
         imgL[640:H, 950:W] = [0,0,0]
         imgR[640:H, 900:W] = [15,15,15]
-        process(frame, frame_id, imgL, imgR, transform_LC, baseline_LC, True, "LC")
+        process(frame, frame_id, imgL, imgR, transform_LC, baseline_LC, False, "LC")
     
     # Right corner stereo images
     imgL = cv2.imread(subpath + str(frame_id) + 'RC1.jpg')
@@ -227,17 +225,19 @@ while(os.path.exists((subpath + str(frame_id) + 'FL.jpg'))):
     if(imgL is not None and imgR is not None):
         imgL[640:H, 0:400] = [0,0,0]
         imgR[640:H, 0:320] = [15,15,15]
-        process(frame, frame_id, imgL, imgR, transform_RC, baseline_RC, True, "RC")
+        process(frame, frame_id, imgL, imgR, transform_RC, baseline_RC, False, "RC")
     
     # Left stereo images
     imgL = cv2.imread(subpath + str(frame_id) + 'L2.jpg')
     imgR = cv2.imread(subpath + str(frame_id) + 'L1.jpg')
-    process(frame, frame_id, imgL, imgR, transform_L, baseline_L, True, "L")
+    if(imgL is not None and imgR is not None):
+        process(frame, frame_id, imgL, imgR, transform_L, baseline_L, False, "L")
     
     # Riht stereo images
     imgL = cv2.imread(subpath + str(frame_id) + 'R1.jpg')
     imgR = cv2.imread(subpath + str(frame_id) + 'R2.jpg')
-    process(frame, frame_id, imgL, imgR, transform_R, baseline_R, True, "R")
+    if(imgL is not None and imgR is not None):
+        process(frame, frame_id, imgL, imgR, transform_R, baseline_R, False, "R")
     
     actorLogger.addFrame(frame)
     frame_id += 1
