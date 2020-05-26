@@ -117,9 +117,9 @@ function load(frameList, truthOrDet, counter, texts, cylinders, points) {
       pose: {
         orientation: { x: 0, y: 0, z: 0, w: 1 },
         position: {
-          x: actor.relative_position.x,
-          y: -actor.relative_position.y,
-          z: actor.relative_position.z,
+          x: actor.relative_position.x + (truthOrDet === "d" ? 0.6 : 0),
+          y: -(actor.relative_position.y + (truthOrDet === "d" ? -0.8 : 0) ),
+          z: (supertype ==="vehicle" ? 0 : 0.25 ) ,
         },
       },
       scale: actorScale[supertype],

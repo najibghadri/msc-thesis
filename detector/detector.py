@@ -61,33 +61,32 @@ swap_axes = torch.tensor([[0,0,1.0,0],[1,0,0,0],[0,1.0,0,0],[0,0,0,1.]])
 
 # yaw, pitch, roll
 # Front stereo
-translate_F = torch.tensor([[1.,0,0,-0.3],[0,1.,0,0.4],[0,0,1.,-1.0],[0,0,0,1.]])
+translate_F = torch.tensor([[1.,0,0,0.3],[0,1.,0,-0.4],[0,0,1.,-1.0],[0,0,0,1.]])
 transform_F = torch.mm(translate_F, swap_axes)
 
 # Right Corner stereo
-translate_RC = torch.tensor([[1.,0,0,-0.2],[0,1.,0,-0.4],[0,0,1.,-1.0],[0,0,0,1.]])
+translate_RC = torch.tensor([[1.,0,0,0.2],[0,1.,0,0.4],[0,0,1.,-1.0],[0,0,0,1.]])
 rotate_RC = R.from_euler('zyx', [45.0, 0.0, 0.0], degrees=True).as_matrix()
 rotate_RC = to4x4Tensor(rotate_RC)
 transform_RC = torch.mm(rotate_RC, swap_axes)
 transform_RC = torch.mm(translate_RC, transform_RC)
 
 # Left Corner stereo
-translate_LC = torch.tensor([[1.,0,0,0],[0,1.,0,0.6],[0,0,1.,-1.0],[0,0,0,1.]])
+translate_LC = torch.tensor([[1.,0,0,0],[0,1.,0,-0.6],[0,0,1.,-1.0],[0,0,0,1.]])
 rotate_LC = R.from_euler('zyx', [-45.0, 0.0, 0.0], degrees=True).as_matrix()
 rotate_LC = to4x4Tensor(rotate_LC)
 transform_LC = torch.mm(rotate_LC, swap_axes)
 transform_LC = torch.mm(translate_LC, transform_LC)
 
-
 # Right stereo
-translate_R = torch.tensor([[1.,0,0,0],[0,1.,0,-0.6],[0,0,1.,-1.0],[0,0,0,1.]])
+translate_R = torch.tensor([[1.,0,0,0],[0,1.,0,0.6],[0,0,1.,-1.0],[0,0,0,1.]])
 rotate_R = R.from_euler('zyx', [90.0, 0.0, 0.0], degrees=True).as_matrix()
 rotate_R = to4x4Tensor(rotate_R)
 transform_R = torch.mm(rotate_R, swap_axes)
 transform_R = torch.mm(translate_R, transform_R)
 
 # Left stereo
-translate_L = torch.tensor([[1.,0,0,0.5],[0,1.,0,0.6],[0,0,1.,-1.0],[0,0,0,1.]])
+translate_L = torch.tensor([[1.,0,0,-0.5],[0,1.,0,-0.6],[0,0,1.,-1.0],[0,0,0,1.]])
 rotate_L = R.from_euler('zyx', [-90.0, 0.0, 0.0], degrees=True).as_matrix()
 rotate_L = to4x4Tensor(rotate_L)
 transform_L = torch.mm(rotate_L, swap_axes)

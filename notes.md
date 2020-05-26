@@ -78,6 +78,8 @@ Artifacts:
        - VS Code
        - Python, Scripts, Colab
        - No training
+     - CARLA
+       - LOT OF ISSUES
      - Stereo imaging
      - Simulation imaging: HD 720p, Camera matrix, compression, noise, reality, distortion, focus, etc, cropping, occlusion, etc, throughoutput
      - Two coordinate systems
@@ -86,6 +88,7 @@ Artifacts:
      - Depth estimation
        - Camera Calibration
        - Projective Camera Model
+       - Inverse transformation explain, Translation: same matrix as camera
        - Stereo Block Matching Algorithm (newer)
      - Detector - the final solution
        - Peudo code - the algorithm
@@ -105,6 +108,10 @@ Artifacts:
      - Lane detection
      - Orientation problematic results with ...
    - Results
+     - Explaining errors
+       - Car tilt problem
+       - Carla position problem
+       - Z coordinate hack explain why its ok, CARLA issue
      - Fine tuning:
        - Depth mean vs mode
        - FPS of one side vs all sides
@@ -115,7 +122,7 @@ Artifacts:
        - FPS of one side my computer vs Titan X
          - 
        - Different models and their accuracy and FPS one side
-     - Explaining errors
+     
      - Results I am proud of
      - precision, recall acc, danger
      - Dangerousness
