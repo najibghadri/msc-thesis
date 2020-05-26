@@ -93,6 +93,9 @@ Artifacts:
        - About
        - Why Instance segm
        - Comparisons
+     - Web visualizer
+       -  Framework
+       -  Usage and results
    - Experimental results
      - Key point detection - orientation
      - 3D bounding box detection
@@ -106,9 +109,11 @@ Artifacts:
        - Depth mean vs mode
        - FPS of one side vs all sides
          - All: FPS avg:  0.53 FPS TITAN X
+           - If saving pictures: FPS avg:  0.29
          - One: 
          - Three: 
        - FPS of one side my computer vs Titan X
+         - 
        - Different models and their accuracy and FPS one side
      - Explaining errors
      - Results I am proud of

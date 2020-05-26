@@ -87,7 +87,7 @@ function load(frameList, truthOrDet, counter, texts, cylinders, points) {
 
   frameList[counter].actors.forEach((actor) => {
     let type = actor.type_id.split(".")[0];
-    let supertype = type;
+    let supertype = "vehicle";
     if (
       type === "vehicle" ||
       type === "car" ||
@@ -332,7 +332,7 @@ export default function WebViz() {
         >
           Frame: {tLoaded ? truthFrameList[counter].frame : "-"}
           <br/>
-          Real time: {counter/30.0}s
+          Real time: {(counter/30.0).toFixed(1)}s
         </h1>
       </div>
       <Cubes>
