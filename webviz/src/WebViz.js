@@ -331,6 +331,8 @@ export default function WebViz() {
           }}
         >
           Frame: {tLoaded ? truthFrameList[counter].frame : "-"}
+          <br/>
+          Real time: {counter/30.0}s
         </h1>
       </div>
       <Cubes>
@@ -388,6 +390,19 @@ export default function WebViz() {
             text: "Z 25m",
             pose: {
               position: { x: 0, y: 0, z: 25 },
+            },
+            scale: { x: 1, y: 1, z: 1 },
+          },{
+            text: "X 100m",
+            pose: {
+              position: { x: 100, y: 0, z: 0 },
+            },
+            scale: { x: 1, y: 1, z: 1 },
+          },
+          {
+            text: "Y 100m",
+            pose: {
+              position: { x: 0, y: -100, z: 0 },
             },
             scale: { x: 1, y: 1, z: 1 },
           },

@@ -110,7 +110,7 @@ stereo.setUniquenessRatio(5)
 
 ########### CONFIGURE PATH AND JSON LOGGER
 from actorlogger import ActorLogger, Frame
-path = "/home/najib/Thesis/Rendering/" + str(4)
+path = "/home/najib/Thesis/Rendering/" + str(sys.argv[1])
 subpath = path + "/out/"
 saveimpath = path + "/det/"
 os.makedirs(saveimpath, exist_ok=True)
@@ -132,14 +132,16 @@ import re
 from PIL import Image
 import time
 
-def process(frame, imgL, imgR, transform_M, baseline, save=False, label=None):
+def process(frame, frame_id, imgL, imgR, transform_M, baseline, save=False, label=None):
+    if(imgL is None or imgR is None):
+        return;
     # Calculate disparity with stereo block matching algorithm
     grayL = cv2.cvtColor(imgL, cv2.COLOR_BGR2GRAY)
     grayR = cv2.cvtColor(imgR, cv2.COLOR_BGR2GRAY)
     disparity = stereo.compute(grayL, grayR).astype(np.float32) / 16.0
     
     if(save):
-        saveDepth(disparity, ('%s/%d%s.jpg' % (saveimpath, frame_id, "DP")))
+        saveDepth(disparity, ('%s/%d%s%s.jpg' % (saveimpath, frame_id, label, "DP")))
 
     # Predict detections with detectron2
     outputs = predictor(imgL)
@@ -148,7 +150,7 @@ def process(frame, imgL, imgR, transform_M, baseline, save=False, label=None):
         v = Visualizer(imgL[:, :, ::-1], MetadataCatalog.get(cfg.DATASETS.TRAIN[0]), scale=1)
         v = v.draw_instance_predictions(outputs["instances"].to("cpu"))
         detim = v.get_image()
-        Image.fromarray(detim, 'RGB').save(('%s/%d%s%s.jpg' % (saveimpath, frame.frame, label, "DET")), 'JPEG', quality=85)
+        Image.fromarray(detim, 'RGB').save(('%s/%d%s%s.jpg' % (saveimpath, frame_id, label, "DET")), 'JPEG', quality=85)
     
     # Detect actors
     for i in range(0, len(outputs["instances"])):
@@ -186,7 +188,8 @@ def process(frame, imgL, imgR, transform_M, baseline, save=False, label=None):
         z = float(z)
         frame.addActor("", things[outputs["instances"].pred_classes[i]], 0, {"x": x, "y": y, "z": z })
 
-sortedPaths = sorted(os.listdir(subpath))
+sortedPaths = os.listdir(subpath)
+sortedPaths.sort(key=lambda f: int(re.sub('\D', '', f)))
 frame_id = int(re.search(r'\d+', sortedPaths[0]).group())
 print("First frame: ", frame_id, " last frame: ", re.search(r'\d+', sortedPaths[-1]).group())
 
@@ -202,23 +205,46 @@ while(os.path.exists((subpath + str(frame_id) + 'FL.jpg'))):
     if lasts:
         print("FPS avg: ", np.mean(lasts))
 
-    # Read front stereo images
+    # Front stereo images
     imgL = cv2.imread(subpath + str(frame_id) + 'FL.jpg')
     imgR = cv2.imread(subpath + str(frame_id) + 'FR.jpg')
-    # Hide ego car from front image
-    imgL[620:H, 360:W] = [0,0,0]
-    imgR[620:H, 0:900] = [15,15,15]
-    process(frame, imgL, imgR, transform_F, baseline_F, True, "F")
+    # Hide ego car from front images
+    if(imgL is not None and imgR is not None):
+        imgL[620:H, 360:W] = [0,0,0]
+        imgR[620:H, 0:900] = [15,15,15]
+        process(frame, frame_id, imgL, imgR, transform_F, baseline_F, True, "F")
 
-    # Read left corner stereo images
+    # Left corner stereo images
     imgL = cv2.imread(subpath + str(frame_id) + 'LC2.jpg')
     imgR = cv2.imread(subpath + str(frame_id) + 'LC1.jpg')
-    process(frame, imgL, imgR, transform_LC, baseline_LC, True, "LC")
-
+    if(imgL is not None and imgR is not None):
+        imgL[640:H, 950:W] = [0,0,0]
+        imgR[640:H, 900:W] = [15,15,15]
+        process(frame, frame_id, imgL, imgR, transform_LC, baseline_LC, True, "LC")
+    
+    # Right corner stereo images
+    imgL = cv2.imread(subpath + str(frame_id) + 'RC1.jpg')
+    imgR = cv2.imread(subpath + str(frame_id) + 'RC2.jpg')
+    if(imgL is not None and imgR is not None):
+        imgL[640:H, 0:400] = [0,0,0]
+        imgR[640:H, 0:320] = [15,15,15]
+        process(frame, frame_id, imgL, imgR, transform_RC, baseline_RC, True, "RC")
+    
+    # Left stereo images
+    imgL = cv2.imread(subpath + str(frame_id) + 'L2.jpg')
+    imgR = cv2.imread(subpath + str(frame_id) + 'L1.jpg')
+    process(frame, frame_id, imgL, imgR, transform_L, baseline_L, True, "L")
+    
+    # Riht stereo images
+    imgL = cv2.imread(subpath + str(frame_id) + 'R1.jpg')
+    imgR = cv2.imread(subpath + str(frame_id) + 'R2.jpg')
+    process(frame, frame_id, imgL, imgR, transform_R, baseline_R, True, "R")
+    
     actorLogger.addFrame(frame)
     frame_id += 1
     
     fpsl.append(1.0 / (time.time() - start_time))
-    start_time = time.time()  
+    start_time = time.time() 
 
 actorLogger.save()
+

@@ -31,6 +31,7 @@ Artifacts:
        - The unkown problem (hint to energy based models and unsupervised learning)
        - broad - narrow problem
      - Short Proposed solution
+       - Task flow (flow diagram): simulation, extraction, imaging, 
      - All code and thesis available at https://github.com/najibghadri/msc-thesis
      - Short summary of results: ...,  detector which uses: state of the art ...
      - Detector can be used like a plug in
@@ -70,7 +71,7 @@ Artifacts:
      - Day light situation
 
    - Design and implementation
-     - Task flow: simulation, extraction, imaging, 
+     - Task flow again: simulation, extraction, imaging, 
      - The simulation idea for dataset and ground truth
      - Tools used
        - Linux Ubuntu
@@ -104,8 +105,12 @@ Artifacts:
      - Fine tuning:
        - Depth mean vs mode
        - FPS of one side vs all sides
+         - All: FPS avg:  0.53 FPS TITAN X
+         - One: 
+         - Three: 
        - FPS of one side my computer vs Titan X
        - Different models and their accuracy and FPS one side
+     - Explaining errors
      - Results I am proud of
      - precision, recall acc, danger
      - Dangerousness
@@ -127,7 +132,6 @@ Artifacts:
      - Parallax motion based depth correction
      - Traffic light understanding
      - Foreign object detection - White list based - difficult problem! (https://link.springer.com/article/10.1186/s13640-018-0261-2)
-
      
      - Dark situations: solution: night detectors, different models
 
