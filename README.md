@@ -111,6 +111,7 @@ Artifacts:
      - Dangerousness
      - Hardware requirements
    - Future improvements
+     - Mono depth correction 
      - Less sensors: rectified cameras - exo stereo
      - Better scene understanding: road segmentation, path regression
      - The biggest improvements in my opinion are unsupervised learning energy based methods - for PHD
@@ -160,6 +161,8 @@ This is going to be the next part of my thesis that I am still working on.
 ![image](/latek/figures/3dmodel1.png)
 
 ![image](/latek/figures/3dmodel2.png)
+
+![image](/latek/figures/3dmodel3.png)
 
 ![image](/latek/figures/335DP.jpg)
 
