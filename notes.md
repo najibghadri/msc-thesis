@@ -31,6 +31,7 @@ Artifacts:
        - The unkown problem (hint to energy based models and unsupervised learning)
        - broad - narrow problem
      - Short Proposed solution
+       - Freedom of a simulation
        - Task flow (flow diagram): simulation, extraction, imaging, 
      - All code and thesis available at https://github.com/najibghadri/msc-thesis
      - Short summary of results: ...,  detector which uses: state of the art ...

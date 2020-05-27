@@ -4,11 +4,27 @@
 mkdir montage${2-}
 for N in {0..4000}
 do
-	if [ -e out/${N}FL${2-}.jpg ]
+	if [ -e ${1-out}/${N}F${2-L}.jpg ]
 	then
-		echo $N
-		montage -geometry +0+0 -tile 3x2  ${1-out}/${N}LC2${2-}.jpg ${1-out}/${N}FL${2-}.jpg ${1-out}/${N}RC1${2-}.jpg ${1-out}/${N}L2${2-}.jpg ../black.jpg ${1-out}/${N}R1${2-}.jpg montage${2-}/${N}montage.jpg
+		if [ -z ${var+x} ]
+		then 
+			declare -i start=471
+			echo start $start
+		fi
+		echo current $N
+		convert -crop 50%x50% +repage  ${1-out}/${N}FL.jpg  ${1-out}/${N}}FL.jpg
+		convert -resize 50% ${1-out}/${N}LC${2-2}.jpg ${1-out}/${N}LC${2-2}halfed.jpg
+		convert -resize 50% ${1-out}/${N}RC${2-1}.jpg ${1-out}/${N}RC${2-1}halfed.jpg 
+		convert -resize 50% ${1-out}/${N}L${2-2}.jpg ${1-out}/${N}L${2-2}halfed.jpg 
+		convert -resize 50% ${1-out}/${N}R${2-1}.jpg ${1-out}/${N}R${2-1}halfed.jpg
+
+		montage -geometry +0+0 -tile 2x4 ${1-out}/${N}}FL-0.jpg ${1-out}/${N}}FL-1.jpg ${1-out}/${N}}FL-2.jpg ${1-out}/${N}}FL-3.jpg ${1-out}/${N}LC${2-2}halfed.jpg ${1-out}/${N}RC${2-1}halfed.jpg ${1-out}/${N}L${2-2}halfed.jpg ${1-out}/${N}R${2-1}halfed.jpg montage${2-}/${N}montage.jpg
 	fi
 done
+echo start $start
+ffmpeg -framerate 30 -i montage${2-}/%dmontage.jpg -qscale 0 output${2-}.mp4
+ffmpeg -i output${2-}.mp4 -vcodec libx265 -crf 28 output${2-}_comp1.mp4
+ffmpeg -i output${2-}_comp1.mp4 -vcodec libx265 -crf 30 output${2-}_comp2.mp4
+ffmpeg -i output${2-}_comp2.mp4 -c:v libvpx-vp9 -crf 30 -b:v 1M -b:a 128k -c:a libopus output${2-}.webm
 
-ffmpeg -framerate 30 -pattern_type glob -i 'montage$'${2-}'/*.jpg' -qscale 0 output${2-}.mp4
+
