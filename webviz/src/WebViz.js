@@ -3,27 +3,10 @@ import Worldview, {
   Cubes,
   Axes,
   Text,
-  Spheres,
   Cylinders,
   Arrows,
   Points,
 } from "regl-worldview";
-
-HTMLVideoElement.prototype.playBackwards = function () {
-  this.pause();
-
-  var video = this;
-
-  var fps = 30;
-  var intervalRewind = setInterval(function () {
-    if (video.currentTime == 0) {
-      clearInterval(intervalRewind);
-      video.pause();
-    } else {
-      video.currentTime += -(1 / fps);
-    }
-  }, 1000 / fps);
-};
 
 var truthFrameList = [];
 var detectionFrameList = [];
@@ -32,12 +15,12 @@ var len = 0;
 
 var actorColor = {
   t: {
-    walker: { r: 1, g: 1, b: 0, a: 0.3 },
-    vehicle: { r: 1, g: 0.8, b: 1, a: 0.3 },
+    walker: {  r: 1, g: 0.8, b: 1, a: 0.5 },
+    vehicle: { r: 1, g: 0.8, b: 1, a: 0.5 },
   },
   d: {
-    walker: { r: 1, g: 1, b: 0, a: 1 },
-    vehicle: { r: 1, g: 0, b: 0, a: 1 },
+    walker: { r: 1, g: 0.5, b: 0, a: 1 },
+    vehicle: { r: 0, g: 0.8, b: 0, a: 1 },
   },
 };
 
@@ -118,7 +101,13 @@ function load(frameList, truthOrDet, counter, texts, cylinders, points) {
 
     if (truthOrDet === "d") {
       texts.push({
-        text: actor.type_id + " " + actor.id,
+        text:
+          actor.type_id +
+          " " +
+          actor.id +
+          " ~" +
+          actor.distance.toFixed(1) +
+          "m",
         pose: {
           position: {
             x: actor.relative_position.x,
@@ -147,110 +136,133 @@ function load(frameList, truthOrDet, counter, texts, cylinders, points) {
 export default function WebViz() {
   const [tLoaded, setTLoaded] = useState(false);
   const [dLoaded, setDLoaded] = useState(false);
-  const [loaded, setLoaded] = useState(false);
   const [counter, setCounter] = useState(0);
   const [speed, setSpeed] = useState(30);
-  const [forward, setForward] = useState(true);
   const [playing, setPlaying] = useState(false);
   const [interval, setMyInterval] = useState(null);
 
-  const videoEl = useRef(null);
+  const videoEl1 = useRef(null);
+  const videoEl2 = useRef(null);
+  const videoEl3 = useRef(null);
+  const [video, setVideo] = useState(1);
 
-  const onTruthFile = (event) => {
-    let file = event.target.files[event.target.files.length - 1];
-    if (file) {
-      file.text().then((text) => {
-        truthFrameList = JSON.parse(text);
-        len = Math.max(truthFrameList.length, detectionFrameList.length);
-        console.log(truthFrameList.length);
-        setPlaying(false);
-        setTLoaded(true);
-        setLoaded(true);
-        setCounter(0);
-        console.log("loaded truth");
-      });
-    }
-  };
+  useEffect(() => {
+    const onTruthFile = (data) => {
+      truthFrameList = data;
+      len = Math.max(truthFrameList.length, detectionFrameList.length);
+      console.log(truthFrameList.length);
+      setPlaying(false);
+      setTLoaded(true);
+      setCounter(0);
+      console.log("loaded truth");
+    };
 
-  const onDetectionFile = (event) => {
-    let file = event.target.files[event.target.files.length - 1];
-    if (file) {
-      file.text().then((text) => {
-        detectionFrameList = JSON.parse(text);
-        len = Math.max(truthFrameList.length, detectionFrameList.length);
-        console.log(detectionFrameList.length);
-        setPlaying(false);
-        setDLoaded(true);
-        setLoaded(true);
-        setCounter(0);
-        console.log("loaded detection");
-      });
-    }
-  };
+    const onDetectionFile = (data) => {
+      detectionFrameList = data;
+      len = Math.max(truthFrameList.length, detectionFrameList.length);
+      console.log(detectionFrameList.length);
+      setPlaying(false);
+      setDLoaded(true);
+      setCounter(0);
+      console.log("loaded detection");
+    };
+
+    fetch("rendering/3/detected.json")
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        onDetectionFile(data);
+      })
+      .catch((err) => {});
+    fetch("rendering/3/frameList.json")
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        onTruthFile(data);
+      })
+      .catch((err) => {});
+  }, []);
 
   const onPlay = () => {
     setPlaying((playing) => !playing);
-    ;
-  };
-
-  const onForward = () => {
-    setForward((forward) => !forward);
   };
 
   const onReset = () => {
     setPlaying(false);
     setCounter(0);
-    videoEl.current.currentTime = 0;
+    videoEl1.current.currentTime = 0;
+    videoEl2.current.currentTime = 0;
+    videoEl3.current.currentTime = 0;
   };
 
   const onSpeed = () => {
     setSpeed((speed) => {
-     if (speed === 15) {
-        videoEl.current.playbackRate = 0.5
+      if (speed === 15) {
+        videoEl1.current.playbackRate = 0.5;
+        videoEl2.current.playbackRate = 0.5;
+        videoEl3.current.playbackRate = 0.5;
         return 30;
       } else if (speed === 30) {
-        videoEl.current.playbackRate = 1
+        videoEl1.current.playbackRate = 1;
+        videoEl2.current.playbackRate = 1;
+        videoEl3.current.playbackRate = 1;
         return 60;
       } else if (speed === 60) {
-        videoEl.current.playbackRate = 2
+        videoEl1.current.playbackRate = 2;
+        videoEl2.current.playbackRate = 2;
+        videoEl3.current.playbackRate = 2;
         return 120;
       } else if (speed === 120) {
-        videoEl.current.playbackRate = 4
-        return 5;
+        videoEl1.current.playbackRate = 4;
+        videoEl2.current.playbackRate = 4;
+        videoEl3.current.playbackRate = 4;
+        return 15;
       }
     });
   };
 
-  const play = () => {
-    videoEl.current.play()
-    setMyInterval(
-      setInterval(() => {
-        setCounter((counter) => {
-          let virtualTime = (counter / 30.0);
-          if(videoEl.current.currentTime > virtualTime  ){
-            videoEl.current.pause();
-          } else {
-            videoEl.current.play();
-          }
-          let newC = forward ? counter + 1 : counter - 1;
-          newC = ((newC % len) + len) % len;
-          console.log(newC);
-          return newC;
-        });
-      }, 1000 / speed)
-    );
-  };
-
-  const clear = () => {
-    setMyInterval((interval) => {
-      clearInterval(interval);
-      videoEl.current.pause()
-      return null;
-    });
-  };
-
   useEffect(() => {
-    console.log("player effect");
+    const controlVideo = (videoEl, simTime) => {
+      if (videoEl.current.currentTime > simTime) {
+        videoEl.current.pause();
+        if (simTime === 0) {
+          videoEl.current.currentTime = 0;
+        }
+      } else {
+        videoEl.current.play();
+      }
+    };
+
+    const play = () => {
+      videoEl1.current.play();
+      videoEl2.current.play();
+      videoEl3.current.play();
+      setMyInterval(
+        setInterval(() => {
+          setCounter((counter) => {
+            let simTime = counter / 30;
+            controlVideo(videoEl1, simTime);
+            controlVideo(videoEl2, simTime);
+            controlVideo(videoEl3, simTime);
+            let newC = counter + 1;
+            newC = ((newC % len) + len) % len;
+            return newC;
+          });
+        }, 1000 / speed)
+      );
+    };
+
+    const clear = () => {
+      setMyInterval((interval) => {
+        clearInterval(interval);
+        videoEl1.current.pause();
+        videoEl2.current.pause();
+        videoEl3.current.pause();
+        return null;
+      });
+    };
 
     if (playing) {
       clear();
@@ -258,7 +270,9 @@ export default function WebViz() {
     } else if (!playing) {
       clear();
     }
-  }, [playing, speed, forward]);
+
+    return clear; // clear listener
+  }, [playing, speed]);
 
   let texts = [];
   let cylinders = [];
@@ -268,19 +282,18 @@ export default function WebViz() {
   if (dLoaded) load(detectionFrameList, "d", counter, texts, cylinders, points);
 
   useEffect(() => {
-    if (!loaded) return;
     function onKey(e) {
       switch (e.code) {
         case "Digit1":
           onPlay();
           break;
+        // case "Digit2":
+        //   onForward();
+        //   break;
         case "Digit2":
-          onForward();
-          break;
-        case "Digit3":
           onSpeed();
           break;
-        case "Digit4":
+        case "Digit3":
           onReset();
           break;
         default:
@@ -289,159 +302,172 @@ export default function WebViz() {
     }
 
     document.addEventListener("keydown", onKey);
-
-    return clear; // clear listener
-  }, [loaded]);
+  }, [tLoaded, dLoaded]);
 
   return (
-    <div className="webVizContainer">
-      <video src="videos/output.webm" ref={videoEl}></video>
-      <div className="worldViewContainer">
-        <Worldview
-          defaultCameraState={{ thetaOffset: (Math.PI / 7) * 3 }}
-          keyMap={{
-            KeyA: "moveLeft",
-            KeyD: "moveRight",
-            KeyE: "rotateRight",
-            KeyF: "tiltUp",
-            KeyQ: "rotateLeft",
-            KeyR: "tiltDown",
-            KeyS: "moveDown",
-            KeyW: "moveUp",
-            KeyX: "zoomOut",
-            KeyZ: "zoomIn",
-          }}
-        >
+    <div className="app">
+      <div className="videoContainer">
+        <video
+          style={{ zIndex: video === 0 ? 1 : 0 }}
+          src="rendering/3/output.webm"
+          ref={videoEl1}
+        ></video>
+        <video
+          style={{ zIndex: video === 1 ? 1 : 0 }}
+          src="rendering/3/outputDET.webm"
+          ref={videoEl2}
+        ></video>
+        <video
+          style={{ zIndex: video === 2 ? 1 : 0 }}
+          src="rendering/3/outputDP.webm"
+          ref={videoEl3}
+        ></video>
+        <div className="videoControl">
+          <p>Video:</p>
+          <button onClick={() => setVideo(0)}>
+            {video === 0 ? <strong>Original</strong> : "Original"}
+          </button>
+          <button onClick={() => setVideo(1)}>
+            {video === 1 ? <strong>Detection</strong> : "Detection"}
+          </button>
+          <button onClick={() => setVideo(2)}>
+            {video === 2 ? <strong>Depth map</strong> : "Depth map"}
+          </button>
+        </div>
+      </div>
+      <div className="webViz">
+        <div className="controlBoard">
           <div
             style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
               display: "flex",
-              flexWrap: "wrap",
+              flexDirection: "column",
             }}
           >
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                width: "180px",
-                backgroundColor: "white",
-              }}
-            >
-              Choose ground truth log:
-              <input
-                title="Choose frame list json file"
-                type="file"
-                id="file"
-                onChange={onTruthFile}
-              />
-              Choose detection log:
-              <input
-                title="Choose frame list json file"
-                type="file"
-                id="file"
-                onChange={onDetectionFile}
-              />
-              <button disabled={!loaded} onClick={onPlay}>
-                Play/Pause (1)
-              </button>
-              <button disabled={!loaded} onClick={onForward}>
-                Forward/Backward (2): {forward ? "forward" : "backward"}
-              </button>
-              <button disabled={!loaded} onClick={onSpeed}>
-                Speed (3): {speed}fps
-              </button>
-              <button disabled={!loaded} onClick={onReset}>
-                Reset (4)
-              </button>
-            </div>
-            <h1
-              style={{
-                color: "white",
-                margin: "1rem 1.5rem",
-              }}
-            >
+            <button disabled={!tLoaded && !dLoaded} onClick={onPlay}>
+              Play/Pause <strong>(1)</strong>
+            </button>
+            <button disabled={!tLoaded && !dLoaded} onClick={onSpeed}>
+              Speed <strong>(2)</strong>: <strong>{speed}fps</strong>
+            </button>
+            <button disabled={!tLoaded && !dLoaded} onClick={onReset}>
+              Reset <strong>(3)</strong>
+            </button>
+          </div>
+          <div
+            style={{
+              margin: "1rem 1.5rem",
+            }}
+          >
+            <h1>
               Frame: {tLoaded ? truthFrameList[counter].frame : "-"}
               <br />
-              Real time: {(counter / 30.0).toFixed(1)}s
+              Simulation time: {(counter / 30.0).toFixed(1)}s
             </h1>
+            <p><span class="gv"></span><span class="gw"></span> Ground truth</p>
+            <p><span class="dv"></span><span class="dw"></span> Detected</p>
+            <p>Use your mouse!</p>
+            <p>Left click move camera</p>
+            <p>Right click tilt camera</p>
+            <p>Scroll to zoom</p>
           </div>
-          <Cubes>
-            {[
-              {
-                pose: {
-                  orientation: { x: 0, y: 0, z: 0, w: 1 },
-                  position: {
-                    x: 0,
-                    y: 0,
-                    z: 0,
+        </div>
+        <div className="worldView">
+          <Worldview
+            defaultCameraState={{
+              distance: 37.40851758105467,
+              fovy: 0.7853981633974483,
+              phi: 1.1931202979777147,
+              thetaOffset: 1.3685363026390311,
+            }}
+            keyMap={{
+              KeyA: "moveLeft",
+              KeyD: "moveRight",
+              KeyE: "rotateRight",
+              KeyF: "tiltUp",
+              KeyQ: "rotateLeft",
+              KeyR: "tiltDown",
+              KeyS: "moveDown",
+              KeyW: "moveUp",
+              KeyX: "zoomOut",
+              KeyZ: "zoomIn",
+            }}
+          >
+            <Cubes>
+              {[
+                {
+                  pose: {
+                    orientation: { x: 0, y: 0, z: 0, w: 1 },
+                    position: {
+                      x: 0,
+                      y: 0,
+                      z: 0,
+                    },
                   },
+                  scale: { x: 4, y: 1.8, z: 1.5 },
+                  // rgba values are between 0 and 1 (inclusive)
+                  color: { r: 1, g: 0, b: 0, a: 1 },
                 },
-                scale: { x: 4, y: 1.8, z: 1.5 },
-                // rgba values are between 0 and 1 (inclusive)
-                color: { r: 1, g: 0, b: 0, a: 1 },
-              },
-            ]}
-          </Cubes>
+              ]}
+            </Cubes>
 
-          <Points>{points}</Points>
-          <Cylinders>{cylinders}</Cylinders>
-          <Text autoBackgroundColor>{texts}</Text>
+            <Points>{points}</Points>
+            <Cylinders>{cylinders}</Cylinders>
+            <Text autoBackgroundColor>{texts}</Text>
 
-          <Axes />
-          <Arrows>
-            {[
-              {
-                pose: {
-                  orientation: { x: 1, y: 0, z: 0, w: 0 },
-                  position: { x: 0, y: 0, z: 0 },
+            <Axes />
+            <Arrows>
+              {[
+                {
+                  pose: {
+                    orientation: { x: 1, y: 0, z: 0, w: 0 },
+                    position: { x: 0, y: 0, z: 0 },
+                  },
+                  scale: { x: 10, y: 0.8, z: 0.8 },
+                  color: { r: 1, g: 1, b: 1, a: 1 },
                 },
-                scale: { x: 10, y: 0.8, z: 0.8 },
-                color: { r: 1, g: 1, b: 1, a: 1 },
-              },
-            ]}
-          </Arrows>
-          <Text autoBackgroundColor>
-            {[
-              {
-                text: "X 50m",
-                pose: {
-                  position: { x: 50, y: 0, z: 0 },
+              ]}
+            </Arrows>
+            <Text autoBackgroundColor>
+              {[
+                {
+                  text: "X 50m",
+                  pose: {
+                    position: { x: 50, y: 0, z: 0 },
+                  },
+                  scale: { x: 1, y: 1, z: 1 },
                 },
-                scale: { x: 1, y: 1, z: 1 },
-              },
-              {
-                text: "Y 50m",
-                pose: {
-                  position: { x: 0, y: -50, z: 0 },
+                {
+                  text: "Y 50m",
+                  pose: {
+                    position: { x: 0, y: -50, z: 0 },
+                  },
+                  scale: { x: 1, y: 1, z: 1 },
                 },
-                scale: { x: 1, y: 1, z: 1 },
-              },
-              {
-                text: "Z 25m",
-                pose: {
-                  position: { x: 0, y: 0, z: 25 },
+                {
+                  text: "Z 25m",
+                  pose: {
+                    position: { x: 0, y: 0, z: 25 },
+                  },
+                  scale: { x: 1, y: 1, z: 1 },
                 },
-                scale: { x: 1, y: 1, z: 1 },
-              },
-              {
-                text: "X 100m",
-                pose: {
-                  position: { x: 100, y: 0, z: 0 },
+                {
+                  text: "X 100m",
+                  pose: {
+                    position: { x: 100, y: 0, z: 0 },
+                  },
+                  scale: { x: 1, y: 1, z: 1 },
                 },
-                scale: { x: 1, y: 1, z: 1 },
-              },
-              {
-                text: "Y 100m",
-                pose: {
-                  position: { x: 0, y: -100, z: 0 },
+                {
+                  text: "Y 100m",
+                  pose: {
+                    position: { x: 0, y: -100, z: 0 },
+                  },
+                  scale: { x: 1, y: 1, z: 1 },
                 },
-                scale: { x: 1, y: 1, z: 1 },
-              },
-            ]}
-          </Text>
-        </Worldview>
+              ]}
+            </Text>
+          </Worldview>
+        </div>
       </div>
     </div>
   );
