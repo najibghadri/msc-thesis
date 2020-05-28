@@ -147,6 +147,8 @@ Artifacts:
 
 # Driving Scene Understanding with RGB cameras based on Stereo Imaging and trained Deep CNN synergy
 
+# Introduction
+
 The concept is the following: I use modern CNNs suchs as YOLOv4, Deep SORT, R-CNN or others to perform object detection, semantic segmentation, and additional
 feature detections with classical methods to achieve lane detection such as Hough transform and perform distance estimation using stereo imaging.
 
