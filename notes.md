@@ -31,11 +31,18 @@ Artifacts:
      - Short summary of results: ...,  detector which uses: state of the art ...
      - Detector can be used like a plug in
      - Structure of Thesis
+   - Related work
+     - Tesla
+     - MobileEye
    - Kind of perceptions
+     - Intro to Deep Learning  and CNNs
+     - Object classification
      - Object Detection
      - Classification
      - Localization
-     - Bounding boxes
+     - Bounding box detection
+     - Voxelization
+     - Key point detection
      - Segmentation
      - Depth estimation
      - Orientation
@@ -47,21 +54,22 @@ Artifacts:
      - Driveable Road
      - Odometry
      - Lidaring
-   - All related work
-     - Datasets - KITTI, MARS, COCO, Waymo, nuScenes
-     - (AlexNet, LeNet, VGG)
-     - YOLO
-     - R-CNN, Fast, Faster
-     - Mask R-CNN
-     - Detectron
-     - PointNet
-     - VoxelNet
-     - Segmentation Networks
-     - ...
+     - Algorithms to talk about:
+       - Datasets - KITTI, MARS, COCO, Waymo, nuScenes
+       - (AlexNet, LeNet, VGG)
+       - YOLO
+       - R-CNN, Fast, Faster
+       - Mask R-CNN
+       - Detectron
+       - PointNet
+       - VoxelNet
+       - Segmentation Networks
+       - ....
+
    - Assumptions made to simplify the task
      - Later will talk about improvements
      - Plane assumption: The objects and road has ~0 pitch and ~0 roll (valid for most of the time)
-     - Time is not important
+     - No consistency through time
      - Human pose does not matter
      - Day light situation
 
