@@ -1,24 +1,35 @@
 # Budapest University of Technology and Economics
+
 Faculty of Electrical Engineering and Informatics \
 Department of Control Engineering and Information Technolog
 
 Artifacts:
- - CARLA Simulator code
- - Python detector 
- - 3D Webvisualizer coupled with montage and data
- - Difference between ground truth and results
-<br/>
-<br/>
- - Thesis structure
+
+- CARLA Simulator code
+- Python detector
+- 3D Webvisualizer coupled with montage and data
+- Difference between ground truth and results
+  <br/>
+  <br/>
+- Thesis structure
   (before each section list parts)
   (highligh in bold the essential parts)
   (figures will be mentioned)
-   - Abstract:
+
+# Abstract:
+
      - Subject placement, importance of topic
      - Related work for comapnies, recent news
      - Quick summary of what was done and why
      - How it turned out - read more exact on najibghadri.com/msc-thesis
-   - Introduction
+
+# Introduction
+     - fill images
+     - Motivation
+     - Analyze task
+     - More detailed introduction
+     - Why it is difficult
+     - What is a good system to develop this? Tesla says real world I say both
      - What is needed for perception to work (problem):
        - Localization, understanding the surrounding etc
        - Data set problem
@@ -26,112 +37,130 @@ Artifacts:
        - broad - narrow problem
      - Short Proposed solution
        - Freedom of a simulation
-       - Task flow (flow diagram): simulation, extraction, imaging, 
-     - All code and thesis available at https://github.com/najibghadri/msc-thesis
+       - Task flow (flow diagram): simulation, extraction, imaging,
      - Short summary of results: ...,  detector which uses: state of the art ...
      - Detector can be used like a plug in
      - Structure of Thesis
-   - Related work
-     - Tesla
-     - MobileEye
-   - Kind of perceptions
-     - Intro to Deep Learning  and CNNs
-     - Object classification
-     - Object Detection
-     - Classification
-     - Localization
-     - Bounding box detection
-     - Voxelization
-     - Key point detection
-     - Segmentation
-     - Depth estimation
-     - Orientation
-     - 3D detection
-     - Tracking
-     - Vidar Stereo imaging
-     - Road detection:
-     - Lane detection
-     - Driveable Road
-     - Odometry
-     - Lidaring
-     - Algorithms to talk about:
-       - Datasets - KITTI, MARS, COCO, Waymo, nuScenes
-       - (AlexNet, LeNet, VGG)
-       - YOLO
-       - R-CNN, Fast, Faster
-       - Mask R-CNN
-       - Detectron
-       - PointNet
-       - VoxelNet
-       - Segmentation Networks
-       - ....
+       - Lastly about Energy based methods
+       - Each chapter
+     - All code and thesis available at https://github.com/najibghadri/msc-thesis and the published verision on my website
 
-   - Assumptions made to simplify the task
+# Related work
+     - fill images
+     - Tesla
+       - Their view on simulations
+       - Lidar sensors provide a 3D sparse pointcloud but they are very expensive.
+       - 
+     - MobileEye
+       -  do some pros/cons
+
+# Kind of perceptions
+     - fill images
+     - do some pros/cons
+       - Intro to Deep Learning  and CNNs
+       - Object classification
+       - Object Detection
+       - Classification
+       - Localization
+       - Bounding box detection
+       - Voxelization
+       - Key point detection
+       - Segmentation
+       - Depth estimation
+       - Orientation
+       - 3D detection
+       - Tracking
+       - Vidar Stereo imaging
+       - Road detection:
+       - Lane detection
+       - Driveable Road
+       - Odometry
+       - Lidaring
+       - Algorithms to talk about:
+         - Datasets - KITTI, MARS, COCO, Waymo, nuScenes
+         - (AlexNet, LeNet, VGG)
+         - YOLO
+         - R-CNN, Fast, Faster
+         - Mask R-CNN - Detectron2
+         - Detectron
+         - PointNet
+         - VoxelNet
+         - Segmentation Networks
+         - ....
+
+# Assumptions made and limitations
+     - to simplify the task
      - Later will talk about improvements
      - Plane assumption: The objects and road has ~0 pitch and ~0 roll (valid for most of the time)
      - No consistency through time
      - Human pose does not matter
      - Day light situation
 
-   - Design and implementation
-     - Task flow again: simulation, extraction, imaging, 
-     - The simulation idea for dataset and ground truth
+# Design and implementation
+     - Task flow again: simulation, extraction, imaging,
+     - The simulation idea for dataset and ground truth instead of dataset
+       - Drawbacks, limitations
+       - Pros cons
      - Tools used
        - Linux Ubuntu
        - VS Code
        - Python, Scripts, Colab
-       - No training
      - CARLA
        - LOT OF ISSUES
      - Stereo imaging
      - Simulation imaging: HD 720p, Camera matrix, compression, noise, reality, distortion, focus, etc, cropping, occlusion, etc, throughoutput
      - Two coordinate systems
      - Which of the algorithms described in the Related Work chapter we chose and why
+     - No training
      - What frameworks are available and how are they different and why we chose the one we chose
-     - Depth estimation
-       - Camera Calibration
-       - Projective Camera Model
-       - Inverse transformation explain, Translation: same matrix as camera
-       - Stereo Block Matching Algorithm (newer)
-     - Detector - the final solution
-       - Peudo code - the algorithm
      - Detectron2
        - About
        - Why Instance segm
        - Comparisons
+     - Depth estimation
+       - Camera Calibration
+       - Projective Camera Model
+       - Inverse transformation explain, Translation: same matrix as camera why
+       - Stereo Block Matching Algorithm (newer)
+     - Detector - the final solution
+       - Peudo code - the algorithm
      - Web visualizer
        -  Framework
        -  Usage and results
-   - Experimental results
-     - Key point detection - orientation
-     - 3D bounding box detection
-     - YOLO
-     - Dark results
-     - Tracking
-     - Lane detection
-     - Orientation problematic results with ...
-   - Results
+
+# Results
      - Explaining errors
        - Car tilt problem
        - Carla position problem
        - Z coordinate hack explain why its ok, CARLA issue
      - Fine tuning:
        - Depth mean vs mode
-       - FPS of one side vs all sides
-         - All: FPS avg:  0.53 FPS TITAN X
+       - FPS
+         - All sides: FPS avg:  0.53 FPS TITAN X
            - If saving pictures: FPS avg:  0.29
-         - One: 
-         - Three: 
+         - One side:
+         - Three sides:
        - FPS of one side my computer vs Titan X
-         - 
        - Different models and their accuracy and FPS one side
-     
+         - Mask R CNN
      - Results I am proud of
-     - precision, recall acc, danger
+     - Precision, recall acc, danger
      - Dangerousness
      - Hardware requirements
-   - Future improvements
-     - Mono depth correction 
+     
+# Experimental results
+     - Tracking
+     - YOLO
+     - Lane detection
+     - 3D Bounding box detection
+     - Keypoint detection
+     - Night results
+     
+
+
+# Future improvements
+     - Correlation
+     - Mono depth correction
      - Less sensors: rectified cameras - exo stereo
      - Better scene understanding: road segmentation, path regression
      - The biggest improvements in my opinion are unsupervised learning energy based methods - for PHD
@@ -147,13 +176,18 @@ Artifacts:
      - Parallax motion based depth correction
      - Traffic light understanding
      - Foreign object detection - White list based - difficult problem! (https://link.springer.com/article/10.1186/s13640-018-0261-2)
-     
+
      - Dark situations: solution: night detectors, different models
 
-   - Conclusion good bye bye
-     - My prediction: only an open commond ever-growing AI could qualify as a super driving AI
+# Conclusion good bye bye
 
-# Driving Scene Understanding with RGB cameras based on Stereo Imaging and trained Deep CNN synergy
+     - My prediction: only an open commond ever-growing AI could qualify as a super driving AI
+     - Give general conclusion (what we did and why is it good)
+     - Evaluate results quickly
+     - Describe opportunities for further research/improvement
+
+
+# Driving Scene Understanding in Simulation with Stereo RGB cameras and CNN synergy
 
 # Introduction
 
@@ -161,7 +195,7 @@ The concept is the following: I use modern CNNs suchs as YOLOv4, Deep SORT, R-CN
 feature detections with classical methods to achieve lane detection such as Hough transform and perform distance estimation using stereo imaging.
 
 For this project I decided that I will test my system on a simulation. This gives me great freedom and efficiency to focus on developing
-the algorithms instead of worrying about the lack of good datasets, because as we know, generating a dataset is half of the hustle in ML today (yet). 
+the algorithms instead of worrying about the lack of good datasets, because as we know, generating a dataset is half of the hustle in ML today (yet).
 However in a simulation you can do anythis almost instantly if you put aside the rendering time. Put arbitrary number of cameras anywhere, use any car,
 be on any kind of road, use camera effects, generate ground truth of any kind programatically (bounding boxes, segmentation, depth, steering data, location data).
 
@@ -173,9 +207,7 @@ Here you can see how it looks like with one image for each side:
 With the output combination of CNNs and other algorithms I will then perform ”self-supervised” deep-learning
 with continuous energy-based method to learn the latent space of generic driving scene scenarios.
 
-
 This is going to be the next part of my thesis that I am still working on.
-
 
 ![image](/latek/figures/carla.png)
 
@@ -191,6 +223,7 @@ This is going to be the next part of my thesis that I am still working on.
 
 ![image](/latek/figures/335merged.jpg)
 
+![image](/latek/figures/webviz2.png)
 
 # Bibliography
 
@@ -257,7 +290,7 @@ http://www.rfpro.com/
 [Ascent Robotics](https://ascent.ai/en/)
 
 ## Courses
-https://selfdrivingcars.mit.edu/
 
+https://selfdrivingcars.mit.edu/
 
 # References

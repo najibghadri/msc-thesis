@@ -9,28 +9,46 @@
 %----------------------------------------------------------------------------
 \chapter*{Abstract}\addcontentsline{toc}{chapter}{Abstract}
 
-Autonomous driving is undoubtedly the future of transportation. The comfort that it brings us is what drives us to work on making it real. We already have autonomous
-systems in public transportation in abundance, but it is different when we talk about the car roads. Driving a car requires near-human intelligence
-due to the nature of the environment, in fact it is impossible to define the environment. A train's or subways's environment can be defined mathematically and hence controlled
-easly, but for a machine to drive a car, it has to understand what we understand, and what we understand is even hard to define ourselves.
+Autonomous driving is undoubtedly the future of transportation. The comfort that
+it brings us is what drives us to work on making it real. We already have
+autonomous systems in public transportation in abundance, but it is different
+when we talk about the car roads. Driving a car requires near-human intelligence
+due to the nature of the environment, in fact it is impossible to define the
+environment. A train's or subways's environment can be defined mathematically
+and hence controlled easly, but for a machine to drive a car, it has to
+understand what we understand, and what we understand is even hard to define
+ourselves.
 
-Computer science has come a long way, and we have already seen the rise of artificial intelligence algorithms and their effectiveness. Out of these methods Deep Learning and 
-Convolutional Neural Networks are key tools in achieving our goal. With these algorithms computers learn general concepts of the world, and this is essential to make a
-safe autonomous driving (AD) system. We will see in this work briefly what they are and how they work. 
+Computer science has come a long way, and we have already seen the rise of
+artificial intelligence algorithms and their effectiveness. Out of these methods
+Deep Learning and Convolutional Neural Networks are key tools in achieving our
+goal. With these algorithms computers learn general concepts of the world, and
+this is essential to make a safe autonomous driving (AD) system. We will see in
+this work briefly what they are and how they work. 
 
-Some notable companies have already achieved a high level AD, most notably Tesla, or another AD supplier MobileEye. These companies use algorithms that are 
-developed globally and publicly and I am going to use the same algorithms to partly achieve what they have achieved. 
+Some notable companies have already achieved a high level of AD, most notably
+Tesla, and another AD supplier MobilEye. These companies use algorithms that are
+developed globally and publicly and I am going to use the same algorithms to
+partly achieve what they have achieved. 
 
-In this work I am going to create a Scene Understanding system specialized for driving situations. I choose to evaluate the system on a virtual car driving simulation called 
-CARLA Sim, that is going to benefit us to measure our rate of success.
+In this work I am going to create a Scene Understanding system specialized for
+driving situations. I choose to evaluate the system on a virtual car driving
+simulation called CARLA Sim, that is going to benefit us to measure our rate of
+success.
 
-I researched how existing autonomous driving systems have been built, and inspired by them I designed a system that is capable of recognizing important information 
-for a car on the road. I used stereo imaging of multiple RGB cameras mounted on top of our virtual car for depth estimation and used trained Convolutional Neural Networks to 
-then perform further infomration extraction from the images and perform detection for each frame of the simulation. I made a 3D webvisualizer that is able to show us the difference 
-between ground truth information extracted programatically from the simulator and the detection infomration while simultaneously play a montage video of the simulation.
-Finally I evaluated the system and measured it's validity for real situations and provided further improvement notes on my work. 
-This thesis is also published on \url{https://najibghadri.com/msc-thesis/} where 
-you can try the 3D webvisualizer.
+I researched how existing autonomous driving systems have been built, and
+inspired by them I designed a system that is capable of recognizing important
+information for a car on the road. I used stereo imaging of multiple RGB cameras
+mounted on top of our virtual car for depth estimation and used trained
+Convolutional Neural Networks to then perform further infomration extraction
+from the images and perform detection for each frame of the simulation. I made a
+3D webvisualizer that is able to show us the difference between ground truth
+information extracted programatically from the simulator and the detection
+infomration while simultaneously play a montage video of the simulation. Finally
+I evaluated the system and measured it's validity for real situations and
+provided further improvement notes on my work. This thesis is also published on
+\url{https://najibghadri.com/msc-thesis/} where you can try the 3D
+webvisualizer.
 
 \vfill
 \selectthesislanguage
