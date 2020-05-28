@@ -14,8 +14,7 @@
 \newcommand{\vikkonzulensBKeresztnev}{}
 
 \newcommand{\vikcim}{Driving Scene Understanding with 
-RGB cameras based on Stereo 
-Imaging and trained Deep CNN synergy} 
+Stereo RGB cameras and CNN synergy} 
 \newcommand{\viktanszek}{\bmeiit} 
 \newcommand{\vikdoktipus}{\msc} 
 \newcommand{\vikmunkatipusat}{szakdolgozatot} % a "hallgató nyilatkozat"
@@ -25,31 +24,55 @@ Imaging and trained Deep CNN synergy}
 \input{include/thesis-en}
 \input{include/preamble}
 
+
+%--------------------------------------------------------------------------------------
+% Table of contents and the main text
+%--------------------------------------------------------------------------------------
 \begin{document}
 
 
-%\pagenumbering{gobble}
-%\include{include/project}
+\pagenumbering{gobble}
+\include{include/project}
 
 \selectthesislanguage
 
+% Titlepage
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \include{include/titlepage}
 
+% Table of Contents
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \tableofcontents\vfill
 
-%\include{include/declaration} %TODO Hallgatói nyilatkozat
-%\include{content/abstract} %TODO 
+% Declaration and Abstract
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\include{include/declaration}
+\include{content/abstract}
 
 
 \pagenumbering{arabic}
 
-%CONTENT
+% The main part of the thesis
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\include{content/introduction}
+\include{content/latex-tools}
+\include{content/thesis-format}
+\include{content/template-usage}
 
-%\include{content/acknowledgement}
 
+
+
+% Acknowledgements
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\include{content/acknowledgement}
+
+% Bibliography
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \addcontentsline{toc}{chapter}{\bibname}
 \bibliography{bib/mybib}
 
-%\include{content/appendices}
+% Appendix
+%~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\include{content/appendices}
 
 \end{document}

@@ -2,16 +2,10 @@
 Faculty of Electrical Engineering and Informatics \
 Department of Control Engineering and Information Technolog
 
-Najib Ghadri's research in autonomous driving
-
 Artifacts:
- - Code
- - Montage of some drives
- - Montage yolo detections
- - Montage depthmaps
- - Montage All
- - Measurements on my and cloud GPU
- - 3D webviz coupled with montage and data
+ - CARLA Simulator code
+ - Python detector 
+ - 3D Webvisualizer coupled with montage and data
  - Difference between ground truth and results
 <br/>
 <br/>
