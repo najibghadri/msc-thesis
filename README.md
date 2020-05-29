@@ -45,10 +45,21 @@ Artifacts:
        - Each chapter
      - All code and thesis available at https://github.com/najibghadri/msc-thesis and the published verision on my website
 
+# Sensors
+     - Radar
+     - Lidar
+     - RGB cameras
+     - Lidar sensors provide a 3D sparse pointcloud but they are very 
+        
 # Related work
+  It is important for a self-driving company to openly detail their technical solution because it let's people trust the autopilot.
+
+     - Simulations
+     - Miles done
+     - Risk
      - Tesla
        - Their view on simulations
-       - Lidar sensors provide a 3D sparse pointcloud but they are very expensive.
+expensive.
        - 
      - MobileEye
        -  do some pros/cons
