@@ -120,21 +120,36 @@ couple of companies have already invested in this. There is Deepdrive from
 Voyage auto\footnote{Deepdrive Voyage \url{https://deepdrive.voyage.auto/}}, an
 American AD supplier, NVIDIA has a project going on called Drive
 Constellation\footnote{NVIDIA Drive Constellation
-    \url{https://www.nvidia.com/en-us/self-driving-cars/drive-constellation/}} and
+\url{https://www.nvidia.com/en-us/self-driving-cars/drive-constellation/}} and
 another project called RFPro\footnote{RFPro \url{http://www.rfpro.com/}}.
 However these are either not opensource or not mature enough. The best that I
 found and ended up basing my project on is called CARLA Simulator\footnote{CARLA
-    Sim \url{http://carla.org/}}\cite{Dosovitskiy17} that is a quite mature and fully opensource project
-developed by the Barcelonian university UAB's computer vision CVC Lab supported
-by Intel, Toyota, GM and others. This simulator has a really good API that
-fulfills my requirements.
+Sim \url{http://carla.org/}} \cite{Dosovitskiy17} that is a quite mature and
+fully opensource project developed by the Barcelonian university UAB's computer
+vision CVC Lab supported by Intel, Toyota, GM and others. This simulator has a
+really good API that fulfills my requirements.
 
-The sensor suite includes 8 RGB cameras mounted on the roof of the car. As the
-title of the thesis says, I only used RGB cameras and no other sensors. This is
-the same approach Tesla is taking, contrary to almost all other players in the
-field including MobilEye and Waymo. Lidar data is good for correction, but it is
-better if the AI can equally perform using only RGB cameras since it is a more
-general solution.
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=150mm, keepaspectratio]{figures/carla.png}
+    \caption{A screenshot from CARLA}
+    \label{fig:carla}
+\end{figure}
+
+The sensor suite includes 8 RGB cameras mounted on the roof of the car as shown
+on \refstruc{fig:3dmodel2}. As the title of the thesis says, I only used RGB
+cameras and no other sensors. This is the same approach Tesla is taking,
+contrary to almost all other players in the field including MobilEye and Waymo.
+Lidar data is good for correction, but it is better if the AI can equally
+perform using only RGB cameras since it is a more general solution that is
+closer to how we humans percieve the environment.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=150mm, keepaspectratio]{figures/3dmodel2.png}
+    \caption{How the cameras are set up on the roof}
+    \label{fig:3dmodel2}
+\end{figure}
 
 The system uses state-of-the-art detection, localization and segmentation model
 Detectron2 \cite{wu2019detectron2} a MASK R-CNN conv net model based on Residual
@@ -155,13 +170,49 @@ detection log simultaneously and compare the error between the two.
 
 \section{Summary of results}
 
+The result is a detector that is capable of localizing vehicles, and pedestrians
+on the road up to 100 meters with an accuracy of ~50cm in an angle of 270\degree
+centered to the front. The virtual vehcile has 8 RGB cameras mounted creating 4
+stereo sides. The algorithm is written in Python and uses PyTorch, with that on
+an NVIDIA Titan X GPU the detector can perform in 2.7FPS for one side, ie. for
+two cameras. In an embedded optimized system using C or C++ code this can easily
+be improved to even 60FPS creating a real-time system. The code cannot perform
+lane detection yet, but that would have been the easier part. The webvisualizer
+let's us relplay the simulation frame by frame and see the detection error for
+each actor in the scene. It also shows a montage the original, detection and
+depthmap. Below \refstruc{fig:webviz1} shows a screenshot of the webvisualizer
+in action.
 
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=150mm, keepaspectratio]{figures/webviz2.png}
+    \caption{3D wevisualizer}
+    \label{fig:webviz1}
+\end{figure}
 
-- Short summary of results: ...,  detector which uses: state of the art ...
-- Detector can be used like a plug in
+All of the code for the thesis, detector, simulator configuration and
+webvisualizer is available on \url{https://github.com/najibghadri/msc-thesis}
+and you can access the webvisualizer and interactively replay and test
+simulations on \url{https://najibghadri.com/msc-thesis/}.
+
 
 \section{Thesis structure}
 
+In the next chapter, \autoref{chap:relatedwork} I analyze and
+compare two self-driving solutions: Tesla autopilot and MobilEye autopilot.
+
+In \autoref{chap:perceptions} I talk about different kind of perceptions,
+state-of-the-art Convolutional Networks and computer vision algorithms that are
+useful for our use-case. In \autoref{chap:assumptions} I define the technical
+assumptions that I made in order to simplify the task and the resulting
+limitations. In \autoref{chap:designimplementation} I detail the design and
+implementation of the simulator configuration, the detector algorithm and the
+webvisualizer.
+
+Then in \autoref{chap:results} I present different measurements and results, and
+in \autoref{chap:experimental} I present experimentations that ended up not
+being part of the detection. Finally I discuss ways to improve the system in
+\autoref{chap:improvement}
 
 - Structure of Thesis
 - Each chapter
