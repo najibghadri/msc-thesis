@@ -1,0 +1,43 @@
+%----------------------------------------------------------------------------
+\chapter{CARLA Simulator}
+\label{chap:carlasim}
+%----------------------------------------------------------------------------
+
+CARLA\cite{Dosovitskiy17} is an open-source simulator for autonomous driving
+research. It is written in C++ and provides a very accessible Python API to
+control a lot of the simulaton execution. CARLA has been developed from the
+ground up to support development, training, and validation of autonomous driving
+systems. In addition to open-source code and protocols, CARLA provides open
+digital assets (urban layouts, buildings, vehicles) that were created for this
+purpose and can be used freely. The simulation platform supports flexible
+specification of sensor suites, environmental conditions, full control of all
+static and dynamic actors, maps generation and much more. It is developed by the
+Barcelonian university UAB's computer vision CVC Lab supported by Intel, Toyota,
+GM and others. The repository for the project is at \url{https://github.com/carla-simulator}
+
+CARLA's mission is to create a simulator that can simulate sufficient-enought
+real-world traffic scenarios so that it is more accessible for researchers like
+myself to research, develop and test computer vision algorithms for
+self-driving. 
+
+It provides Scalability via a server multi-client architecture: multiple clients
+in the same or in different nodes can control different actors. CARLA exposes a
+powerful API that allows users to control all aspects related to the simulation,
+including traffic generation, pedestrian behaviors, weathers, sensors, and much
+more. Users can configure diverse sensor suites including LIDARs, multiple
+cameras, depth sensors and GPS among others. Users can easily create their own
+maps following the OpenDrive standard via tools like RoadRunner. CARLA provides
+integration with ROS via their ROS-bridge
+
+I used CARLA 9.8.0 in the project that was the latest at the time (2020 March
+09). Carla has a primary support for Linux so I could run it easly on Ubuntu. It
+requires a decent GPU otherwise the simulation is going to be slow.
+
+It's important to Coordinate system
+
+\section{Is a simulation enough?}
+I believe the future is in part with simulations and in part with
+real-world training as-well. To develop a self-driving AI from ground up it is
+certanly advisable to first develop and test the algorithms in a simulation. 
+
+Carla provides many ways

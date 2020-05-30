@@ -3,8 +3,32 @@
 \label{chap:designimplementation}
 %----------------------------------------------------------------------------
 
-Task flow again: simulation and extraction, detector, webviz
+Let's recap the task flow of the task I described in the Introduction: After
+configuring the simulator with the designed camera setting I render multiple
+traffic scenarios in different maps provided by CARLA while extracting all
+necessary information into a log file to later compare the detection log with
 
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=150mm, keepaspectratio]{figures/flowchart.png}
+    \caption{Task flow}
+    \label{fig:flow2}
+\end{figure}
+
+
+\section{Tools used}
+
+Very soon it became obvious that a Linux operating system is the right way to
+develop everything. I have been using Ubuntu before this project as well so I
+was already familiar with everything. The main IDE I used throughout the project
+is Visual Studio Code, which thanks to it's openness and community has a lot of
+extensions that helped me develop in fact every part of the thesis: Python,
+Nodejs and Javascript for the webvisualizer and finally LaTeX and ofcourse git
+support.
+
+- VS Code
+- Python, Scripts, Conda, Jupyter
 
 \section{Choosing the sensor suite}
 
@@ -21,45 +45,23 @@ around the vehicle. The following model shows the design setting \refstruc{fig:3
     \label{fig:3dmodel3}
 \end{figure}
 
-The setting is the following: 
+The setting is the following in details: 
 \begin{itemize}
-    \item Variations in viewpoint
-    \item Difference in illumination
-    \item Hidden parts of images, occulsion
-    \item Background Clutter
+    \item Front stereo: two cameras looking straight to the front 0.8 meters
+    apart
+    \item Right corner and left corner stereo cameras: the cameras are on the
+    diagonal corners of a 20 cm wide 20cm tall triangle creating two 45\degree
+    angled stero vision.
+    \item Right and left side stereos are turned 90\degree to the sides and they are apart 0.5 meter.
 \end{itemize}
 
-\section{Tools used}
-- Linux Ubuntu
-- VS Code
-- Python, Scripts, Conda, Jupyter
+The advantage of puting cameras apart to a relatively large distance is it
+increases the accuracy of the stereo algorithm to a further distance. However
+the drawback is that a smaller portion of the right and left side image is going
+to intersect hence creating a smaller field of view. However due to to corner
+stereo cameras this is not a problem.
 
-\section{Carla simulator}
 
-CARLA\cite{Dosovitskiy17} is an open-source simulator for autonomous driving
-research. It is written in C++ and provides a very accessible Python API to
-control a lot of the simulaton execution. CARLA has been developed from the
-ground up to support development, training, and validation of autonomous driving
-systems. In addition to open-source code and protocols, CARLA provides open
-digital assets (urban layouts, buildings, vehicles) that were created for this
-purpose and can be used freely. The simulation platform supports flexible
-specification of sensor suites, environmental conditions, full control of all
-static and dynamic actors, maps generation and much more. It is developed by the
-Barcelonian university UAB's computer vision CVC Lab supported by Intel, Toyota,
-GM and others. The repository for the project is at \url{https://github.com/carla-simulator}
-
-It provides Scalability via a server multi-client architecture: multiple clients
-in the same or in different nodes can control different actors. CARLA exposes a
-powerful API that allows users to control all aspects related to the simulation,
-including traffic generation, pedestrian behaviors, weathers, sensors, and much
-more. Users can configure diverse sensor suites including LIDARs, multiple
-cameras, depth sensors and GPS among others. Users can easily create their own
-maps following the OpenDrive standard via tools like RoadRunner. CARLA provides
-integration with ROS via their ROS-bridge
-
-I used CARLA 9.8.0 in the project that was the latest at the time (2020 March
-09). Carla has a primary support for Linux so I could run it easly on Ubuntu. It
-requires a decent GPU otherwise the simulation is going to be slow.
 
 
 \section{Configuring the simulation}
@@ -72,21 +74,46 @@ distortion, focus, etc, cropping, occlusion, etc, throughoutput
 - Rendering file structure 
 - Extracted data - section
 - Coordinate system
+\begin{lstlisting}[language=]
+{data: hello}
+\end{lstlisting}
 \section{Detector}
+    The plan: 
+    three images of detection montage!!!
+    \subsection{Pseudo-code}
+    Final pseudo code
+    \begin{lstlisting}[language=]
+       pseudo code
+    \end{lstlisting}
     \subsection{OpenCV}
     \subsection{Detectron}
+    - Detection images!
     - Pretrained models
     - Comparison
     - Object detection and localization
     - Instance segmentation
     \subsection{Depth estimation}
-    \subsection{Back projection}
-        Camera setting
-    - Inverse transformation explain, Translation: same matrix as camera why
+    \subsubsection{Triangulation}
+        - Triangulation
+    \subsubsection{Stereo Block Matching Algorithm}
     - Stereo Block Matching Algorithm (newer)
-    \subsection{Pseudo-code}
-        Final pseudo code
+    \subsubsection{Result}
+    - 
+    \subsection{Back projection}
+    - Camera model and coordinates
+
+    - Camera setting
+    - Inverse transformation explain, Translation: same matrix as camera why
+    - Yaw pitch roll, euler matrix
+    - Affine matrix
+
 \section{Web visualizer}
+In order to measure the accuracy
         Web visualizer
     -  Framework
     -  Usage and results
+
+\section{Additon scripts}
+-Start script
+-Montage script
+

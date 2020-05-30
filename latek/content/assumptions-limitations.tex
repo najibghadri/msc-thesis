@@ -3,18 +3,49 @@
 \label{chap:assumptions}
 %----------------------------------------------------------------------------
 
-\section{Day light situation}
+In order to simply the task of scene understanding we need
+to define boundaries to measure the success of the detector. 
 
-\section{Plane assumption}
--  The objects and road has ~0 pitch and ~0 roll (valid for most of the time)
+\section{Daylight situation}
 
-\section{Lane detection}
+First of all we are going to specialize to day-light situations only. This
+detection with RGB cameras at night is difficult, in order to achieve that we
+need other sensors such as Radar, Sonar or LiDAR. As we are only using RGB
+cameras we arge going to assume that all driving situations occur in daylight.
 
-- to simplify the task
-- Later will talk about improvements
+\section{Flat plane assumption}
+Another important assumption is that the driving field and landscape area is
+flat. It isn't difficult to detect object that are a bit higher on the picture
+but it is difficult to recognize the curvature of the plane on the image. In
+case the detector can interpret curvature and the ego car is on an angled road
+the angle data from the gyroscope sensors has to be take into account and
+subtracted from the percieved angles. It is generally true that inorder to
+recognize true information about the world the relative position and orientation
+has to be taken into account.
+
+In order to reduce this complexity,  we are going to only take into account the
+objects' position on planar coordinates.
+
+\section{Path, lane and road detection}
+
+As described before there are many ways of detecting lane and the easiest is to
+use the Hough transform and detect the lanes directly in front of the car.
+However this is not a robust solution: this only gives good results in good
+illumination and weather situations. It is true that most situations are like
+this but there are still many unpainted roads, dirt roads or simply due to
+lightning and weather the lane edges won't be clear.
+
+One robust solution would be to take into account the vehicles in front and
+behind us and interpret their path as the right path and regress the lane to
+their path. 
+
+Another solution is to take into account previously driven paths. This is the
+approach Tesla takes however it is not clear how exactly.
 
 \section{Orientation}
-- Human pose does not matter
+
+It would be important to 
+
 \section{Tracking}
 - No tracking
 - No consistency through time
