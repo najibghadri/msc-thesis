@@ -2,10 +2,29 @@
 \chapter{Improvement notes}
 \label{chap:improvement}
 %----------------------------------------------------------------------------
-
-A bevezető tartalmazza a diplomaterv-kiírás elemzését, történelmi előzményeit, 
-a feladat indokoltságát (a motiváció leírását), az eddigi megoldásokat, 
-és ennek tükrében a hallgató megoldásának összefoglalását.
-
-A bevezető szokás szerint a diplomaterv felépítésével záródik, 
-azaz annak rövid leírásával, hogy melyik fejezet mivel foglalkozik.
+\section{Optimal sensor suite}
+Less sensors: rectified cameras - exo stereo
+\subsection{Data correction}
+Car position, tilt, velocity detection and correction, odometric correction
+\section{Tracking and correlation}
+\section{Depth correction}
+Size based depth correction
+Parallax motion based depth correction
+\subsection{Size based}
+\subsection{Monodepth}
+\subsection{Parallax motion}
+\section{Lane, path and road detection}
+Road segmentation, path  based on other actors
+Drivable area reconstruction from other actors - more robust
+\section{unsupervised learning methods}
+Energy based method - Yann LeCun
+  - Latent space for possible outcomes
+  - Traffic situation understanding
+  - Surrounding understanding
+\section{Keypoint based detection and orientation}
+Orientation, keypoint detection, wheel, etc detection
+\section{3D reconstruction}
+Voxel reconstruction of actors
+\section{Traffic light understanding}
+\section{Foreign object detection}
+White list based - difficult problem! (https://link.springer.com/article/10.1186/s13640-018-0261-2)

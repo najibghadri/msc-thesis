@@ -1,49 +1,141 @@
 %----------------------------------------------------------------------------
-\chapter{Kinds of perception}
+\chapter{Computer vision}
 \label{chap:perceptions}
 %----------------------------------------------------------------------------
 
 After collecting data from the sensors we choose we need to implement the right
 algorithms to extract information from the sensor data. In this chapter I start
-with explaining basic image feature detection and 
+with explaining basics of computer vision and then move on to advanced
+convolutional neural netowrks that will help our goal.
 
-Basics: depth from radar/stereo cameras: I choose only cameras
+Computer Vision, often abbreviated as CV, is defined as a field of study that
+seeks to develop techniques to help computers “see” and understand the content
+of digital images such as photographs and videos.
 
-Image features
-Neural networks
-Convolutional Neural Networks
-Deep Learning
-Detection and Segmentation
-    Object Classification Detection, Localization 
-    Segmentation
+The problem of computer vision appears simple because it is trivially solved by
+people, even very young children. Nevertheless, it largely remains an unsolved
+problem based both on the limited understanding of biological vision and because
+of the complexity of vision perception in a dynamic and nearly infinitely
+varying physical world.
+
+Computer vision has become wide spear due to the increased availability of
+computational power, more cost-efficient manufacturing technologies and the
+advancement of image processing algorithms. Computer vision, as a scientific
+domain, intends to extract relevant information from images or image sequences
+for decision-makers (individual or technical system), with the help of
+algorithmic tools. 
+
+CV algorithms can be categorized into image processing and computer vision
+algorithms. The goal of image processing is to produce an image which is more
+advantageous for our purposes. Image processing is often used to prepare images
+for further analysis . On the other hand, the goal of computer vision is to
+transform the input image to a higher abstraction level, thus to extract and
+extract information from the image in a more compact manner. To further
+differentiate, the term machine vision is used if these methods are applied in
+embedded systems (cars, robots, production machines, smartphones, etc.).
+
+Due to recent results in machine learning-aided computer vision applications,
+these algorithms form a separate domain called learning vision. The most
+dynamically advancing branch of learning vision utilizes deep learning. Other
+computer vision techniques and algorithms are called tradition vision.
+
+Traditional vision applications consist of four main steps, the first of which
+is the recording of images sequences. Usually there is a second step which is
+image correction, where we might reduce noise or apply effects to the images. We
+will see later that in our case wil will need to occlude parts of the image
+where the ego car appears in order that it won't detect itself as another car.
+In the third step task-relevant features are extracted, properties which can
+help solve the given problem. In the last step, called decision-making, the
+applied algorithm uses the available data to determine the final output.
+
+\section{Challenges in Computer Vision}
+Object detection is considered to be the most basic application of computer
+vision. Rest of the other developments in computer vision are achieved by making
+small enhancements on top of this. In real life, every time we(humans) open our
+eyes, we unconsciously detect objects.
+
+Since it is intuitive for us, we fail to appreciate the key challenges involved
+when we try to design systems similar to our eye. Some challenges for computers are:
+
+\begin{itemize}
+    \item Variations in viewpoint
+    \item Difference in illumination
+    \item Hidden parts of images, occulsion
+    \item Background Clutter
+\end{itemize}
+
+\section{Traditional approaches}
+
+Various techniques, other than deep learning are available enhancing computer
+vision. Though, they work well for simpler problems, but as the data become huge
+and the task becomes complex, they are no substitute for deep CNNs. Let’s
+briefly discuss two simple approaches.
+
+\subsection{KNN (K-Nearest Neighbours)}
+
+In the KNN algorithm each image is matched with all images in training data. The
+top K with minimum distances are selected. The majority class of those top K is
+predicted as output class of the image. Various distance metrics can be used
+like L1 distance (sum of absolute distance), L2 distance (sum of squares), etc.
+However KNN performs poorly - qute expectedly - they have a high error rate on
+complex images, because all they do is compare pixel values among other images,
+without any use of image patterns.
+
+\subsection{Linear Classifiers}
+
+They use a parametric approach where each pixel value is considered as a
+parameter. It’s like a weighted sum of the pixel values with the dimension of
+the weights matrix depending on the number of outcomes. Intuitively, we can
+understand this in terms of a template. The weighted sum of pixels forms a
+template image which is matched with every image. This will also face difficulty
+in overcoming the challenges discussed in earlier as it is difficult to design a
+single template for all the different cases.
+
+\section{Neural networks}
+
+
+
+\section{Deep Learning}
+\section{Convolutional Neural Networks}
+\section{Detection and Segmentation}
+\subsection{Object Classification Detection, Localization }
     (AlexNet, LeNet, VGG)
     R-CNN, Fast, Faster
     Segmentation Networks
     Mask R-CNN - Detectron2
     Detectron
     YOLO
-Bounding box detection and orientation
-Key point detection
-Voxelization        
-        PointNet
-        VoxelNet
-
-Tracking
-    others
-    SORT
-    Deep Sort
-
-Lane and road detection
-Road detection:
+\subsection{Segmentation}
+\section{Bounding box detection and orientation}
+\section{Key point detection}
+\section{Voxelization }
+PointNet
+VoxelNet
+\section{Tracking}
+others
+SORT
+Deep Sort
+\section{Lane and road detection}
+Road detection
 Driveable Road
 Lane detection: sliding window, curve fit
-
-3D vision
-    Camera model and Calibration
-    3D reconstruction
-    Stereo vision
-    Depth estimation
-
-Object Detection
-
+\section{3D vision}
+Camera model and Calibration
+3D reconstruction
+Stereo vision
+Depth estimation
+\section{Datasets}
 Datasets - KITTI, MARS, COCO, Waymo, nuScenes
+
+
+Basics: depth from radar/stereo cameras: I choose only cameras
+
+
+
+
+
+
+
+
+
+

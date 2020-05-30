@@ -8,6 +8,8 @@ import Worldview, {
   Points,
 } from "regl-worldview";
 
+let path = "rendering/2";
+
 var truthFrameList = [];
 var detectionFrameList = [];
 var len = 0;
@@ -15,7 +17,7 @@ var len = 0;
 
 var actorColor = {
   t: {
-    walker: {  r: 1, g: 0.8, b: 1, a: 0.5 },
+    walker: { r: 1, g: 0.8, b: 1, a: 0.5 },
     vehicle: { r: 1, g: 0.8, b: 1, a: 0.5 },
   },
   d: {
@@ -167,7 +169,7 @@ export default function WebViz() {
       console.log("loaded detection");
     };
 
-    fetch("rendering/3/detected.json")
+    fetch(path + "/detected.json")
       .then((response) => {
         return response.json();
       })
@@ -175,7 +177,7 @@ export default function WebViz() {
         onDetectionFile(data);
       })
       .catch((err) => {});
-    fetch("rendering/3/frameList.json")
+    fetch(path + "/frameList.json")
       .then((response) => {
         return response.json();
       })
@@ -309,17 +311,17 @@ export default function WebViz() {
       <div className="videoContainer">
         <video
           style={{ zIndex: video === 0 ? 1 : 0 }}
-          src="rendering/3/output.webm"
+          src={path + "/output.webm"}
           ref={videoEl1}
         ></video>
         <video
           style={{ zIndex: video === 1 ? 1 : 0 }}
-          src="rendering/3/outputDET.webm"
+          src={path + "/output.webm"}
           ref={videoEl2}
         ></video>
         <video
           style={{ zIndex: video === 2 ? 1 : 0 }}
-          src="rendering/3/outputDP.webm"
+          src={path + "/output.webm"}
           ref={videoEl3}
         ></video>
         <div className="videoControl">
@@ -363,8 +365,14 @@ export default function WebViz() {
               <br />
               Simulation time: {(counter / 30.0).toFixed(1)}s
             </h1>
-            <p><span class="gv"></span><span class="gw"></span> Ground truth</p>
-            <p><span class="dv"></span><span class="dw"></span> Detected</p>
+            <p>
+              <span class="gv"></span>
+              <span class="gw"></span> Ground truth
+            </p>
+            <p>
+              <span class="dv"></span>
+              <span class="dw"></span> Detected
+            </p>
             <p>Use your mouse!</p>
             <p>Left click move camera</p>
             <p>Right click tilt camera</p>

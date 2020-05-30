@@ -136,14 +136,14 @@ fulfills my requirements.
     \label{fig:carla}
 \end{figure}
 
-The sensor suite includes 8 RGB cameras mounted on the roof of the car as shown
-on \refstruc{fig:3dmodel2}. As the title of the thesis says, I only used RGB
-cameras and no other sensors. This is a similar approach to what Tesla is
-taking, except for the radar sensors, contrary to almost all other players in
-the field who also employ a Lidar sensor for depth data including MobilEye and
-Waymo. Lidar data is good for correction, but it is better if the AI can equally
-perform using only RGB cameras, since it is a more general solution that is
-closer to how we humans percieve the environment.
+I set up the virtual vehcile with 10 RGB cameras mounted on the roof creating 4
+stereo sides as shown on \refstruc{fig:3dmodel2}. As the title of the thesis
+says, I only used RGB cameras and no other sensors. This is a similar approach
+to what Tesla is taking, except for the radar sensors, contrary to almost all
+other players in the field who also employ a Lidar sensor for depth data
+including MobilEye and Waymo. Lidar data is good for correction, but it is
+better if the AI can equally perform using only RGB cameras, since it is a more
+general solution that is closer to how we humans percieve the environment.
 
 \begin{figure}[!ht]
     \centering
@@ -173,8 +173,7 @@ detection log simultaneously and compare the error between the two.
 
 The result is a detector that is capable of localizing vehicles, and pedestrians
 on the road up to 100 meters with an accuracy of ~50cm in an angle of 270\degree
-centered to the front. The virtual vehcile has 8 RGB cameras mounted creating 4
-stereo sides. The algorithm is written in Python and uses PyTorch, with that on
+centered to the front. The algorithm is written in Python and uses PyTorch, with that on
 an NVIDIA Titan X GPU the detector can perform in 2.7FPS for one side, ie. for
 two cameras. In an embedded optimized system using C or C++ code this can easily
 be improved to even 60FPS creating a real-time system. The code cannot perform
@@ -199,23 +198,21 @@ simulations on \url{https://najibghadri.com/msc-thesis/}.
 
 \section{Thesis structure}
 
-In \autoref{chap:sensors} I give an overview of the 
-widely used sensors for peception in the automotive industry: RGB cameras, radar,
-Lidar and ultrasonic sensors.
-In \autoref{chap:perceptions} I talk about different kinds of perceptions,
-state-of-the-art Convolutional Networks and computer vision algorithms that are
-useful for our use-case. 
+In \autoref{chap:sensors} I give an overview of the widely used sensors for
+peception in the automotive industry: RGB cameras, radar, Lidar and ultrasonic
+sensors. In \autoref{chap:perceptions} I talk about different kinds of
+perceptions, state-of-the-art Convolutional Networks and computer vision
+algorithms that are useful for our use-case.
 
 In \autoref{chap:relatedwork}, I analyze and compare different self-driving  car
-solutions: Tesla and Waymo self-driving cars and MobilEye autopilot. In
-\autoref{chap:simulators} I describe the CARLA simulator and compare it with
-other simulators.
+solutions: Tesla and Waymo self-driving cars and MobilEye autopilot.
 
 In \autoref{chap:assumptions} I define the technical assumptions that I made in
 order to simplify the task and the resulting limitations.
 
-\autoref{chap:designimplementation} details the design and implementation of the
-simulator configuration, the detector algorithm and the webvisualizer.
+\autoref{chap:designimplementation} introduces the Carla simulator details the
+design and implementation of the simulator configuration, the detector algorithm
+and the webvisualizer.
 
 Then in \autoref{chap:results} I present different measurements and results, and
 in \autoref{chap:experimental} I present experimentations that ended up not
