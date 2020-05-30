@@ -110,24 +110,15 @@ there is no dataset that contains all the necessary information, because in fact
 it is not possible to collect everything from the real world.
 
 This is why I choose to use a \emph{simulation} instead to test the system.
-Using a simulation gives me a huge ammount of freedom. My research work started
-in looking for simulations that let me extract data from the simulation in each
-frame and let's me create custom sensor settings. The first thing that came to
-my mind was GTA V the well-known free-world game, but soon I found out it isn't
-going to be useful. I found that there are dedicated projects for this, and a
-couple of companies have already invested in this. There is Deepdrive from
-Voyage auto\footnote{Deepdrive Voyage \url{https://deepdrive.voyage.auto/}}, an
-American AD supplier, NVIDIA has a project going on called Drive
-Constellation\footnote{NVIDIA Drive Constellation
-\url{https://www.nvidia.com/en-us/self-driving-cars/drive-constellation/}} and
-another project called RFPro\footnote{RFPro \url{http://www.rfpro.com/}}.
-However these are either not opensource or not mature enough. The best that I
-found and ended up basing my project on is called CARLA Simulator\footnote{CARLA
-Sim \url{http://carla.org/}} \cite{Dosovitskiy17} (a screenshot is seen on
-\refstruc{fig:carla}) that is a quite mature and fully opensource project
-developed by the Barcelonian university UAB's computer vision CVC Lab supported
-by Intel, Toyota, GM and others. This simulator has a really good API that
-fulfills my requirements.
+Using a simulation gives a huge ammount of freedom. My research work started
+in looking for simulators that let me extract data from the simulation in each
+frame and let's me create custom world scenario and sensor settings. 
+
+After an extensive research of self-driving car simulators of I found CARLA
+Simulator\footnote{CARLA Sim \url{http://carla.org/}} \cite{Dosovitskiy17} (a
+screenshot is seen on \refstruc{fig:carla}) to be the most advanced one that is
+also opensource. CARLA is a quite mature simulator with an API that
+fulfills our requirements.
 
 \begin{figure}[!ht]
     \centering
