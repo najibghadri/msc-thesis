@@ -3,9 +3,35 @@
 \label{chap:designimplementation}
 %----------------------------------------------------------------------------
 
-A bevezető tartalmazza a diplomaterv-kiírás elemzését, történelmi előzményeit, 
-a feladat indokoltságát (a motiváció leírását), az eddigi megoldásokat, 
-és ennek tükrében a hallgató megoldásának összefoglalását.
+Task flow again: simulation and extraction, detector, webviz
+Choosing the sensor suite
+Tools used
+- Linux Ubuntu
+- VS Code
+- Python, Scripts, Conda, Jupyter
 
-A bevezető szokás szerint a diplomaterv felépítésével záródik, 
-azaz annak rövid leírásával, hogy melyik fejezet mivel foglalkozik.
+Configuring the simulation
+- Recorder
+- Stereo imaging
+- Coordinate system
+- Simulation imaging: HD 720p, Camera matrix, compression, noise, reality,
+distortion, focus, etc, cropping, occlusion, etc, throughoutput
+- Rendering file structure 
+- Extracted data - section
+- Coordinate system
+
+Detector
+    OPENCV
+    Detectron
+        - Pretrained models
+            - Comparison
+        - Object detection and localization
+        - Instance segmentation
+    Depth estimation
+        Camera setting
+        - Inverse transformation explain, Translation: same matrix as camera why
+        - Stereo Block Matching Algorithm (newer)
+    Final pseudo code
+Web visualizer
+-  Framework
+-  Usage and results

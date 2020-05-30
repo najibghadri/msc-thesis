@@ -46,10 +46,59 @@ Artifacts:
      - All code and thesis available at https://github.com/najibghadri/msc-thesis and the published verision on my website
 
 # Sensors
-     - Radar
-     - Lidar
-     - RGB cameras
-     - Lidar sensors provide a 3D sparse pointcloud but they are very 
+
+Selecting the right sensors for the task is half the job. In this chapter we are going to detail the most widely used sensors for autonomous driving and compare them. 
+
+## Radar
+
+     - Radar 1
+     - Lidar 1
+     - Ultrasonic 1
+     - RGB cameras 1
+     - Lidar sensors provide a 3D sparse pointcloud but they are very  1
+     - Other sensors: GPS, Odometry, Rain 1
+
+     - Sensors in CARLA simulation 1
+  
+  5
+
+# Kind of perceptions
+Basics: depth from radar/stereo cameras: I choose only cameras
+
+Convolutional Neural networks
+Intro to Deep Learning  and CNNs
+ Object classification
+- Object Detection
+- Classification
+- Localization
+- Bounding box detection
+- Voxelization
+- Key point detection
+- Segmentation
+- Depth estimation
+- Orientation
+- Tracking
+
+- Road detection:
+- Lane detection
+- Driveable Road
+
+- Odometry
+- Lidar data detection
+- Algorithms to talk about:
+ - Datasets - KITTI, MARS, COCO, Waymo, nuScenes
+ - (AlexNet, LeNet, VGG)
+ - YOLO
+ - R-CNN, Fast, Faster
+ - Mask R-CNN - Detectron2
+ - Detectron
+ - PointNet
+ - VoxelNet
+ - Segmentation Networks
+ - ....
+
+
+5-6
         
 # Related work
   It is important for a self-driving company to openly detail their technical solution because it let's people trust the autopilot.
@@ -57,46 +106,14 @@ Artifacts:
      - Simulations
      - Miles done
      - Risk
-     - Tesla
+     - Tesla  eight cameras, 12 ultrasonic sensors, and one forward-facing radar.
        - Their view on simulations
 expensive.
        - 
      - MobileEye
        -  do some pros/cons
 
-# Kind of perceptions
-     - fill images
-     - do some pros/cons
-       - Intro to Deep Learning  and CNNs
-       - Object classification
-       - Object Detection
-       - Classification
-       - Localization
-       - Bounding box detection
-       - Voxelization
-       - Key point detection
-       - Segmentation
-       - Depth estimation
-       - Orientation
-       - 3D detection
-       - Tracking
-       - Vidar Stereo imaging
-       - Road detection:
-       - Lane detection
-       - Driveable Road
-       - Odometry
-       - Lidaring
-       - Algorithms to talk about:
-         - Datasets - KITTI, MARS, COCO, Waymo, nuScenes
-         - (AlexNet, LeNet, VGG)
-         - YOLO
-         - R-CNN, Fast, Faster
-         - Mask R-CNN - Detectron2
-         - Detectron
-         - PointNet
-         - VoxelNet
-         - Segmentation Networks
-         - ....
+3-4
 
 # Assumptions made and limitations
      - to simplify the task
@@ -106,8 +123,11 @@ expensive.
      - Human pose does not matter
      - Day light situation
 
+-3
+
 # Design and implementation
      - Task flow again: simulation, extraction, imaging,
+     - Choosing the sensor suite
      - The simulation idea for dataset and ground truth instead of dataset
        - Drawbacks, limitations
        - Pros cons
@@ -138,6 +158,8 @@ expensive.
        -  Framework
        -  Usage and results
 
+-7
+
 # Results
      - Explaining errors
        - Car tilt problem
@@ -158,6 +180,8 @@ expensive.
      - Dangerousness
      - Hardware requirements
      
+-5
+
 # Experimental results
      - Tracking
      - YOLO
@@ -166,9 +190,10 @@ expensive.
      - Keypoint detection
      - Night results
      
-
+-5
 
 # Future improvements
+     - Optimal sensor suite
      - Correlation
      - Mono depth correction
      - Less sensors: rectified cameras - exo stereo
@@ -189,6 +214,8 @@ expensive.
 
      - Dark situations: solution: night detectors, different models
 
+-5
+
 # Conclusion good bye bye
 
      - My prediction: only an open commond ever-growing AI could qualify as a super driving AI
@@ -196,6 +223,7 @@ expensive.
      - Evaluate results quickly
      - Describe opportunities for further research/improvement
 
+-3
 
 # Driving Scene Understanding in Simulation with Stereo RGB cameras and CNN synergy
 
