@@ -186,9 +186,14 @@ objects.
 
 \section{Detector}
 
+The plan algorithm is the following: first take a stereo pair of images and
+calculate the disparity map with a stereo block matching algorithm. Then
+detetect objects and their segmentation mask (instance segmentation) with a
+state-of-the-art convnet and then extract the disparity data using the
+segmentaiton mask. Then use the extracted disparity data to etimate the depth of
+the detected object and then reproject to Carla-world coordinates to match the
+logfile coordinate system.
 
-The plan: 
-three images of detection montage!!!
 
 \subsection{OpenCV}
 Intro to it
@@ -214,6 +219,10 @@ Intro to it
 - Yaw pitch roll, euler matrix
 - Affine matrix
 
+The plan: 
+three images of detection montage!!!
+
+
 \subsection{Final pseudo-code}
 Final pseudo code
 \begin{lstlisting}[language=]
@@ -221,12 +230,25 @@ Final pseudo code
     \end{lstlisting}
 
 \section{Web visualizer}
-In order to measure the accuracy
-Web visualizer
--  Framework
--  Usage and results
+As I mentioned before in order to compare the detection result and the ground
+truth log of each rendering scenario it would be useful to have a visusalization
+of the detection replayed. This is similar to the information shown on a monitor
+of a self-driving car.
+
+Since I already had experience in Javascript and in ReactJs \footnote{ReactJs
+\url{https://reactjs.org/}} - a very easy-to-use web application framework
+developed by Facebook - I decided to look for options in 3D visualization. I
+found WebViz\footnote{WorldView WebViz\url{https://webviz.io/worldview/}}, a
+React library specifically made for 3D visualization of traffic scenarios. It
+has a very compelling declarative API.
+
+There are two main views in the end product webvisualizer: The video montage and
+the 3D visualization.
 
 \section{Additonal scripts}
--Start script
--Montage script
 
+In order to simplify some tasks that included multiple repetitive commands I had
+to create some scripts that let me invoke them in one command. One script was to
+start the simulator, the ego controller and spawn actors in a choosen map all in
+one script. Another useful script was to create a montage of all frames and
+immediately create a video and compress it multiple times.
