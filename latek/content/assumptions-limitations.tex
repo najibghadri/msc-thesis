@@ -42,9 +42,16 @@ their path.
 Another solution is to take into account previously driven paths. This is the
 approach Tesla takes however it is not clear how exactly.
 
-\section{Orientation}
+\section{Keypoint detection and orientation}
 
-It would be important to 
+It is important to determine the orientation of the detected cars on the road,
+so that the algorithm knows the depth data corresponds to which side of the
+detected vehicle. It is also a clue that helps in the determining the direction
+of the car.
+
+Detecting keypoints is one way
+
+Detection keypoints could be done with an algorithm similar to Latent 3D Keypoints\cite{suwajanakorn_discovery_2018}
 
 \section{Tracking}
 - No tracking

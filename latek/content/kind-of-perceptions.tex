@@ -18,34 +18,11 @@ problem based both on the limited understanding of biological vision and because
 of the complexity of vision perception in a dynamic and nearly infinitely
 varying physical world.
 
-CV algorithms can be categorized into image processing and computer vision
-algorithms. The goal of image processing is to produce an image which is more
-advantageous for our purposes. Image processing is often used to prepare images
-for further analysis . On the other hand, the goal of computer vision is to
-transform the input image to a higher abstraction level, thus to extract and
-extract information from the image in a more compact manner. To further
-differentiate, the term machine vision is used if these methods are applied in
-embedded systems (cars, robots, production machines, smartphones, etc.).
-
-Due to recent results in machine learning-aided computer vision applications,
-these algorithms form a separate domain called learning vision. The most
-dynamically advancing branch of learning vision utilizes deep learning. Other
-computer vision techniques and algorithms are called tradition vision.
-
-Traditional vision applications consist of four main steps, the first of which
-is the recording of images sequences. Usually there is a second step which is
-image correction, where we might reduce noise or apply effects to the images. We
-will see later that in our case wil will need to occlude parts of the image
-where the ego car appears in order that it won't detect itself as another car.
-In the third step task-relevant features are extracted, properties which can
-help solve the given problem. In the last step, called decision-making, the
-applied algorithm uses the available data to determine the final output.
-
 \section{Challenges in Computer Vision}
-Object detection is considered to be the most basic application of computer
+Image Classification is considered to be the most basic application of computer
 vision. Rest of the other developments in computer vision are achieved by making
 small enhancements on top of this. In real life, every time we, humans open our
-eyes, we unconsciously detect objects.
+eyes, we unconsciously classify and detect objects.
 
 Since it is intuitive for us, we fail to appreciate the key challenges involved
 when we try to design systems similar to our eye. Some challenges for computers are:
@@ -84,14 +61,97 @@ template image which is matched with every image. This will also face difficulty
 in overcoming the challenges discussed in earlier as it is difficult to design a
 single template for all the different cases.
 
-\section{Neural networks}
+\section{Convolutional Neural Networks}
 
+Visual recognition tasks such as image classification, localization, and
+detection are key components of Computer vision. However these are not possible
+to achieve with traditional vision.
+
+Recent developments in neural networks and deep learning approaches have greatly
+advanced the performance of these state-of-the-art visual recognition systems.
+
+Neural networks are the basis of deep learning methods. They are made up of
+multiple layers, each layer containing a lot of perceptrons. Layers can be
+fully-connected or sparsely if possible, providing some performance benefits.
+Each perceptron is an activation function whose input is the weighted output of
+perceptrons from previous layers, and the function is usually a sigmoid
+function. A neural networks first layer is the input layer and the last layer is
+the output, which could be an array of perceptron where only one yields a high
+output creating a classifier. Layer in-between are called hidden layers and it
+is up to design and experimentation the determine what is the right
+configuration of hidden layers.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=80mm, keepaspectratio]{figures/nn.png}
+    \caption{Neural network visualization. Image taken from CS231N Notes}
+    \label{fig:convnet}
+\end{figure}
+
+Neural Networks (NN) are very good at classifying different patterns recieved in the
+input layers however they are not sufficient for even image classification,
+because in one part the number of inputs is way to high. Consider a high
+resolution image with 1000*1000*3 pixels, then the NN has 3million input
+parameters to process. This takes lot of time and computational power.
+
+Secondly the neural network architecture in itself is not a
+general-enough solution (if you think about it, it is similar to a linear
+classifier or a KNN).
+
+Convolutional Neural Network (CNNs) however solve image classification and more.
+A CNN is able to capture the spatial features in an image through the
+application of relevant filters. The architecture performs a better fitting to
+an image dataset due to the reduction in the number of parameters involved and
+reusability of weights.
+
+
+There is material on the internet in abundance about how convolutional neural
+networks work, and I have read many of them, but the one I recommend most is the
+Stanford course CS231N\footnote{ Stanford CV course CS231N
+\url{https://cs231n.github.io/}}. 
+
+The general architecture of CNN is similar to a cone, where the first layer is
+the widest and each layer first convolves multiple filters (which in the
+beginning of the CNN correspond to edges and corners) applying ReLU (rectifier,
+non-linearity function) then it downsizes the input which is called the max
+pooling. This repeated over and over in the end results in a very small tensors
+that \emph{then} can be fed to a neural network which acts as the classifier.
+
+Why is this the winner architecture? Because if you think about it the neural
+network in the end only has to vote for the presence of the right features in roughly
+the right image position not for each pixel. A visualization of a
+CNN's architecture can be seen in \refstruc{fig:convnet}.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=150mm, keepaspectratio]{figures/convnet.png}
+    \caption{Architecture of a CNN}
+    \label{fig:convnet}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=60mm, keepaspectratio]{figures/filters.png}
+    \caption{A visualization of the features in the first convnet layer in AlexNet\cite{NIPS2012_4824}. AlexNet was a CNN which revolutionized the field of Deep Learning, and is built from conv layers, max-pooling layers and FC layers. Image taken from CS231N notes.}
+    \label{fig:filters}
+\end{figure}
+
+There are varoious architectures for 
+These all 
+
+LeNet
+AlexNet
+VGGNet
+GoogLeNet
+ResNet
+ZFNet
 
 
 \section{Deep Learning}
-\section{Convolutional Neural Networks}
-\section{Detection and Segmentation}
-\subsection{Object Classification Detection, Localization }
+
+\section{Detection, Classification and Segmentation}
+\subsection{Image Classification}
+\subsection{Object Detection, Localization}
     (AlexNet, LeNet, VGG)
     R-CNN, Fast, Faster
     Segmentation Networks
@@ -99,15 +159,16 @@ single template for all the different cases.
     Detectron
     YOLO
 \subsection{Segmentation}
+\subsection{Instance Segmentation}
+\section{Tracking}
+others
+SORT
+Deep Sort
 \section{Bounding box detection and orientation}
 \section{Key point detection}
 \section{Voxelization }
 PointNet
 VoxelNet
-\section{Tracking}
-others
-SORT
-Deep Sort
 \section{Lane and road detection}
 Road detection
 Driveable Road
