@@ -115,11 +115,12 @@ the widest and each layer first convolves multiple filters (which in the
 beginning of the CNN correspond to edges and corners) applying ReLU (rectifier,
 non-linearity function) then it downsizes the input which is called the max
 pooling. This repeated over and over in the end results in a very small tensors
-that \emph{then} can be fed to a neural network which acts as the classifier.
+which can \emph{then} be fed to the fully-connected (FC) layers (i.e. a neural network)
+which acts as the classifier.
 
 Why is this the winner architecture? Because if you think about it the neural
 network in the end only has to vote for the presence of the right features in roughly
-the right image position not for each pixel. A visualization of a
+the right image position, not for each pixel. A visualization of a
 CNN's architecture can be seen in \refstruc{fig:convnet}.
 
 \begin{figure}[!ht]
@@ -132,44 +133,57 @@ CNN's architecture can be seen in \refstruc{fig:convnet}.
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=60mm, keepaspectratio]{figures/filters.png}
-    \caption{A visualization of the features in the first convnet layer in AlexNet\cite{NIPS2012_4824}. AlexNet was a CNN which revolutionized the field of Deep Learning, and is built from conv layers, max-pooling layers and FC layers. Image taken from CS231N notes.}
+    \caption{A visualization of the features learned in the first convnet layer in AlexNet\cite{NIPS2012_4824}. AlexNet was a CNN which revolutionized the field of Deep Learning, and is built from conv layers, max-pooling layers and FC layers. Image taken from CS231N notes.}
     \label{fig:filters}
 \end{figure}
 
-There are varoious architectures for 
-These all 
+There are various architectures that have emerged each incrementally improving on the previous ones:
+LeNet\cite{Lecun98gradient-basedlearning} - the work of Yann LeCun himself,
+AlexNet\cite{NIPS2012_4824}
+VGGNet\cite{DBLP:journals/corr/SimonyanZ14a}
+GoogLeNet\cite{DBLP:journals/corr/SzegedyLJSRAEVR14}
+ResNet\cite{DBLP:journals/corr/HeZRS15}
 
-LeNet
-AlexNet
-VGGNet
-GoogLeNet
-ResNet
-ZFNet
-
-
-\section{Deep Learning}
+\subsection{Deep Learning}
+Deep learning referes to the procedure of training neural networks and
+convolutional neural networks to perform the task at hand accurately. During
+deep learning first a dataset is created with training images coupled with
+"ground truth" data that is the required prediction for each image. The neural
+networks are then fed with the images in batches for a certain number of
+iterations - epochs. The weights of the neural network and the filters are
+adjusted with the loss function that comes from calculating the error of the
+current prediction and the ground truth for each image. This error is then
+"backpropagated" which is just another way of saying it is multiplied with the
+derivative of each weight in the network and subtracted from it. For filters this means
+"filtering filters", so only those filters will stay in the convnet which
+resulted in a non-zero gradient in the neural network.
 
 \section{Detection, Classification and Segmentation}
 \subsection{Image Classification}
+
 \subsection{Object Detection, Localization}
     (AlexNet, LeNet, VGG)
     R-CNN, Fast, Faster
-    Segmentation Networks
-    Mask R-CNN - Detectron2
-    Detectron
     YOLO
 \subsection{Segmentation}
+Segmentation Networks
 \subsection{Instance Segmentation}
+Mask R-CNN - Detectron2
+Yolact
+Yolact++
 \section{Tracking}
 others
 SORT
 Deep Sort
 \section{Bounding box detection and orientation}
+
 \section{Key point detection}
-\section{Voxelization }
+
+\section{Voxelization}
 PointNet
 VoxelNet
 \section{Lane and road detection}
+Traditional way
 Road detection
 Driveable Road
 Lane detection: sliding window, curve fit
@@ -180,10 +194,6 @@ Stereo vision
 Depth estimation
 \section{Datasets}
 Datasets - KITTI, MARS, COCO, Waymo, nuScenes
-
-
-Basics: depth from radar/stereo cameras: I choose only cameras
-
 
 
 

@@ -6,6 +6,13 @@
 In order to simply the task of scene understanding we need
 to define boundaries to measure the success of the detector. 
 
+\section{Ideal traffic situations - only known actors}
+The first essential assumption is that there will only be ideal situations which
+means that we will only need to detect actors that we expect on the road:
+vehicles, bicycles, pedestrians. In the real world foreign objects on the road
+are a usual and dangerous phenomenon, however here I won't take that into
+account.
+
 \section{Daylight situation}
 
 First of all we are going to specialize to day-light situations only. This
@@ -46,17 +53,28 @@ approach Tesla takes however it is not clear how exactly.
 
 It is important to determine the orientation of the detected cars on the road,
 so that the algorithm knows the depth data corresponds to which side of the
-detected vehicle. It is also a clue that helps in the determining the direction
+detected vehicle. It is also a clue that helps in determining the direction
 of the car.
 
-Detecting keypoints is one way
-
-Detection keypoints could be done with an algorithm similar to Latent 3D Keypoints\cite{suwajanakorn_discovery_2018}
+Detecting keypoints could be done with an algorithm similar to Latent 3D
+Keypoints\cite{suwajanakorn_discovery_2018}
 
 \section{Tracking}
-- No tracking
-- No consistency through time
-\section{Only detection}
 
-No control - just scene understanding:
-simple steer control explain
+The final algorithm does not include tracking, this means that the identity of
+each detected actor/object is inconsistent throughout time. Tracking helps
+handling occlusion of previously detected pedestrians/vehicles and also in
+building up a knowledge base for each actor throughout it's presence in the
+scene. This can help in estimating the actor's velocity, acceleration and it
+provides a base for interpreting intentions. I simplified the task by not
+considering identity throughout time an important factor, eventhough in a real
+system it is a must-have.
+
+\section{Only detection and localization}
+
+The final product will be a detector that can detect vehicles and pedestrians up
+more than a 100 meters and localize them using stereo vison. The detector work
+with a reasonable accuracy error and is built in an extensible way so that
+tracking, and improved instance segmentator and lane detection can be plugged
+in. The webvisualizer then can be easily extended to show futher information by
+a newer version of the detector.
