@@ -4,14 +4,15 @@
 %----------------------------------------------------------------------------
 In \autoref{chap:assumptions} I established some simplifications to the system.
 In order to create a fully capable scene understanding algorithm the following
-improvements are needed.
+improvements are necessary.
 
 \section{Tracking and correlation}
 In order to measure the accuracy of detections (false positives, false
 negatives), it is important to correlate the positive detections with the most
 likely ground truth actor. This could be done by finding the closest truth actor
-to each detection. This should suffice, because in case there are huge errors,
-intead the algorithm should be redesigned fundamentally!
+to each detection. There is no point in implementing more robust solutions,
+because if the error is so high that there are conflicting possibilities for the
+nearest possible truth object then the depth estimation is fundamentally flawed.
 
 \section{Faster instance segmentation with Yolact++}
 A new research has emerged relating instance segmentation,
@@ -24,38 +25,52 @@ the same accuracy with a higher fps than it is replaceable with Detectron2.
 \section{Optimal sensor suite}
 We have seen that companies use many sensors combined not only rgb cameras. In
 an optimal setting I would use only one stereo camera setting to the front and
-rely on radar and ultrasonic sensors for depth data. Monodepth is also an option
-to estimate or correct depth however research is still ongoing and it might not
-be a stable method.
+rely on radar and ultrasonic sensors for depth data.
+Monodepth~\cite{monodepth17} is also an option to estimate or correct depth
+however it might not be a stable method.
 
 \section{Keypoint based detection and orientation}
-Orientation, keypoint detection, wheel, etc detection
-Depth not based on center point
+Keypoint or landmark based orientation estimation would be a robust method to
+determine the orientation of vehicle in an image. This is imporant in order to
+determine which side is visible to the depth map, and assign the depth data to
+that side of the object and reconstruct knowing this information. In the next
+chapter I describe to methods I experimented with to estimate orientation.
 
 \section{Data correction}
-
-
 The percieved information must be corrected with the car's gyroscopic data,
-because cameras get tilted Car position, tilt, velocity detection and correction,
-odometric correction
+because cameras get tilted. This is important when the road we are on or the
+road ahed of us has a high difference in inclination.
 
-
-\section{Depth correction}
-Size based depth correction
-Parallax motion based depth correction
-\subsection{Size based}
-\subsection{Monodepth}
-\subsection{Parallax motion}
 \section{Lane, path and road detection}
-Road segmentation, path  based on other actors
-Drivable area reconstruction from other actors - more robust
+Lane detection can be done with the prevalent methods such a Hough transform
+combined with sliding window curve fit. Another possibility is to take into
+account the vehicles in front and behind us and interpret their path as the
+right path and regress the lane to their path. However this might lead to
+uninteded results.
 
-
-\section{3D reconstruction}
-Voxel reconstruction of actors
-\section{Traffic light understanding}
 \section{Foreign object detection}
-White list based - difficult problem! (https://link.springer.com/article/10.1186/s13640-018-0261-2)
+With the usage of sonar and radar sensors and even more so with LiDAR it is
+possible to detect object on the road. However it is more robust if the
+algorithm can detect when there is an object on the road independent of what it
+is exactly. A solution to this would be to use road segmentation which has to
+exclude segmenting the foreign object on the road creating a hole in the
+segmentation. 
+
+\section{Traffic light understanding}
+Traffic light understanding is a straightforward problem to have. Detection
+algorithm trained on the COCO~\cite{DBLP:journals/corr/LinMBHPRDZ14} dataset are
+already able to detect traffic lights. A difficult problem to solve is if there
+are multiple traffic lights visible to the camera, but even then, usually the
+closest one facing towards the vehicle is the one to follow. After determining
+the traffic light we have to read the current value, which is a simple image
+processing procedure. Optionally if this is not enough the algorithm can be made
+more robust by teaching a convnet to be able to determine the position of the
+three light circles. 
+
+\subsection{Traffic officer detection}
+Detecting traffic officers could also be a useful part of the algorithm. There
+are new human pose estimation algorithms that could even help in understanding
+the gestures of an officer controlling the road.  
 
 \section{Unsupervised learning methods}
 One of the most exciting improvement after all improvements above have been

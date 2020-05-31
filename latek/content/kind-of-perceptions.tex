@@ -64,7 +64,7 @@ single template for all the different cases.
 \section{Convolutional Neural Networks}
 
 Visual recognition tasks such as image classification, localization, and
-detection are key components of Computer vision. However these are not possible
+detection are key components of computer vision. However these are not possible
 to achieve with traditional vision.
 
 Recent developments in neural networks and deep learning approaches have greatly
@@ -75,7 +75,7 @@ multiple layers, each layer containing multiple perceptrons. Layers can be
 fully-connected or sparsely if possible, providing some performance benefits.
 Each perceptron is an activation function whose input is the weighted output of
 perceptrons from previous layers, and the function is usually a sigmoid
-function. A neural networks first layer is the input layer and the last layer is
+function. A neural network's first layer is the input layer and the last layer is
 the output, which could be an array of perceptron where only one yields a high
 output creating a classifier. Layer in-between are called hidden layers and it
 is up to design and experimentation the determine what is the right
@@ -108,7 +108,7 @@ reusability of weights.
 There is material on the internet in abundance about how convolutional neural
 networks work, and I have read many of them, but the one I recommend most is the
 Stanford course CS231N\footnote{ Stanford CV course CS231N
-\url{https://cs231n.github.io/}}. 
+    \url{https://cs231n.github.io/}}. 
 
 The general architecture of CNN is similar to a cone, where the first layer is
 the widest and each layer first convolves multiple filters (which in the
@@ -137,9 +137,9 @@ CNN's architecture can be seen in \autoref{fig:convnet}.
     \label{fig:filters}
 \end{figure}
 
-There are various architectures that have emerged each incrementally improving on the previous ones:
-LeNet~\cite{Lecun98gradient-basedlearning} - the work of Yann LeCun himself,
-AlexNet~\cite{NIPS2012_4824}
+There are various architectures that have emerged each incrementally improving
+on the previous ones: LeNet~\cite{Lecun98gradient-basedlearning} - the work of
+Yann LeCun himself, AlexNet~\cite{NIPS2012_4824}
 VGGNet~\cite{DBLP:journals/corr/SimonyanZ14a}
 GoogLeNet~\cite{DBLP:journals/corr/SzegedyLJSRAEVR14}
 ResNet~\cite{DBLP:journals/corr/HeZRS15}
@@ -158,42 +158,99 @@ derivative of each weight in the network and subtracted from it. For filters thi
 "filtering filters", so only those filters will stay in the convnet which
 resulted in a non-zero gradient in the neural network.
 
-\section{Detection, Classification and Segmentation}
-\subsection{Image Classification}
+\section{Detection and Segmentation}
 
 \subsection{Object Detection, Localization}
-    (AlexNet, LeNet, VGG)
-    R-CNN, Fast, Faster
-    YOLO
+
+The task to define objects within images usually involves outputting bounding
+boxes and labels for individual objects. This differs from the
+classification / localization task by applying classification and
+localization to many objects instead of just a single dominant object.
+
+If we use the Sliding Window technique like the way we classify and localize
+images, we need to apply a CNN to many different crops of the image.
+
+In order to cope with this, researchers have proposed to use regions
+instead, which are suggestions of regions that are likely to contain
+objects. The first such convnet is called
+\textbf{R-CNN}~\cite{DBLP:journals/corr/GirshickDDM13} (Region-based
+Convolutional Neural Network).
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=80mm, keepaspectratio]{figures/rcnn.jpeg}
+    \caption{R-CNN architecture}
+    \label{fig:rcnn}
+\end{figure}
+
+An immediate descendant to R-CNN is \textbf{Fast
+    R-CNN}~\cite{DBLP:journals/corr/Girshick15}, which improves the detection
+speed through 2 augmentations: 1) Performing feature extraction before
+proposing regions, thus only running one CNN over the entire image, and 2)
+Replacing SVM with a softmax layer, thus extending the neural network for
+predictions instead of creating a new model.
+
+There are other methods for object detection and localization but in general
+they are all based on first feature extraction then classification with
+different intermediate procedures.
+
+\begin{itemize}
+    \item You Only Look Once (YOLOv4~\cite{Bochkovskiy2020YOLOv4OS} being the latest)
+    \item Single Shot MultiBox Detector (SSD)~\cite{DBLP:journals/corr/LiuAESR15}
+\end{itemize}
+
 \subsection{Segmentation}
-Segmentation Networks
+Central to Computer Vision is the process of segmentation, which divides whole
+images into pixel groupings which can then be labelled and classified.
+Particularly, Semantic Segmentation tries to semantically understand the role of
+each pixel in the image (e.g. is it a car, a motorbike, or some other type of
+class?). Therefore, unlike classification, we need dense pixel-wise predictions
+from the models.
+
+One of the earlier approaches was patch classification through a sliding window,
+where each pixel was separately classified into classes using a patch of images
+around it. This, however, is very inefficient computationally because we don’t
+reuse the shared features between overlapping patches. The solution, instead, is
+Fully Convolutional Networks (FCN)~\cite{DBLP:journals/corr/LongSD14}.
+
 \subsection{Instance Segmentation}
-Mask R-CNN - Detectron2
-Yolact
-Yolact++
+Beyond Semantic Segmentation, Instance Segmentation segments different instances
+of classes, such as labelling 4 cars with 4 different colors. Instance
+segmentation problem is explored at Facebook AI using an architecture known as
+Mask R-CNN~\cite{DBLP:journals/corr/HeGDG17}. 
+
+The idea is that since Faster R-CNN works so well for object detection is it
+possible to extend it to that is also performs pixel-level segmentation. 
+
+Mask R-CNN adss a branch to Faster R-CNN that outputs a binary mask that says
+whether or not a given pixel is part of an object. The branch is a Fully
+Convolutional Network on top of a CNN-based feature map.
+Detectron2~\cite{wu2019detectron2} a detection framework developed by Facebook,
+is based on Mask R-CNN and it is the framework I ended up using.
+
 \section{Tracking}
-others
+Object Tracking refers to the process of following a specific object of
+interest, or multiple objects, in a given scene. It traditionally has
+applications in video and real-world interactions where observations are made
+following an initial object detection. Now, it’s crucial to autonomous driving
+systems.
+
 SORT
 Deep Sort
-\section{Bounding box detection and orientation}
 
-\section{Key point detection}
-
-\section{Voxelization}
-PointNet
-VoxelNet
 \section{Lane and road detection}
 Traditional way
 Road detection
 Driveable Road
 Lane detection: sliding window, curve fit
+
+
 \section{3D vision}
 Camera model and Calibration
 3D reconstruction
 Stereo vision
 Depth estimation
-\section{Datasets}
-Datasets - KITTI, MARS, COCO, Waymo, nuScenes
+
 
 
 
