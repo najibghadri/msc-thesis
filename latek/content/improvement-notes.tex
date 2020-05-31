@@ -5,6 +5,14 @@
 In \autoref{chap:assumptions} I established some simplifications to the system.
 In order to create a fully capable scene understanding algorithm the following
 improvements are needed.
+
+\section{Tracking and correlation}
+In order to measure the accuracy of detections (false positives, false
+negatives), it is important to correlate the positive detections with the most
+likely ground truth actor. This could be done by finding the closest truth actor
+to each detection. This should suffice, because in case there are huge errors,
+intead the algorithm should be redesigned fundamentally!
+
 \section{Faster instance segmentation with Yolact++}
 A new research has emerged relating instance segmentation,
 YOLACT~\cite{yolact-iccv2019} and YOLACT++~\cite{yolact-plus-arxiv2019}\footnote{
@@ -19,11 +27,21 @@ an optimal setting I would use only one stereo camera setting to the front and
 rely on radar and ultrasonic sensors for depth data. Monodepth is also an option
 to estimate or correct depth however research is still ongoing and it might not
 be a stable method.
+
+\section{Keypoint based detection and orientation}
+Orientation, keypoint detection, wheel, etc detection
+Depth not based on center point
+
 \section{Data correction}
+
+
 The percieved information must be corrected with the car's gyroscopic data,
 because cameras get tilted Car position, tilt, velocity detection and correction,
 odometric correction
-\section{Tracking and correlation}
+
+
+
+
 \section{Depth correction}
 Size based depth correction
 Parallax motion based depth correction
@@ -34,8 +52,7 @@ Parallax motion based depth correction
 Road segmentation, path  based on other actors
 Drivable area reconstruction from other actors - more robust
 
-\section{Keypoint based detection and orientation}
-Orientation, keypoint detection, wheel, etc detection
+
 \section{3D reconstruction}
 Voxel reconstruction of actors
 \section{Traffic light understanding}

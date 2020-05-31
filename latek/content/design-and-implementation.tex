@@ -262,7 +262,7 @@ return a disparitymap that corresponds to the pixels of the left image.
 
 Triangulation is a simple method of deriving the depth coordinate when we have
 two parallel cameras. \autoref{fig:triangulation} shows the camera setting of
-an ideal stereo setting. Recall that each stereo side in our setting is like
+an ideal stereo setting. Recall, that each stereo side in our setting is like
 this.
 
 \begin{figure}[!ht]
@@ -298,8 +298,11 @@ From this the triangulation is as follows:
         X = \frac{xl \cdot z}{f} \\
         Y = \frac{yl \cdot z}{f}
     \end{split}
+    \label{eq:depthcalc}
 \end{align}
 
+Where xl and yl refers to to distance from the center of the image to the center
+points of the detection boundingbox (in the left image). 
 
 \subsubsection{Depth calculation}
 Now we know the way to calculate the depth knowing the disparity. The result of
@@ -320,12 +323,16 @@ results, that way it simply is ignores the small inaccuracies of the masking and
 disparity error and takes the most dominant disparity value. The visualization
 of masking can be seen on \autoref{fig:merged}.
 
+
+
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=150mm, keepaspectratio]{figures/335merged.jpg}
     \caption{Masking the instance segmentation with the disparitymap filters the necessary values for estimating the vehcile's depth}
     \label{fig:merged}
 \end{figure}
+
+
 
 \subsection{Back projection}
 Each stereo side has a transformation matrix initialized before running the
@@ -337,7 +344,7 @@ following in this order:
     \item It translates the camera with the same translation for the camerase relative to the vehcile's bottom center point.
   \end{enumerate}
 
-The resulting x, y, z coordinates are the final detection coordinates that get into the detection log.
+The resulting x, y, z coordinates are the final detection coordinates that go into the detection log.
 
 \subsection{Final pseudo-code}
 The final algorithm pseudo-code:

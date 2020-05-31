@@ -4,43 +4,104 @@
 %----------------------------------------------------------------------------
 
 \section{Accuracy}
-- Explaining errors
-- Fine tuning:
-- Results I am proud of
-- Precision, recall acc, danger
+The best way to see the accuracy of the detector is through the webvisualizer.
+The reader is encouraged to visit \url{https://najibghadri.com/msc-thesis/}
+where you can interact with with the simulation playback and see each detection.
 
+The reader might notice that most of the time the detected objects are located
+closer than the ground truth. Recall, that the depth estimation happens on the
+surface of the object. Estimating the centerpoint is difficult. If instead of
+working with centerpoints I would have worked with a more complex approach of
+first detection orientation or 3D bounding box, ther would be no need for
+working with center points. I discuss improvements later on.
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=150mm, keepaspectratio]{figures/accuracy.png}
+	\caption{General accuraccy of the detector visualized in the webviewer}
+	\label{fig:accuracy}
+\end{figure}
+
+Genearlly there are no missed objects but there are false positives. Most of the
+detections are accurate within ~0.5meters. 
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=150mm, keepaspectratio]{figures/accfalsepositive.png}
+	\caption{False positive detection where a building is detected as a train}
+	\label{fig:accfalsepositive}
+\end{figure}
+
+
+Depth estimation is not accurate enough due to the inaccuracy of the
+blockmatching algorithm. This can be fixed with the use of LiDar or radio
+sensors instead of stereo imaging. Optimal sensor suite is discussed in
+Improvements \autoref{chap:improvement}.
+
+Since the setero sides overlap and they see different sides of the detect
+objects in the detection log the objects appear as many times as many sides it
+appears on as seen on \autoref{fig:accmultidet}. This can be fixed by using tracking and using a shared feature
+dictionary. Another solution is to abandon stereo camera based depth estimation
+and use mono cameras with radio or lidar sensors for depth estimation with
+cameras having a small overlapping region. This would be similar to Tesla's
+approach.
+
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=150mm, keepaspectratio]{figures/accmultidet.png}
+	\caption{Multiple detections of the same object due to overlapping stereo sides}
+	\label{fig:accmultidet}
+\end{figure}
+
+Despite these depth estimation can be accurate to 70 meters even as seen on \autoref{fig:accfar}.
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=150mm, keepaspectratio]{figures/accfar.png}
+	\caption{Relatively accurate depth estimation for far distances of \textasciitilde70 meters}
+	\label{fig:accfar}
+\end{figure}
+
+An automatic quantification method for the error will be discussed in \autoref{chap:improvement}.
 
 \subsection{Fine tuning}
-- Depth mean vs mode
-Table here
-- FPS of one side my computer vs Titan X
-- Different models and their accuracy and FPS one side
-- Mask R CNN
+Choosing different convnet models for Detectron2 can change the performance and
+accuracy of the detector. I used the ResNet-101
+model~\cite{DBLP:journals/corr/HeZRS15}. ResNet50 is faster but I experienced
+more detection misses.
 
 \begin{table}[ht]
 	\footnotesize
 	\centering
 	\begin{tabular}{ l c c }
 		\toprule
-		Sides & FPS average \\
+		Sides       & FPS average \\
 		\midrule
-		All 5 sides & 0.53 FPS \\
-		One side & 2.73 FPS  \\
+		All 5 sides & 0.53 FPS    \\
+		One side    & 2.73 FPS    \\
 		\bottomrule
 	\end{tabular}
 	\label{tab:TabularExample}
 \end{table}
 
-\section{Free Z coordinate}
-- Car tilt problem
-- Carla position problem
-- Z coordinate hack explain why its ok, CARLA issue
-    Show the difference!
+In \autoref{chap:improvement} imporvements on instance segmentation research
+will be discussed that might lead to an improved detection speed over
+Detectron2.
 
-\section{Night results}
+\section{Free Z coordinate}
+As discussed earlier in \autoref{chap:assumptions} about assumptions, the Z
+coordinate (in Carla UE coordinates \autoref{fig:carlacoords}) is disgregarded
+in the webvisualization. The accuracy of the Z coordinate is not worse or better
+the X and Y coordinates but 
+
+- Car tilt problem - Carla
+position problem - Z coordinate hack explain why its ok, CARLA issue Show the
+difference!
+
+\section{Dark results}
+
 
 \section{Hardware requirements}
-- Dangerousness
-- Hardware requirements
-
-For more results visit najibghadri.com/msc-thesis
+It wasn't possible for me to evalute the real-timeness of the system simply
+because the architecture doesn't allow that. As discussed earlier in
+\autoref{chap:carlasim} Nvidia Drive Consteallation has support for HIL
+simulation that could be used to test the real-timeness of systems.

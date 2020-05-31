@@ -8,7 +8,7 @@ import Worldview, {
   Points,
 } from "regl-worldview";
 
-let path = "rendering/3";
+let path = "rendering/2";
 
 var truthFrameList = [];
 var detectionFrameList = [];
@@ -126,6 +126,7 @@ function load(frameList, truthOrDet, counter, texts, cylinders, points) {
         position: {
           x: actor.relative_position.x,
           y: -actor.relative_position.y,
+          // z: actor.relative_position.z,
           z: supertype === "vehicle" ? 0 : 0.25,
         },
       },
@@ -201,26 +202,29 @@ export default function WebViz() {
 
   const onSpeed = () => {
     setSpeed((speed) => {
-      if (speed === 15) {
-        videoEl1.current.playbackRate = 0.5;
-        videoEl2.current.playbackRate = 0.5;
-        videoEl3.current.playbackRate = 0.5;
-        return 30;
-      } else if (speed === 30) {
-        videoEl1.current.playbackRate = 1;
-        videoEl2.current.playbackRate = 1;
-        videoEl3.current.playbackRate = 1;
-        return 60;
-      } else if (speed === 60) {
-        videoEl1.current.playbackRate = 2;
-        videoEl2.current.playbackRate = 2;
-        videoEl3.current.playbackRate = 2;
-        return 120;
-      } else if (speed === 120) {
-        videoEl1.current.playbackRate = 4;
-        videoEl2.current.playbackRate = 4;
-        videoEl3.current.playbackRate = 4;
-        return 15;
+      switch (speed) {
+        case 15:
+          videoEl1.current.playbackRate = 4;
+          videoEl2.current.playbackRate = 4;
+          videoEl3.current.playbackRate = 4;
+          return 120;
+        case 30:
+          videoEl1.current.playbackRate = 0.5;
+          videoEl2.current.playbackRate = 0.5;
+          videoEl3.current.playbackRate = 0.5;
+          return 15;
+        case 60:
+          videoEl1.current.playbackRate = 1;
+          videoEl2.current.playbackRate = 1;
+          videoEl3.current.playbackRate = 1;
+          return 30;
+        case 120:
+          videoEl1.current.playbackRate = 2;
+          videoEl2.current.playbackRate = 2;
+          videoEl3.current.playbackRate = 2;
+          return 60;
+        default:
+          break;
       }
     });
   };
