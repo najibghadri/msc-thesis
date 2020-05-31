@@ -8,7 +8,7 @@ import Worldview, {
   Points,
 } from "regl-worldview";
 
-let path = "rendering/2";
+let path = "rendering/3";
 
 var truthFrameList = [];
 var detectionFrameList = [];
@@ -316,12 +316,12 @@ export default function WebViz() {
         ></video>
         <video
           style={{ zIndex: video === 1 ? 1 : 0 }}
-          src={path + "/output.webm"}
+          src={path + "/outputDET.webm"}
           ref={videoEl2}
         ></video>
         <video
           style={{ zIndex: video === 2 ? 1 : 0 }}
-          src={path + "/output.webm"}
+          src={path + "/outputDP.webm"}
           ref={videoEl3}
         ></video>
         <div className="videoControl">

@@ -143,16 +143,16 @@ In each frame I log information about the current state of the simulation. For
 the purpouses of the final detector the following information gets logged in each frame:
 \begin{itemize}
     \item Frame's number: the value of the frame counter at each frame
-    \item For all walker and vehicle actors in a 100 meter radius from the ego car: 
-    \begin{itemize}
-        \item Id: corresponds to the actor's unique id among other actors.
-        \item Relative position: X, Y, Z coordinate of the actor in the CARLA
-        coordinate system (see \refstruc{fig:carlacoords})
-        \item Distance: Euclidean distance from the ego car 
-      \end{itemize}
+    \item For all walker and vehicle actors in a 100 meter radius from the ego car:
+          \begin{itemize}
+              \item Id: corresponds to the actor's unique id among other actors.
+              \item Relative position: X, Y, Z coordinate of the actor in the CARLA
+                    coordinate system (see \refstruc{fig:carlacoords})
+              \item Distance: Euclidean distance from the ego car
+          \end{itemize}
     \item Waypoints: these are center and left-right points of the lane the egocar is currently in up
-    to 30 points forward. These were meant to be the ground-truth data for
-    lane-detection
+          to 30 points forward. These were meant to be the ground-truth data for
+          lane-detection
 \end{itemize}
 
 This information is then exported into a JSON file with the following format:
@@ -186,32 +186,110 @@ objects.
 
 \section{Detector}
 
-The plan algorithm is the following: first take a stereo pair of images and
-calculate the disparity map with a stereo block matching algorithm. Then
-detetect objects and their segmentation mask (instance segmentation) with a
-state-of-the-art convnet and then extract the disparity data using the
-segmentaiton mask. Then use the extracted disparity data to etimate the depth of
-the detected object and then reproject to Carla-world coordinates to match the
-logfile coordinate system.
+The algorithm plan is the following: for each stereo pair of images calculate
+the disparity map with a stereo block matching algorithm. Then detetect objects
+and their segmentation mask (instance segmentation) with a state-of-the-art
+convnet and then extract the disparity data using the segmentaiton mask. Then
+use the extracted disparity data to etimate the depth of the detected object and
+then reproject to Carla-world coordinates to match the logfile coordinate
+system.
 
-
-\subsection{OpenCV}
-Intro to it
 \subsection{Detectron2}
-- Occulsion
-- Detection images!
-- Pretrained models
-- Comparison
-- Object detection and localization
-- Instance segmentation
+Detectron2's\cite{wu2019detectron2} Mask R-CNN model provides both object
+detection and instance segmentation so I decided to use it. Detectron is built
+with PyTorch, Facebook's own GPU-aided ML library.
+
+There are multiple models provided by D
+
+- Occulsion - Detection images! - Pretrained models - Comparison -
+Object detection and localization - Instance segmentation
+
+A visualization of the detection results can be seen on \refstruc{fig:detection}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=150mm, keepaspectratio]{figures/335DET.jpg}
+    \caption{A visualization of the Detectron2 detections and instance segmentation on an ego-occluded image}
+    \label{fig:detection}
+\end{figure}
+
 \subsection{Depth estimation}
-\subsubsection{Triangulation}
-- Triangulation
+\subsubsection{OpenCV}
+OpenCV is a library of programming functions mainly aimed at real-time computer
+vision originally developed by Intel. The library is cross-platform and free for
+use. It provides a lot of traditional Computer Vision tools such as the stereo
+correspondence algorithm using block matching \cite{5489515} and an advanced
+version of it the Semi-Global Block Matching method \cite{4359315} that I used
+for the stereo disparity map calculation.
 \subsubsection{Stereo Block Matching Algorithm}
-- Stereo Block Matching Algorithm (newer)
-\subsubsection{Result}
-- 
+The Stereo Block Matching Algorithm works by comparing the neighborhood of a pixel
+to each neighborhood of the row of the other image - the measure of similarity
+can be different, but usually the mean squared error is used.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=150mm, keepaspectratio]{figures/335DP.jpg}
+    \caption{A visualized disparity map result after using OpenCV's StereoBM algorithm on the front stereo side}
+    \label{fig:disparitymap}
+\end{figure}
+
+\subsubsection{Triangulation}
+
+Triangulation is a simple method of deriving the depth coordinate when we have
+two parallel cameras. \refstruc{fig:triangulation} shows the camera setting of
+an ideal stereo setting. Recall that each in our setting each side is like
+this.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=150mm, keepaspectratio]{figures/triangulation.png}
+    \caption{An ideal parallel stereo camera model.}
+    \label{fig:triangulation}
+\end{figure}
+
+If there is a point P in the real world that will be projected on to different
+points of two cameras set apart. If the cameras are set in an ideal parallel
+stereoscopic setting then we can easily calculate the depth of the point. The
+pixel difference between the same block in each pixel can be calculated with
+xr-xl. The OpenCV Stereo BM algorithm provides this value for each matched
+pixel. From now on all we have to do is use triangulation to calculate the depth
+of each pixel. The f corresponds to the focus length and Z corresponds to the
+real depth of the point.
+
+The following equations hold true for the figure above from similar triangles.
+\begin{align}
+    \begin{split}
+        \frac{z}{f} = \frac{x}{xl} =  \frac{x-b}{xr} \\
+        \frac{z}{f} = \frac{y}{yl} =  \frac{y-b}{yr}
+    \end{split}
+\end{align}
+
+From this the triangulation is as follows:
+
+\begin{align}
+    \begin{split}
+        \text{Depth}\;\; Z = \frac{f*b}{xl - xr} =  \frac{f*b}{disparity} \\
+        X = \frac{xl*z}{f} \\
+        Y = \frac{yl*z}{f}
+    \end{split}
+\end{align}
+
+
+\subsubsection{Depth calculation}
+
+In order to 
+
+\refstruc{fig:merged}
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=150mm, keepaspectratio]{figures/335merged.jpg}
+    \caption{Masking the instance segmentation with the disparitymap filters the necessary values for estimating the vehcile's depth}
+    \label{fig:merged}
+\end{figure}
+
 \subsection{Back projection}
+Now that we have the image-based coordinates of an object 
+
 - Camera model and coordinates
 
 - Camera setting
@@ -224,10 +302,22 @@ three images of detection montage!!!
 
 
 \subsection{Final pseudo-code}
-Final pseudo code
+The final algorithm pseudo-code:
 \begin{lstlisting}[language=]
-       pseudo code
-    \end{lstlisting}
+for each frame:
+    for each stereo side:
+        1. read left and right image
+        2. occlude ego from image
+        3. compute disparity map using stereo bm.
+        4. predict detections and instance segmentation
+        for each detection:
+            mask disparity map with detection segmentation
+            calculate mode of the masked disparity
+            apply triangulation and inverse projection
+            add actor to frame
+    add frame to framelist
+save detection list
+\end{lstlisting}
 
 \section{Web visualizer}
 As I mentioned before in order to compare the detection result and the ground
@@ -236,7 +326,7 @@ of the detection replayed. This is similar to the information shown on a monitor
 of a self-driving car.
 
 Since I already had experience in Javascript and in ReactJs \footnote{ReactJs
-\url{https://reactjs.org/}} - a very easy-to-use web application framework
+    \url{https://reactjs.org/}} - a very easy-to-use web application framework
 developed by Facebook - I decided to look for options in 3D visualization. I
 found WebViz\footnote{WorldView WebViz\url{https://webviz.io/worldview/}}, a
 React library specifically made for 3D visualization of traffic scenarios. It
