@@ -87,18 +87,38 @@ In \autoref{chap:improvement} imporvements on instance segmentation research
 will be discussed that might lead to an improved detection speed over
 Detectron2.
 
-\section{Free Z coordinate}
+\section{Z coordinate ignored}
 As discussed earlier in \autoref{chap:assumptions} about assumptions, the Z
 coordinate (in Carla UE coordinates \autoref{fig:carlacoords}) is disgregarded
 in the webvisualization. The accuracy of the Z coordinate is not worse or better
-the X and Y coordinates but 
+the X and Y coordinates but it doesn't add information and due to an
+inconsistency in CARLA simulator when returning the location of actors for
+vehicles and pedestriands the center point is interpreted differently. Hence it
+showed a false inaccuracy in the Z direction, however not significant as seen on \autoref{fig:acczcoord}.
 
-- Car tilt problem - Carla
-position problem - Z coordinate hack explain why its ok, CARLA issue Show the
-difference!
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=150mm, keepaspectratio]{figures/acczcoord2.png}
+	\caption{Inaccuracies on the Z coordinates are not significant}
+	\label{fig:acczcoord}
+\end{figure}
+
+In \autoref{chap:improvement} on imporvements a different more complex and
+robust approach to position estimation is discussed that doesn't use detected
+bounding box centerpoints.
 
 \section{Dark results}
+There is only one map with a "night" situation, and it takes place in a city
+that is well-luminated, hence I don't consider it a night light test, but it is
+darker than other scenarios. The results are good no significant objects were
+missed.
 
+\begin{figure}[!ht]
+	\centering
+	\includegraphics[width=150mm, keepaspectratio]{figures/nightresult.png}
+	\caption{Night situation yields good performance}
+	\label{fig:nightresult}
+\end{figure}
 
 \section{Hardware requirements}
 It wasn't possible for me to evalute the real-timeness of the system simply
