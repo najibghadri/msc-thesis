@@ -2,7 +2,7 @@
 \chapter{\bevezetes}
 %----------------------------------------------------------------------------
 
-I am very passionate about artificial intelligence and as much inspired by the
+I am passionate about artificial intelligence and as much inspired by the
 work of tech companies such as Tesla. Tesla has managed create cutting edge
 technology, creating compelling and practical electric cars combined with their
 Tesla Autopilot system. It has become iconic to sit in a Tesla and watch it
@@ -11,16 +11,16 @@ access to data is most likely number one in the world. There are other important
 companies who develop autopilot systems, one of them is MobilEye an Israeli
 subsidiary of Intel corporation that was actually a supplier of Tesla until they
 set apart in part due to disagreements on how the technology should be built,
-which is an important topic that I will talk about.
+which is an important topic that will be discussed in the thesis.
 
 There are a couple of topics we should establish first. The first being levels
 of autopilot systems as defined by SAE (Society of Automotive Engineers)
-(\refstruc{fig:J3016}). 
+(\autoref{fig:J3016}). 
 
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=150mm, keepaspectratio]{figures/levels-of-ad.jpg}
-    \caption{Levels of driving automation defined in SAE J3016 \cite{j3016b}}
+    \caption{Levels of driving automation defined in SAE J3016~\cite{j3016b}}
     \label{fig:J3016}
 \end{figure}
 
@@ -32,14 +32,14 @@ Full automation, where the driver is not expected to intervene and the vehicle
 is able to handle all situations is on Level 5. In order to achieve that level
 the autopilot must fully understand the environment.
 
-This is however very difficult. The algorithms that we know today are not enough
+This is however difficult. The algorithms that we know today are not enough
 to achieve understanding of the environment yet. Even Convolutional Neural
 Networks (CNNs) are not cabale of understanding deep concepts of the world. CNNs
 are mainly used in computer vision and are useful when we want to recognize
 patterns that appear anywhere in 2D images. Today we are able to calssify
-images, detect and localize objects, segment images to very high accuracy,
+images, detect and localize objects, segment images to high accuracy,
 however this doesn't mean the computer \emph{understands} the scenes.
-Furthermore these algorithms are trained very specifically: To build a detection
+Furthermore these algorithms are trained specifically: To build a detection
 neural network (NN) first a meticulous dataset must be created that tells the
 algorithm what must be detected - we call this the ground truth, or training
 data set. Then the NN must be trained and optimized until it yields a low error
@@ -86,23 +86,23 @@ requires improvization to save a situation and we might need a more general AI.
 
 For the vehicle to understand it's surroundigs first of all it needs sensors.
 Each company goes differently about the sensor suite, and it is quite
-interesting to examine each solution. I will talk about this in the next
+interesting to examine each solution. This will be discussed in the next
 chapter, Related works.
 
 \section{Proposed solution}
 
-As we said to develop our system first of all we need data. There are a lot of
-datasets available on the internet for car driving. They include object
+In order to develop the proposed system, a sizeable dataset is needed. There are
+many datasets available on the internet for car driving. They include object
 detections, segmentations, map data, lidar data. Some of the most notable ones
 are the nuScenes dataset\footnote{nuScenes dataset
 \url{https://www.nuscenes.org/}}, Waymo dataset\footnote{Waymo dataset
 \url{https://waymo.com/open/}} from Google's self-driving car company or the
 Cityscapes dataset\footnote{Cityscapes dataset
 \url{https://www.cityscapes-dataset.com/}} and more. Each of these datasets are
-very good, however they are not really helpful for our case.
+good, however they are not really helpful for our case.
 
 In order to localize objects in 3D space I use stereo imaging. Each AD system
-today employs stereo camera setting because it is a very simple and cheap but
+today employs stereo camera setting because it is a simple and cheap but
 accurate way of estimating depth for each pixel in an image. In order to have
 the \emph{freedom} to create a custom camera setting I cannot rely on these
 datasets. Furthermore, I want to measure the success rate of my detector however
@@ -115,8 +115,8 @@ in looking for simulators that let me extract data from the simulation in each
 frame and let's me create custom world scenario and sensor settings. 
 
 After an extensive research of self-driving car simulators of I found CARLA
-Simulator\footnote{CARLA Sim \url{http://carla.org/}} \cite{Dosovitskiy17} (a
-screenshot is seen on \refstruc{fig:carla}) to be the most advanced one that is
+Simulator\footnote{CARLA Sim \url{http://carla.org/}}~\cite{Dosovitskiy17} (a
+screenshot is seen on \autoref{fig:carla}) to be the most advanced one that is
 also opensource. CARLA is a quite mature simulator with an API that
 fulfills our requirements.
 
@@ -128,7 +128,7 @@ fulfills our requirements.
 \end{figure}
 
 I set up the virtual vehcile with 10 RGB cameras mounted on the roof creating 4
-stereo sides as shown on \refstruc{fig:3dmodel2}. As the title of the thesis
+stereo sides as shown on \autoref{fig:3dmodel2}. As the title of the thesis
 says, I only used RGB cameras and no other sensors. This is a similar approach
 to what Tesla is taking, except for the radar sensors, contrary to almost all
 other players in the field who also employ a Lidar sensor for depth data
@@ -144,14 +144,14 @@ general solution that is closer to how we humans percieve the environment.
 \end{figure}
 
 The detector uses state-of-the-art detection, localization and segmentation model
-Detectron2 \cite{wu2019detectron2} a MASK R-CNN conv net model based on Residual
+Detectron2~\cite{wu2019detectron2} a MASK R-CNN conv net model based on Residual
 neural networks and Feature Pyramid Networks trained on the COCO general
 dataset\footnote{COCO dataset \url{http://cocodataset.org/}}.
 
 Finally I develop a 3D webvisualizer that lets us replay the ground truth and
 detection log simultaneously and compare the error between the two.
 
-\refstruc{fig:flow} depicts this taskflow.
+\autoref{fig:flow} depicts this taskflow.
 
 \begin{figure}[!ht]
     \centering
@@ -171,7 +171,7 @@ be improved to even 60FPS creating a real-time system. The code cannot perform
 lane detection yet, but that would have been the easier part. The webvisualizer
 let's us relplay the simulation frame by frame and see the detection error for
 each actor in the scene. It also shows a montage the original, detection and
-depthmap. Below, \refstruc{fig:webviz1} shows a screenshot of the webvisualizer
+depthmap. Below, \autoref{fig:webviz1} shows a screenshot of the webvisualizer
 in action.
 
 \begin{figure}[!ht]

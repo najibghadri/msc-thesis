@@ -19,23 +19,24 @@ necessary information into a log file to later compare the detection log with
 
 \section{Tools used}
 
-Very soon it became obvious that Linux operating system is the right tool to use
+Soon it became obvious that Linux operating system is the right tool to use
 for development. I have been using Ubuntu before this project as well so I was
 already familiar with everything. The main IDE I used throughout the project is
-Visual Studio Code, which thanks to it's openness and community has a lot of
+Visual Studio Code, which thanks to it's openness and community has many useful
 extensions that helped me develop in fact every part of the thesis: Python,
 Nodejs and Javascript for the webvisualizer and finally LaTeX and ofcourse git
 support.
 
 I also used Conda which is I think an essential tool when you want to develop ML
 and AI projects with Python. Conda makes it easy to create and use separate
-Python environments. This is very important because different implementations of
+Python environments. This is important because different implementations of
 algorithms require different versions of the same packages thus it keeps a clean
-separation. The drawback is that consecuently it requires a lot of drive memory.
+separation. The drawback is that consecuently it requires an excessive ammount
+of hard-drive space.
 
 Upon developing the algorithm and experimenting with it I used Jupyter Notebook
 which is a Python runtime on top of the bare one and a web-based IDE at the same
-time. With Jupyter Notebook it is very easy to change and re run the code thanks
+time. With Jupyter Notebook it is easy to change and re run the code thanks
 to it's "kernel" system, which keeps the value of variable and imported packages
 between executions.
 
@@ -51,7 +52,7 @@ design strategy, as we have seen in the work of other companies in
 \autoref{chap:relatedwork}. However we will need to determine depth as well. I
 decided to use only cameras in a stereoscopic structure to create 4 stereo sides
 around the vehicle. The following image shows the design setting with field of
-views visualized in \refstruc{fig:3dmodel3}.
+views visualized in \autoref{fig:3dmodel3}.
 
 \begin{figure}[!ht]
     \centering
@@ -69,7 +70,8 @@ In details:
           angled stero vision.
     \item Right and left side stereos are turned 90\degree to the sides and they are apart 0.5 meter.
 \end{itemize}
-The cameras are 1.5 meters above the ground.
+The cameras are 1.5 meters above the ground and they are mounted relative to the
+bottom center-point of the vehicle.
 
 The advantage of puting stereo cameras apart to a relatively large distance is
 that it increases the accuracy of the stereo block matching algorithm to a
@@ -101,10 +103,10 @@ simulation minute, i.e. it ran the simulation with 2FPS. Note, this is different
 from the simulation time-step which we fixed to 30FPS.  Since I collect 10 images
 in each frame it results in a dataset of 18000 images.
 
-The camera setting I used is an undistorted camera that takes 1280x720
-resolution images, i.e HD 720p images, compressed with JPEG to yield a
+The camera setting I used is an undistorted camera that takes $1280\times720$
+resolution images, i.e. HD 720p images, compressed with JPEG to yield a
 reasonable size. This way one image is on average 215 kilobytes instead of 1MB
-which is a very good compression rate and this was the limit where I did not see
+which is a good compression rate and this was the limit where I did not see
 any difference in detection accuracy.
 
 In a real-world systems images go straight to the GPU and CPU unit and they get
@@ -129,7 +131,7 @@ Naming the images in an organized way is important to make it easy to read the
 images in a structured way upon detection. Each image starts with the number of
 the frame it was taken in. Starting the simulator server Carla increases a
 frame counter starting with 1. To know which image corresponds to which camera,
-the framenumbers are postfixed with a label. \refstruc{fig:labeling} shows the
+the framenumbers are postfixed with a label. \autoref{fig:labeling} shows the
 postfixes for each image.
 
 \begin{figure}[!ht]
@@ -147,7 +149,7 @@ the purpouses of the final detector the following information gets logged in eac
           \begin{itemize}
               \item Id: corresponds to the actor's unique id among other actors.
               \item Relative position: X, Y, Z coordinate of the actor in the CARLA
-                    coordinate system (see \refstruc{fig:carlacoords})
+                    coordinate system (see \autoref{fig:carlacoords})
               \item Distance: Euclidean distance from the ego car
           \end{itemize}
     \item Waypoints: these are center and left-right points of the lane the egocar is currently in up
@@ -180,7 +182,7 @@ megabytes. It isn't optimal to save information like this for longer
 simulations. In those cases it is recommended to use a binary format. Carla
 provides a way to save binary information of the recording but unfortunately
 there were issues with recording that way, so I ended up with this custom log
-format. However it ended up being very beneficial, because the webvisualizer
+format. However it ended up being beneficial, because the webvisualizer
 simply loads the json files (detection and ground truth) into two JavaScript
 objects.
 
@@ -190,21 +192,28 @@ The algorithm plan is the following: for each stereo pair of images calculate
 the disparity map with a stereo block matching algorithm. Then detetect objects
 and their segmentation mask (instance segmentation) with a state-of-the-art
 convnet and then extract the disparity data using the segmentaiton mask. Then
-use the extracted disparity data to etimate the depth of the detected object and
+use the extracted disparity data to estimate the depth of the detected object and
 then reproject to Carla-world coordinates to match the logfile coordinate
 system.
 
 \subsection{Detectron2}
-Detectron2's\cite{wu2019detectron2} Mask R-CNN model provides both object
+Detectron2's~\cite{wu2019detectron2} Mask R-CNN model provides both object
 detection and instance segmentation so I decided to use it. Detectron is built
 with PyTorch, Facebook's own GPU-aided ML library.
 
-There are multiple models provided by D
+% There are multiple models provided by D
 
-- Occulsion - Detection images! - Pretrained models - Comparison -
-Object detection and localization - Instance segmentation
+The algorithm runs the detecton prediction only on the left image of each side,
+because later on we will need the segmentation mask of the left image to extract
+the depth data from the disparity map generated by the stereo block matching
+algorithm. 
 
-A visualization of the detection results can be seen on \refstruc{fig:detection}
+Before prediction if our ego car falls into the image it is filled with zeros,
+i.e. it is occluded ith black color. It is better to use black since it is all
+zeros, and therefore convnet is not going to be sensitive for those parts of the
+image.
+
+A visualization of the detection results can be seen on \autoref{fig:detection}
 
 \begin{figure}[!ht]
     \centering
@@ -214,30 +223,46 @@ A visualization of the detection results can be seen on \refstruc{fig:detection}
 \end{figure}
 
 \subsection{Depth estimation}
+To perform depth estimation I found to easiest way is to use OpenCV a widely
+used library in computer vision that includes the stereo processing tools I
+needed.
 \subsubsection{OpenCV}
 OpenCV is a library of programming functions mainly aimed at real-time computer
 vision originally developed by Intel. The library is cross-platform and free for
-use. It provides a lot of traditional Computer Vision tools such as the stereo
-correspondence algorithm using block matching \cite{5489515} and an advanced
-version of it the Semi-Global Block Matching method \cite{4359315} that I used
+use. It provides traditional Computer Vision tools such as the stereo
+correspondence algorithm using block matching~\cite{5489515} and an advanced
+version of it the Semi-Global Block Matching method (SGBM)~\cite{4359315} that I used
 for the stereo disparity map calculation.
 \subsubsection{Stereo Block Matching Algorithm}
-The Stereo Block Matching Algorithm works by comparing the neighborhood of a pixel
-to each neighborhood of the row of the other image - the measure of similarity
-can be different, but usually the mean squared error is used.
+The Stereo Block Matching Algorithm works by comparing the neighborhood of a
+pixel to each neighborhood of the row of the other image - the measure of
+similarity can be different, but usually the mean squared error is used. Usually
+before using the stereo block matchin algorithm a camera calibration is
+required. This happens with the chessboard calibration method
+\footnote{Chessboard calibration in OpenCV \url{https://docs.opencv.org/master/dc/dbb/tutorial_py_calibration.html}}
+ where a flat checkerboard is displayed in front of the two stereo cameras. The
+ calibration algorithm then calculates the distortion for each camera and
+ rotation difference between the two cameras to calculate the intrinsic matrix.
+
+ In our case since we record images in a super ideal way: no distortion and
+ perfectly parallel cameras we don't need any calibration and application of
+ inverse intrinsic matrix before using the SGBM algorithm.
 
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=150mm, keepaspectratio]{figures/335DP.jpg}
-    \caption{A visualized disparity map result after using OpenCV's StereoBM algorithm on the front stereo side}
+    \caption{A visualized disparity map result after using OpenCV's StereoSGBM algorithm on the front stereo side}
     \label{fig:disparitymap}
 \end{figure}
+
+The StereoBM algorithm considers the left image as the primary, so it will
+return a disparitymap that corresponds to the pixels of the left image.
 
 \subsubsection{Triangulation}
 
 Triangulation is a simple method of deriving the depth coordinate when we have
-two parallel cameras. \refstruc{fig:triangulation} shows the camera setting of
-an ideal stereo setting. Recall that each in our setting each side is like
+two parallel cameras. \autoref{fig:triangulation} shows the camera setting of
+an ideal stereo setting. Recall that each stereo side in our setting is like
 this.
 
 \begin{figure}[!ht]
@@ -247,10 +272,11 @@ this.
     \label{fig:triangulation}
 \end{figure}
 
-If there is a point P in the real world that will be projected on to different
-points of two cameras set apart. If the cameras are set in an ideal parallel
-stereoscopic setting then we can easily calculate the depth of the point. The
-pixel difference between the same block in each pixel can be calculated with
+If there is a point P in the real world in the field of view of the stereo
+camerase, the point will be projected onto different points of both camera's
+image plane. If the cameras are set in an ideal parallel stereoscopic setting
+then we can easily calculate the depth of the point. The pixel difference
+between between pixels correspoonding to the same block can be calculated with
 xr-xl. The OpenCV Stereo BM algorithm provides this value for each matched
 pixel. From now on all we have to do is use triangulation to calculate the depth
 of each pixel. The f corresponds to the focus length and Z corresponds to the
@@ -268,18 +294,32 @@ From this the triangulation is as follows:
 
 \begin{align}
     \begin{split}
-        \text{Depth}\;\; Z = \frac{f*b}{xl - xr} =  \frac{f*b}{disparity} \\
-        X = \frac{xl*z}{f} \\
-        Y = \frac{yl*z}{f}
+        \text{Depth}\;\; Z = \frac{f \cdot b}{xl - xr} =  \frac{f \cdot b}{disparity} \\
+        X = \frac{xl \cdot z}{f} \\
+        Y = \frac{yl \cdot z}{f}
     \end{split}
 \end{align}
 
 
 \subsubsection{Depth calculation}
+Now we know the way to calculate the depth knowing the disparity. The result of
+the SGBM, seen on \autoref{fig:disparitymap}, is a 2D array containg valid and
+invalid data values. In order to determine the right disparity value
+for a detection it is not enough to simple take the values under the mask. The
+disparities under a mask contain values for the same object's closest point and
+farthest point from the camera. Taking into account the simplifications we
+established in the previous chapter there are two solutions to find the distance
+of the object: 1.) take the average of the valid disparities under a mask 2.)
+take the mode of the disparities. By intuition we would choose taking the
+average, however that is going to result in high error and high variance. The
+reason is, that the segmentation itself is going to mask values that might not
+correspond to the object's disparities. Even a few values that are far from the
+average the object's disparities can change the average of the masked
+disparities drastically. Using the mode the algorithm yielded much more stable
+results, that way it simply is ignores the small inaccuracies of the masking and
+disparity error and takes the most dominant disparity value. The visualization
+of masking can be seen on \autoref{fig:merged}.
 
-In order to 
-
-\refstruc{fig:merged}
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=150mm, keepaspectratio]{figures/335merged.jpg}
@@ -288,18 +328,16 @@ In order to
 \end{figure}
 
 \subsection{Back projection}
-Now that we have the image-based coordinates of an object 
+Each stereo side has a transformation matrix initialized before running the
+algorithm. Each matrix is an affine 4x4 transformation matrix, that does the
+following in this order: 
+\begin{enumerate}
+    \item It swapes the axes from the image coordinate system to Carla's coordinate system z->x, x->y, y->z
+    \item It rotates the points with the same rotation as the camera
+    \item It translates the camera with the same translation for the camerase relative to the vehcile's bottom center point.
+  \end{enumerate}
 
-- Camera model and coordinates
-
-- Camera setting
-- Inverse transformation explain, Translation: same matrix as camera why
-- Yaw pitch roll, euler matrix
-- Affine matrix
-
-The plan: 
-three images of detection montage!!!
-
+The resulting x, y, z coordinates are the final detection coordinates that get into the detection log.
 
 \subsection{Final pseudo-code}
 The final algorithm pseudo-code:
@@ -326,14 +364,35 @@ of the detection replayed. This is similar to the information shown on a monitor
 of a self-driving car.
 
 Since I already had experience in Javascript and in ReactJs \footnote{ReactJs
-    \url{https://reactjs.org/}} - a very easy-to-use web application framework
+    \url{https://reactjs.org/}} - an easy-to-use web application framework
 developed by Facebook - I decided to look for options in 3D visualization. I
-found WebViz\footnote{WorldView WebViz\url{https://webviz.io/worldview/}}, a
+found WebViz\footnote{WorldView WebViz \url{https://webviz.io/worldview/}}, a
 React library specifically made for 3D visualization of traffic scenarios. It
-has a very compelling declarative API.
+has a compelling declarative API.
 
 There are two main views in the end product webvisualizer: The video montage and
-the 3D visualization.
+the 3D visualization (\autoref{fig:webviz2})
+
+The main feature of the webvisualizer is to replay each simulation and see the
+original, detection and depthmap videos in synchronization with the 3D
+visualizer that displays both the detection log and the ground truth log for
+each frame. The webapp is equipped with control buttons that help the control of
+the playback. 
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=150mm, keepaspectratio]{figures/webviz3.png}
+    \caption{Screenshot of the webvisualizer}
+    \label{fig:webviz2}
+\end{figure}
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=150mm, keepaspectratio]{figures/detmontage.jpg}
+    \caption{The montage videos in the webvisalization: original, depthmap, detections}
+    \label{fig:detmontage}
+\end{figure}
+
 
 \section{Additonal scripts}
 

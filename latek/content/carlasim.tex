@@ -8,9 +8,9 @@ real-world traffic scenarios so that it is more accessible for researchers like
 myself to research, develop and test computer vision algorithms for
 self-driving car. 
 
-CARLA\cite{Dosovitskiy17} is an open-source simulator for autonomous driving
-research. It is written in C++ and provides a very accessible Python API to
-control a lot of the simulaton execution. It has been developed from the ground
+CARLA~\cite{Dosovitskiy17} is an open-source simulator for autonomous driving
+research. It is written in C++ and provides an accessible Python API to
+control the simulaton execution. It has been developed from the ground
 up to support development, training, and validation of autonomous driving
 systems. In addition to open-source code and protocols, CARLA provides open
 digital assets (urban layouts, buildings, vehicles) that were created for this
@@ -39,7 +39,7 @@ It's important to mind the coordinate system used in Carla, because later when
 we will extract data the axes must be mapped to the correct data points. Since
 Carla is built with Unreal Engine \footnote{Unreal Engine
 \url{https://www.unrealengine.com/}} it uses the coordinate system as in
-\refstruc{fig:carlacoords}: X coordinate is to the front of the ego actor, Y is to the
+\autoref{fig:carlacoords}: X coordinate is to the front of the ego actor, Y is to the
 right of ego and Z is to the top.
 
 \begin{figure}[!ht]
@@ -64,7 +64,7 @@ they to collide instead of waiting until the actor in front moves away. This is
 actually useful as it helps unlock possible traffic deadlocks. The latest
 CARLA provides 8 maps but in newer versions they will be adding new maps. You
 can see a screenshot of each rendering in the 6 maps I used in
-\refstruc{fig:maps}.
+\autoref{fig:maps}.
 
 \begin{figure}[!ht]
   \centering
@@ -82,14 +82,14 @@ there is a need for the market.
 \section{CARLA Simulation sensors}
 
 The Carla simulator's API support a wide range of sensors: RGB Cameras, LiDAR,
-Radar, GPS, gyroscope, accelerometer, compass and more. These are very easy to
+Radar, GPS, gyroscope, accelerometer, compass and more. These are easy to
 use, If you are interested I recommend reading the sensors reference in their
 documentation \footnote{CARLA sensors reference
 \url{https://carla.readthedocs.io/en/latest/ref_sensors/}}
 
 Carla also provides miscellaneous sensors that help collecting ground-truth data
 for deep learning applications. This includes semantic segmentation camera,
-depthmap camera and other simple ones such as collision detector. \refstruc{fig:carlaseg}
+depthmap camera and other simple ones such as collision detector as seen in \autoref{fig:carlaseg}.
 
 \begin{figure}[!ht]
   \centering
@@ -105,7 +105,7 @@ Deepdrive from Voyage auto\footnote{Deepdrive Voyage
 \url{https://deepdrive.voyage.auto/}}, an American AD supplier, NVIDIA has a
 project going on called Drive Constellation\footnote{NVIDIA Drive Constellation
 \url{https://developer.nvidia.com/drive/drive-constellation}} which
-is said to be very advanced but is not opensource, and another project called
+is said to be advanced but is not opensource, and another project called
 RFPro\footnote{RFPro \url{http://www.rfpro.com/}}. However these are either not
 opensource or not mature enough. CARLA Simulator\footnote{CARLA Sim
 \url{http://carla.org/}} was by far the best one.

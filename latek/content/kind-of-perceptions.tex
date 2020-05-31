@@ -71,7 +71,7 @@ Recent developments in neural networks and deep learning approaches have greatly
 advanced the performance of these state-of-the-art visual recognition systems.
 
 Neural networks are the basis of deep learning methods. They are made up of
-multiple layers, each layer containing a lot of perceptrons. Layers can be
+multiple layers, each layer containing multiple perceptrons. Layers can be
 fully-connected or sparsely if possible, providing some performance benefits.
 Each perceptron is an activation function whose input is the weighted output of
 perceptrons from previous layers, and the function is usually a sigmoid
@@ -88,11 +88,11 @@ configuration of hidden layers.
     \label{fig:convnet}
 \end{figure}
 
-Neural Networks (NN) are very good at classifying different patterns recieved in the
+Neural Networks (NN) are good at classifying different patterns recieved in the
 input layers however they are not sufficient for even image classification,
 because in one part the number of inputs is way to high. Consider a high
-resolution image with 1000*1000*3 pixels, then the NN has 3million input
-parameters to process. This takes lot of time and computational power.
+resolution image with $1000\times 1000\times 3$ pixels, then the NN has 3million input
+parameters to process. This takes a long time and too much computational power.
 
 Secondly the neural network architecture in itself is not a
 general-enough solution (if you think about it, it is similar to a linear
@@ -114,14 +114,14 @@ The general architecture of CNN is similar to a cone, where the first layer is
 the widest and each layer first convolves multiple filters (which in the
 beginning of the CNN correspond to edges and corners) applying ReLU (rectifier,
 non-linearity function) then it downsizes the input which is called the max
-pooling. This repeated over and over in the end results in a very small tensors
+pooling. This repeated over and over in the end results in a small tensor
 which can \emph{then} be fed to the fully-connected (FC) layers (i.e. a neural network)
 which acts as the classifier.
 
 Why is this the winner architecture? Because if you think about it the neural
 network in the end only has to vote for the presence of the right features in roughly
 the right image position, not for each pixel. A visualization of a
-CNN's architecture can be seen in \refstruc{fig:convnet}.
+CNN's architecture can be seen in \autoref{fig:convnet}.
 
 \begin{figure}[!ht]
     \centering
@@ -133,16 +133,16 @@ CNN's architecture can be seen in \refstruc{fig:convnet}.
 \begin{figure}[!ht]
     \centering
     \includegraphics[width=60mm, keepaspectratio]{figures/filters.png}
-    \caption{A visualization of the features learned in the first convnet layer in AlexNet\cite{NIPS2012_4824}. AlexNet was a CNN which revolutionized the field of Deep Learning, and is built from conv layers, max-pooling layers and FC layers. Image taken from CS231N notes.}
+    \caption{A visualization of the features learned in the first convnet layer in AlexNet~\cite{NIPS2012_4824}. AlexNet was a CNN which revolutionized the field of Deep Learning, and is built from conv layers, max-pooling layers and FC layers. Image taken from CS231N notes.}
     \label{fig:filters}
 \end{figure}
 
 There are various architectures that have emerged each incrementally improving on the previous ones:
-LeNet\cite{Lecun98gradient-basedlearning} - the work of Yann LeCun himself,
-AlexNet\cite{NIPS2012_4824}
-VGGNet\cite{DBLP:journals/corr/SimonyanZ14a}
-GoogLeNet\cite{DBLP:journals/corr/SzegedyLJSRAEVR14}
-ResNet\cite{DBLP:journals/corr/HeZRS15}
+LeNet~\cite{Lecun98gradient-basedlearning} - the work of Yann LeCun himself,
+AlexNet~\cite{NIPS2012_4824}
+VGGNet~\cite{DBLP:journals/corr/SimonyanZ14a}
+GoogLeNet~\cite{DBLP:journals/corr/SzegedyLJSRAEVR14}
+ResNet~\cite{DBLP:journals/corr/HeZRS15}
 
 \subsection{Deep Learning}
 Deep learning referes to the procedure of training neural networks and
