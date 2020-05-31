@@ -94,11 +94,9 @@ chapter, Related works.
 In order to develop the proposed system, a sizeable dataset is needed. There are
 many datasets available on the internet for car driving. They include object
 detections, segmentations, map data, lidar data. Some of the most notable ones
-are the nuScenes dataset\footnote{nuScenes dataset
-\url{https://www.nuscenes.org/}}, Waymo dataset\footnote{Waymo dataset
-\url{https://waymo.com/open/}} from Google's self-driving car company or the
-Cityscapes dataset\footnote{Cityscapes dataset
-\url{https://www.cityscapes-dataset.com/}} and more. Each of these datasets are
+are the nuScenes dataset~\cite{DBLP:journals/corr/abs-1903-11027}, Waymo
+dataset~\cite{sun2019scalability} from Google's self-driving car company or the
+Cityscapes dataset~\cite{Cordts2016Cityscapes} and more. Each of these datasets are
 good, however they are not really helpful for our case.
 
 In order to localize objects in 3D space I use stereo imaging. Each AD system
@@ -115,7 +113,7 @@ in looking for simulators that let me extract data from the simulation in each
 frame and let's me create custom world scenario and sensor settings. 
 
 After an extensive research of self-driving car simulators of I found CARLA
-Simulator\footnote{CARLA Sim \url{http://carla.org/}}~\cite{Dosovitskiy17} (a
+Simulator~\cite{Dosovitskiy17} (a
 screenshot is seen on \autoref{fig:carla}) to be the most advanced one that is
 also opensource. CARLA is a quite mature simulator with an API that
 fulfills our requirements.
@@ -145,8 +143,8 @@ general solution that is closer to how we humans percieve the environment.
 
 The detector uses state-of-the-art detection, localization and segmentation model
 Detectron2~\cite{wu2019detectron2} a MASK R-CNN conv net model based on Residual
-neural networks and Feature Pyramid Networks trained on the COCO general
-dataset\footnote{COCO dataset \url{http://cocodataset.org/}}.
+neural networks and Feature Pyramid Networks trained on the COCO~\cite{DBLP:journals/corr/LinMBHPRDZ14} general
+dataset.
 
 Finally I develop a 3D webvisualizer that lets us replay the ground truth and
 detection log simultaneously and compare the error between the two.

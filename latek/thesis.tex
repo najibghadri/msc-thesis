@@ -1,6 +1,7 @@
 \documentclass[11pt,a4paper,oneside]{report}
 
 \input{include/packages}
+\addbibresource{bib/mybib.bib}
 
 \newcommand{\vikszerzoVezeteknev}{Ghadri}
 \newcommand{\vikszerzoKeresztnev}{Najib}
@@ -81,7 +82,8 @@ Stereo RGB imaging and CNN synergy}
 % Bibliography
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 \addcontentsline{toc}{chapter}{\bibname}
-\bibliography{bib/mybib}
+% \bibliography{bib/mybib}
+\printbibliography
 
 % Appendix
 %~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

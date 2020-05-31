@@ -10,7 +10,46 @@
 %----------------------------------------------------------------------------
 \chapter*{Kivonat}\addcontentsline{toc}{chapter}{Kivonat}
 
-Az önvezető autók kétség kívűl a jövőt 
+Az önvezető autók kétség kívűl az autós közlekedés jövőjét jelentik. A kényelem
+és időmegtakarítás amit nyújthatnának számunkra, motiváció számunkra a
+kutatásukra. Már ma is vannak autonóm közlekedési rendszerek, mint pélául a
+vasúti hálózatok vagy a földalatti metró, azonban ez nem mondható el az
+autókról. Ahhoz, hogy egy autó önmagát vezesse, szükséges hogy az értse a
+környezetét, és ez egy emberi intelligencia szint közeli feladat. Mi magunknak is
+nehéz körülírni mit is jelent az, hogy "érteni a környezetünket".
+
+Az informatika sokat fejlődött az utóbbi időszakban a mesterséges intellgiencia
+területén, és jelenlegi álláspontján olyan módszereket ismerünk amik ebben a
+feladatban segíthetnek. A gépi tanulás új módszerei forradalmasították az
+intelligens érzékelés területét különlegesen a mély tanuló (Deep Learning)
+rendszerek és a konvolúciós neurális hálok. Ezeknek az algoritmusoknak az
+alkalmazása kulcsfontosságú egy autonóm jármű megalkotásához.
+
+Néhány említésre méltó vállalat már az élen jár az önvezető autókkal, elsősorban
+Tesla, az ameriaki elektromosautó-gyártó, Waymo, Google egyik alvállalata vagy
+egy önvezetési-megoldás szolgáltató MobilEye. Ezek a vállalatok olyan
+algoritmusokat használnak amik világszinten vannak kutatva és fejlesztve, és
+jómagam is ezeket az algoritmusokat alkalmazom hogy egy önvezető rendszer
+részét megalkossam. 
+
+Ebben a munkában egy jelenetértelmező szoftvert készítek ami vezetési jelenetek
+értelmezésére specializált. Úgy döntöttem hogy a rendszert egy szimulátor,
+CARLA, segítségével fejlesztem és tesztelem. Egy szimulátor használata nagy
+szabadságot biztosít számunkra a munka során.
+
+Felkutattam a meglévő önvezető autó megoldásokat, és belőlük inspirálódva egy
+olyan szoftvert fejlesztek ami képes fontos információ kienyerésére vezetési
+jelenetekből. A távolság méréshez sztereo képfeldolgozást alkalmaztam a
+virtuális autónk tetőjére szerelve. A képi jelenetekből való információ
+kinyeréséhez edzett konvolúciós neurális hálókat használtam. A szoftver minden
+képkockára végrehajtja a jelenetértelmezést és a kinyert információt exportálja.
+A szoftver teljesítményének mérlegeléséhez egy 3D-s vizualizáló webalkalmazást
+fejlesztettem amivel szimultáns visszajátszhatjuk a programatikusan kinyert
+valós adatsort és a detektált adatsort ezzel látva a jelnetértelmező eltérését,
+miközben a forrás videó anyag is szinkron lejátszódik. Végül megállapítottam a
+rendszer validitását valós alkalmazhatóságra és továbbfejlesztési utakat
+vázoltam fel. Ez a munka és a 3D web vizualizáló elérhető és kipróbálható a
+\url{https://najibghadri.com/msc-thesis/} címen.
 
 \vfill
 \selectenglish
