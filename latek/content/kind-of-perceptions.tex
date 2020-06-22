@@ -5,7 +5,7 @@
 
 After collecting data from the sensors we choose we need to implement the right
 algorithms to extract information from the sensor data. In this chapter I start
-with explaining basics of computer vision and then move on to advanced
+with explaining the basics of computer vision and then move on to advanced
 convolutional neural netowrks that will help our goal.
 
 Computer Vision, often abbreviated as CV, is defined as a field of study that
@@ -19,13 +19,11 @@ of the complexity of vision perception in a dynamic and nearly infinitely
 varying physical world.
 
 \section{Challenges in Computer Vision}
-Image Classification is considered to be the most basic application of computer
-vision. Rest of the other developments in computer vision are achieved by making
-small enhancements on top of this. In real life, every time we, humans open our
-eyes, we unconsciously classify and detect objects.
-
-Since it is intuitive for us, we fail to appreciate the key challenges involved
-when we try to design systems similar to our eye. Some challenges for computers are:
+Image classification is considered to be the most basic application of computer
+vision. The rest of the developments in computer vision are achieved by making
+small enhancements on top of this. Since this task is intuitive for us, we fail to
+appreciate the key challenges involved when we try to design systems similar to
+our eye. Some challenges for computers are:
 
 \begin{itemize}
     \item Variations in viewpoint
@@ -36,10 +34,10 @@ when we try to design systems similar to our eye. Some challenges for computers 
 
 \section{Traditional approaches}
 
-Various techniques, other than deep learning are available enhancing computer
-vision. Though, they work well for simpler problems, but as the data become huge
-and the task becomes complex, they are no substitute for deep CNNs. Let’s
-briefly discuss two simple approaches.
+Various techniques, other than deep learning are available in computer vision.
+They work well for simpler problems, but as the data becomes huge and the task
+becomes more complex, they are no substitute for deep CNNs. Let’s briefly
+discuss two simple approaches.
 
 \subsection{KNN (K-Nearest Neighbours)}
 
@@ -235,23 +233,14 @@ applications in video and real-world interactions where observations are made
 following an initial object detection. Now, it’s crucial to autonomous driving
 systems.
 
-SORT
-Deep Sort
-
-\section{Lane and road detection}
-Traditional way
-Road detection
-Driveable Road
-Lane detection: sliding window, curve fit
-
-
-\section{3D vision}
-Camera model and Calibration
-3D reconstruction
-Stereo vision
-Depth estimation
-
-
+Simple Online and Realtime Tracking - SORT~\cite{Wojke2017simple} and Deep
+SORT~\cite{Wojke2018deep} Are both based on Kalman filters to use the available
+detections and previous predictions to arrive at a best guess of the current
+state. Deep SORT extends SORT with the use feature extraction with encoders.
+These features are then kept in a dictionary for each object. For each detection
+throughout the tracking process a distance is calculated between signatures in
+the dictionary and the current object's feature model this way tracking
+previously identified objects. 
 
 
 

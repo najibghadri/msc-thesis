@@ -8,7 +8,7 @@ import Worldview, {
   Points,
 } from "regl-worldview";
 
-let path = "rendering/2";
+let path = "/rendering/";
 
 var truthFrameList = [];
 var detectionFrameList = [];
@@ -143,6 +143,7 @@ export default function WebViz() {
   const [speed, setSpeed] = useState(30);
   const [playing, setPlaying] = useState(false);
   const [interval, setMyInterval] = useState(null);
+  const [rendering, setRendering] = useState(3);
 
   const videoEl1 = useRef(null);
   const videoEl2 = useRef(null);
@@ -170,7 +171,7 @@ export default function WebViz() {
       console.log("loaded detection");
     };
 
-    fetch(path + "/detected.json")
+    fetch(path + rendering + "/detected.json")
       .then((response) => {
         return response.json();
       })
@@ -178,7 +179,7 @@ export default function WebViz() {
         onDetectionFile(data);
       })
       .catch((err) => {});
-    fetch(path + "/frameList.json")
+    fetch(path + rendering + "/frameList.json")
       .then((response) => {
         return response.json();
       })
@@ -186,7 +187,7 @@ export default function WebViz() {
         onTruthFile(data);
       })
       .catch((err) => {});
-  }, []);
+  }, [rendering]);
 
   const onPlay = () => {
     setPlaying((playing) => !playing);
@@ -312,33 +313,55 @@ export default function WebViz() {
 
   return (
     <div className="app">
+      <a class="gohome" href="/">
+        ← najibghadri.com
+      </a>
       <div className="videoContainer">
         <video
           style={{ zIndex: video === 0 ? 1 : 0 }}
-          src={path + "/output.webm"}
+          src={path + rendering + "/output.webm"}
           ref={videoEl1}
         ></video>
         <video
           style={{ zIndex: video === 1 ? 1 : 0 }}
-          src={path + "/outputDET.webm"}
+          src={path + rendering + "/outputDET.webm"}
           ref={videoEl2}
         ></video>
         <video
           style={{ zIndex: video === 2 ? 1 : 0 }}
-          src={path + "/outputDP.webm"}
+          src={path + rendering + "/outputDP.webm"}
           ref={videoEl3}
         ></video>
         <div className="videoControl">
-          <p>Video:</p>
-          <button onClick={() => setVideo(0)}>
-            {video === 0 ? <strong>Original</strong> : "Original"}
-          </button>
-          <button onClick={() => setVideo(1)}>
-            {video === 1 ? <strong>Detection</strong> : "Detection"}
-          </button>
-          <button onClick={() => setVideo(2)}>
-            {video === 2 ? <strong>Depth map</strong> : "Depth map"}
-          </button>
+          <div
+            style={{
+              display: "flex",
+            }}
+          >
+            <p>Scenario:</p>
+            <button onClick={() => setRendering(3)}>
+              {rendering === 3 ? <strong>1</strong> : 1}
+            </button>
+            <button onClick={() => setRendering(2)}>
+              {rendering === 2 ? <strong>2</strong> : 2}
+            </button>
+          </div>
+          <div
+            style={{
+              display: "flex",
+            }}
+          >
+            <p>Video:</p>
+            <button onClick={() => setVideo(0)}>
+              {video === 0 ? <strong>Original</strong> : "Original"}
+            </button>
+            <button onClick={() => setVideo(1)}>
+              {video === 1 ? <strong>Detection</strong> : "Detection"}
+            </button>
+            <button onClick={() => setVideo(2)}>
+              {video === 2 ? <strong>Depth map</strong> : "Depth map"}
+            </button>
+          </div>
         </div>
       </div>
       <div className="webViz">

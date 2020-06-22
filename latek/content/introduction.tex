@@ -6,7 +6,7 @@ I am passionate about artificial intelligence and as much inspired by the
 work of tech companies such as Tesla. Tesla has managed create cutting edge
 technology, creating compelling and practical electric cars combined with their
 Tesla Autopilot system. It has become iconic to sit in a Tesla and watch it
-drive itself. Tesla has already driven 3 billion drives on autopilot, their
+drive itself. Tesla has already driven 3 billion kilometers on autopilot, their
 access to data is most likely number one in the world. There are other important
 companies who develop autopilot systems, one of them is MobilEye an Israeli
 subsidiary of Intel corporation that was actually a supplier of Tesla until they
@@ -49,9 +49,9 @@ thousands of iterations. This is not close to what might be general AI.
 
 In this sense we can argue about the meaning of "scene understanding". There is
 research going on in the direction of general AI most notably in my opinion by
-Yann LeCun the chief at Facebook AI and professsor at NYU, who works a concept
+Yann LeCun the chief at Facebook AI and professsor at NYU, who works on a concept
 called energy-based models. The Energy-based model that is a form of generative
-model allow a mathematical "bounding" or "learning" of a data distribution in
+model allows a mathematical "bounding" or "learning" of a data distribution in
 any dimension. Upon prediciton the model tries to generate a possible future for
 the current model in time, where the generated future model acts as the
 prediciton itself. Generative adversarial networks are a type of these models.
@@ -60,7 +60,7 @@ discriminative model which is what we use mostly. Perceptrons such as NNs and
 CNNs, support vector machines fall into this category, however the distinction
 is not clear.
 
-For the purpouse of this thesis hence it is important to define what a system
+For the purpouse of this thesis it is important to define what a system
 capabale of understanding scences in driving situations means. The essentials
 are the following:
 \begin{itemize}
@@ -86,8 +86,8 @@ requires improvization to save a situation and we might need a more general AI.
 
 For the vehicle to understand it's surroundigs first of all it needs sensors.
 Each company goes differently about the sensor suite, and it is quite
-interesting to examine each solution. This will be discussed in the next
-chapter, Related works.
+interesting to examine each solution. This will be discussed in the
+chapter \autoref{chap:relatedwork} Other solutions.
 
 \section{Proposed solution}
 
@@ -112,7 +112,7 @@ Using a simulation gives a huge ammount of freedom. My research work started
 in looking for simulators that let me extract data from the simulation in each
 frame and let's me create custom world scenario and sensor settings. 
 
-After an extensive research of self-driving car simulators of I found CARLA
+After an extensive research of self-driving car simulators I found CARLA
 Simulator~\cite{Dosovitskiy17} (a
 screenshot is seen on \autoref{fig:carla}) to be the most advanced one that is
 also opensource. CARLA is a quite mature simulator with an API that
@@ -127,12 +127,12 @@ fulfills our requirements.
 
 I set up the virtual vehcile with 10 RGB cameras mounted on the roof creating 4
 stereo sides as shown on \autoref{fig:3dmodel2}. As the title of the thesis
-says, I only used RGB cameras and no other sensors. This is a similar approach
-to what Tesla is taking, except for the radar sensors, contrary to almost all
-other players in the field who also employ a Lidar sensor for depth data
-including MobilEye and Waymo. Lidar data is good for correction, but it is
-better if the AI can equally perform using only RGB cameras, since it is a more
-general solution that is closer to how we humans percieve the environment.
+says, I only used RGB cameras and no other sensors. Tesla additionally uses
+radar and sonar sensors taking contrary to almost all other players in the field
+who also employ a Lidar sensor for depth data including MobilEye and Waymo.
+Lidar data is good for correction, but it is better if the AI can equally
+perform using only RGB cameras, since it is a more general solution that is
+closer to how we humans percieve the environment.
 
 \begin{figure}[!ht]
     \centering
@@ -148,7 +148,6 @@ dataset.
 
 Finally I develop a 3D webvisualizer that lets us replay the ground truth and
 detection log simultaneously and compare the error between the two.
-
 \autoref{fig:flow} depicts this taskflow.
 
 \begin{figure}[!ht]
@@ -161,7 +160,7 @@ detection log simultaneously and compare the error between the two.
 \section{Summary of results}
 
 The result is a detector that is capable of localizing vehicles, and pedestrians
-on the road up to 100 meters with an accuracy of \textasciitilde50cm in an angle of 270\degree
+on the road up to 100 meters with an accuracy of \textasciitilde1m in an angle of 270\degree
 centered to the front. The algorithm is written in Python and uses PyTorch, with that on
 an NVIDIA Titan X GPU the detector can perform in 2.7FPS for one side, ie. for
 two cameras. In an embedded optimized system using C or C++ code this can easily
@@ -201,7 +200,7 @@ of it.
 In \autoref{chap:assumptions} I define the technical assumptions that I made in
 order to simplify the task and the resulting limitations.
 
-\autoref{chap:designimplementation} introduces the Carla simulator details the
+\autoref{chap:designimplementation} details the
 design and implementation of the simulator configuration, the detector algorithm
 and the webvisualizer.
 

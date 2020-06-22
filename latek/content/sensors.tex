@@ -5,8 +5,8 @@
 
 Selecting the right sensors to understand the environment is half the task.
 Combining multiple sensors to collect data for further information extraction is
-called sensor fusion. In this chapter we are going to detail the most widely
-used sensors for scene understanding for autonomous vehicles and compare them. 
+called sensor fusion. This chapter details the most widely used sensors for
+scene understanding for autonomous vehicles and compare them. 
 
 Radar, utrasonic and LiDar sensors basically all work the same: emit a wave,
 wait until it returns and estimate the distance based on the time difference,
@@ -24,7 +24,7 @@ versa. A visualization is seen on \autoref{fig:sensors}.
 Thus calculating the distance is a simple equation:
 
 \begin{align}
-Distance=\frac{Speed\; of\; wavefrom * Time\; of\; Flight}{2}
+    Distance=\frac{Speed\; of\; wavefrom * Time\; of\; Flight}{2}
 \end{align}
 
 However they use different waves: Radar works with electromagnetic waves,
@@ -58,24 +58,22 @@ antenna with a large scanning angle, creating a wide field of view.
 Long-range radar (LRR): Long-range radars (LRR) using the 77 GHz band (from
 76-81GHz) provide better accuracy and better resolution in a smaller package.
 They are used for measuring the distance to, speed of other vehicles and
-detecting objects within a wider field of view e.g. for cross traffic alert
-systems. Long range applications need directive antennas that provide a higher
+detecting objects within a wider field of view. Long range applications need directive antennas that provide a higher
 resolution within a more limited scanning range. Long-range radar (LRR) systems
 provide ranges of 80 m to 200 m or greater.
 
 \section{Ultrasonic}
 
-Ultrasonic (or sonar) sensors like radar, can detect objects in the space around
-the car. Ultrasonic sensors are much more inexpensive than radar sensors, but
-have a limited effective range of detection. Because they’re effective at short
-range, sonar sensors are frequently used for parking assistance features and
-anti-collision safety systems. Ultrasonic sensors are also used in robotic
-obstacle detection systems, as well as manufacturing technology. In comparison
-to infrared sensors in proximity sensing applications, ultrasonic sensors are
-not as susceptible to interference of smoke, gas, and other airborne particles
-(though the physical components are still affected by variables such as heat),
-and they are independent of light conditions. They also work based on reflected
-emission. 
+Ultrasonic (or sonar) sensors, alike radar, can detect objects in the space
+around the car. Ultrasonic sensors are much more inexpensive than radar sensors,
+but have a limited effective range of detection. Because they’re effective at
+short range, sonar sensors are frequently used for parking assistance features
+and anti-collision safety systems. Ultrasonic sensors are also used in robotic
+obstacle detection systems, as well as manufacturing technology. Ultrasonic
+sensors are not as susceptible to interference of smoke, gas, and other airborne
+particles (though the physical components are still affected by variables such
+as heat), and they are independent of light conditions. They also work based on
+the reflection of emission principle. 
 
 Ultrasound signals refer to those above the human hearing range, roughly from 30
 to 480 kHz. For ultrasonic sensing, the most widely used range is 40 to 70 kHz.
@@ -83,18 +81,6 @@ At 58 kHz, a commonly used frequency, the measurement resolution is one
 centimeter, and range is up to 11 meters. At 300 kHz, the resolution can be as
 low as one millimeter; however, range suffers at this frequency with a maximum
 of about 30 cm.
-
-You can see the sensor suite of Tesla \autoref{fig:teslasensors} from
-Tesla Autopilot website \footnote{Tesla autopilot
-\url{https://www.tesla.com/autopilot}}.
-
-\begin{figure}[!ht]
-    \centering
-    \includegraphics[width=150mm, keepaspectratio]{figures/teslasensors.png}
-    \caption{Tesla sensor suite infographic }
-    \label{fig:teslasensors}
-\end{figure}
-
 
 \section{LiDAR}
 
@@ -125,7 +111,7 @@ to surrounding cars and pedestrians as well as the road geography. And, like
 radar, it works just as well in low-light conditions.
 
 You can see how a lidar sensor from Luminar\footnote{Luminar
-\url{https://www.luminartech.com/}} reconstructs the environment in
+    \url{https://www.luminartech.com/}} reconstructs the environment in
 \autoref{fig:luminar}.
 
 \begin{figure}[!ht]
@@ -156,15 +142,14 @@ cameras and camcorders.
 An important aspect of cameras is the camera model that describes how points of
 the world translate to pixels in the image. That is going to be essential when
 we want to apply the inverse projection to determine the world-position of
-objects in the picture. I will talk about this in the next chapter. 
+objects in the picture. This will be discussed in the following chapters. 
 
 
 \section{GPS \& WPS}
 
-The Global Positioning System is the perfect example of how sensor
-technology grows smaller and more ubiquitous over time. Originally introduced
-for military applications in 1974, GPS probes today can be found in cameras,
-watches, key fobs, and of course, the smartphone in your pocket.
+Originally introduced for military applications in 1974, GPS probes today can be
+found in cameras, watches, key fobs, and of course, the smartphone in our
+pockets.
 
 The lesser-known WPS stands for Wi-Fi Positioning System, which operates
 similarly. When a probe detects satellites (GPS) or Wi-Fi networks (WPS), it can
