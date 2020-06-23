@@ -5,14 +5,18 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 .containter {
-  width: 50%;
   margin: auto;
   color: rgba(0, 0, 0, 0.9);
   font-family: Georgia, serif;
-  font-size: 1.2rem;
+  font-size: 1.25rem;
+  p{
+    line-height: 1.6rem;
+  }
+  width: 800px;
 
   &.title {
     text-align: center;
@@ -30,13 +34,9 @@ body {
     }
 
   }
-  
-  p{
-    line-height: 1.5rem;
-  }
 
   img{
-    width: 90%;
+    width: 100%;
   }
 
   .figure {
@@ -51,7 +51,11 @@ body {
   }
 }
 
-
+@media only screen and (max-width: 800px) {
+  .containter {
+    width: 100%;
+  }
+}
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
