@@ -1,3 +1,6 @@
+## Pandoc latex to html sitegen
+`pandoc thesis.tex -f latex -t html -s -o thesissite.html --mathjax=https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML  --bcdibliography bib/mybib.bib`
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

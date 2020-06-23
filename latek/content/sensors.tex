@@ -8,7 +8,7 @@ Combining multiple sensors to collect data for further information extraction is
 called sensor fusion. This chapter details the most widely used sensors for
 scene understanding for autonomous vehicles and compare them. 
 
-Radar, utrasonic and LiDar sensors basically all work the same: emit a wave,
+Radar, utrasonic and LiDAR sensors basically all work the same: emit a wave,
 wait until it returns and estimate the distance based on the time difference,
 and estimate the speed calculating the frequency shift - this is the Doppler
 effect: an increase in frequency corresponds to an object approaching and vice
@@ -28,7 +28,7 @@ Thus calculating the distance is a simple equation:
 \end{align}
 
 However they use different waves: Radar works with electromagnetic waves,
-ultrasonic sensors work with sound waves and LiDar works with laser light.
+ultrasonic sensors work with sound waves and LiDAR works with laser light.
 
 \section{Radar}
 
@@ -85,7 +85,7 @@ of about 30 cm.
 \section{LiDAR}
 
 As Radar is to radio waves, and sonar is to sound, LiDAR (Light Detection and
-Ranging) uses lasers to determine distance to objects. Lidar sometimes is called
+Ranging) uses lasers to determine distance to objects. LiDAR sometimes is called
 3D laser scanning. It does this by spinning a laser across its field of view and
 measuring the individual distances to each point that the laser detects. This
 creates an extremely accurate (within 2 centimeters) 3D scan of the world around
@@ -102,15 +102,15 @@ with high accuracy. By repeating this in quick succession the insturment builds
 up a complex 'map' of the surface it is measuring.
 
 The three most common currently used or explored wavelengths for automotive
-lidar are 905 nm, 940 nm and 1550 nm, each with its own advantages and
+LiDAR are 905 nm, 940 nm and 1550 nm, each with its own advantages and
 drawbacks.
 
-Lidar sensors are able to paint a detailed 3D point cloud of their environment
+LiDAR sensors are able to paint a detailed 3D point cloud of their environment
 from the signals that bounce back instantaneously. It provides shape and depth
 to surrounding cars and pedestrians as well as the road geography. And, like
 radar, it works just as well in low-light conditions.
 
-You can see how a lidar sensor from Luminar\footnote{Luminar
+You can see how a LiDAR sensor from Luminar\footnote{Luminar
     \url{https://www.luminartech.com/}} reconstructs the environment in
 \autoref{fig:luminar}.
 

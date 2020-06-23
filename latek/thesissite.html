@@ -1,0 +1,665 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="Najib Ghadri" />
+  <style type="text/css">code{white-space: pre;}</style>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+</head>
+<body>
+<p><embed src="figures/bme_logo.jpg" width="226" /><br />
+<strong><span>Budapest University of Technology and Economics</span></strong><br />
+<br />
+<br />
+<br />
+<br />
+<span style="font-variant: small-caps;"><span><span>Master’s Thesis</span></span></span><br />
+</p>
+
+<p><span> </span></p>
+<h1 id="kivonat" class="unnumbered">Kivonat</h1>
+<p>Az önvezető autók kétség kívűl az autós közlekedés jövőjét jelentik. A kényelem és időmegtakarítás amit nyújthatnának számunkra, motiváció számunkra a kutatásukra. Már ma is vannak autonóm közlekedési rendszerek, mint pélául a vasúti hálózatok vagy a földalatti metró, azonban ez nem mondható el az autókról. Ahhoz, hogy egy autó önmagát vezesse, szükséges hogy az értse a környezetét, és ez egy emberi intelligencia szint közeli feladat. Mi magunknak is nehéz körülírni mit is jelent az, hogy “érteni a környezetünket”.</p>
+<p>A tudomány sokat fejlődött az utóbbi időszakban a mesterséges intellgiencia területén, és jelenlegi álláspontján olyan módszereket ismerünk amik ebben a feladatban segíthetnek. A gépi tanulás új módszerei forradalmasították az intelligens érzékelés területét különlegesen a mély tanuló (Deep Learning) rendszerek és a konvolúciós neurális hálok. Ezeknek az algoritmusoknak az alkalmazása kulcsfontosságú egy autonóm jármű megalkotásához.</p>
+<p>Néhány említésre méltó vállalat már az élen jár az önvezető autókkal, elsősorban Tesla, az ameriaki elektromosautó-gyártó, Waymo, Google egyik alvállalata vagy egy önvezetési-megoldás szolgáltató MobilEye. Ezek a vállalatok olyan algoritmusokat használnak amik világszinten vannak kutatva és fejlesztve, és jómagam is ezeket az algoritmusokat alkalmazom hogy egy önvezető rendszer részét megalkossam.</p>
+<p>Ebben a munkában egy jelenetértelmező szoftvert készítek ami vezetési jelenetek értelmezésére specializált. Úgy döntöttem hogy a rendszert egy szimulátor, CARLA, segítségével fejlesztem és tesztelem. Egy szimulátor használata nagy szabadságot biztosít számunkra a munka során.</p>
+<p>Felkutattam a meglévő önvezető autó megoldásokat, és belőlük inspirálódva egy olyan szoftvert fejlesztek ami képes fontos információ kienyerésére vezetési jelenetekből. A távolság méréshez sztereo képfeldolgozást alkalmaztam a virtuális autónk tetőjére szerelve. A képi jelenetekből való információ kinyeréséhez előre kitanított konvolúciós neurális hálókat használtam. A szoftver minden képkockára végrehajtja a jelenetértelmezést és a kinyert információt exportálja. A szoftver teljesítményének mérlegeléséhez egy 3D-s vizualizáló webalkalmazást fejlesztettem amivel szimultáns visszajátszhatjuk a programatikusan kinyert valós adatsort és a detektált adatsort ezzel látva a jelnetértelmező eltérését, miközben a forrás videó anyag is szinkron lejátszódik. Végül megállapítottam a rendszer validitását valós alkalmazhatóságra és továbbfejlesztési utakat vázoltam fel. Ez a munka és a 3D web vizualizáló elérhető és kipróbálható a <a href="https://najibghadri.com/msc-thesis/" class="uri">https://najibghadri.com/msc-thesis/</a> címen.</p>
+<h1 id="abstract" class="unnumbered">Abstract</h1>
+<p>Autonomous driving is undoubtedly the future of transportation. The comfort that it brings us is what drives us to work on making it real. We already have autonomous systems in public transportation in abundance, but it is different when we talk about the car roads. Driving a car requires near-human intelligence due to the nature of the environment, in fact it is impossible to define the environment. A train’s or subways’s environment can be defined mathematically and hence controlled easly, but for a machine to drive a car, it has to understand what we understand, and what we understand is even hard to define ourselves.</p>
+<p>Computer science has come a long way, and we have already seen the rise of artificial intelligence algorithms and their effectiveness. Out of these methods Deep Learning and Convolutional Neural Networks are key tools in achieving our goal. With these algorithms computers learn general concepts of the world, and this is essential to make a safe autonomous driving (AD) system. We will see in this work briefly what they are and how they work.</p>
+<p>Some notable companies have already achieved a high level of AD, most notably Tesla, and another AD supplier MobilEye. These companies use algorithms that are developed globally and publicly and I used them in the algorithm to partly achieve what they have achieved.</p>
+<p>In this work I create a Scene Understanding system specialized for driving situations. I choose to evaluate the system on a virtual car driving simulation called CARLA Sim, that is going to benefit us to measure our rate of success.</p>
+<p>I researched how existing autonomous driving systems have been built, and inspired by them I designed a system that is capable of recognizing important information for a car on the road. I used stereo imaging of multiple RGB cameras mounted on top of our virtual car for depth estimation and used trained Convolutional Neural Networks to then perform further infomration extraction from the images and perform detection for each frame of the simulation. I made a 3D webvisualizer that is able to show us the difference between ground truth information extracted programatically from the simulator and the detection infomration while simultaneously play a montage video of the simulation. Finally I evaluated the system and measured it’s validity for real situations and provided further improvement notes on my work. This thesis is also published on <a href="https://najibghadri.com/msc-thesis/" class="uri">https://najibghadri.com/msc-thesis/</a> where you can try the 3D webvisualizer.</p>
+<h1 id="introduction"><span>Introduction</span></h1>
+<p>I am passionate about artificial intelligence and as much inspired by the work of tech companies such as Tesla. Tesla has managed create cutting edge technology, creating compelling and practical electric cars combined with their Tesla Autopilot system. It has become iconic to sit in a Tesla and watch it drive itself. Tesla has already driven 3 billion kilometers on autopilot, their access to data is most likely number one in the world. There are other important companies who develop autopilot systems, one of them is MobilEye an Israeli subsidiary of Intel corporation that was actually a supplier of Tesla until they set apart in part due to disagreements on how the technology should be built, which is an important topic that will be discussed in the thesis.</p>
+<p>There are a couple of topics we should establish first. The first being levels of autopilot systems as defined by SAE (Society of Automotive Engineers) ().</p>
+<div class="figure">
+<img src="figures/levels-of-ad.jpg" alt="Levels of driving automation defined in SAE J3016 (“J3016B: Taxonomy and Definitions for Terms Related to Driving Automation Systems for on-Road Motor Vehicles - SAE International” 2020)" width="566" />
+<p class="caption">Levels of driving automation defined in SAE J3016 <span class="citation">(“J3016B: Taxonomy and Definitions for Terms Related to Driving Automation Systems for on-Road Motor Vehicles - SAE International” 2020)</span><span data-label="fig:J3016"></span></p>
+</div>
+<p>From level 0 to 2 are automations where the human is still required to fully monitor the driving environment. Tesla’s autopilot is Level 2 which is partial automation that includes control of steering and both acceleration and deceleration. From Level 3 the human is not required to monitor the environment. Full automation, where the driver is not expected to intervene and the vehicle is able to handle all situations is on Level 5. In order to achieve that level the autopilot must fully understand the environment.</p>
+<p>This is however difficult. The algorithms that we know today are not enough to achieve understanding of the environment yet. Even Convolutional Neural Networks (CNNs) are not cabale of understanding deep concepts of the world. CNNs are mainly used in computer vision and are useful when we want to recognize patterns that appear anywhere in 2D images. Today we are able to calssify images, detect and localize objects, segment images to high accuracy, however this doesn’t mean the computer <em>understands</em> the scenes. Furthermore these algorithms are trained specifically: To build a detection neural network (NN) first a meticulous dataset must be created that tells the algorithm what must be detected - we call this the ground truth, or training data set. Then the NN must be trained and optimized until it yields a low error on the test dataset. We call this Deep Learning due to the fact that the networks contain millions of parameters that are trained through hundreds of thousands of iterations. This is not close to what might be general AI.</p>
+<p>In this sense we can argue about the meaning of “scene understanding”. There is research going on in the direction of general AI most notably in my opinion by Yann LeCun the chief at Facebook AI and professsor at NYU, who works on a concept called energy-based models. The Energy-based model that is a form of generative model allows a mathematical “bounding” or “learning” of a data distribution in any dimension. Upon prediciton the model tries to generate a possible future for the current model in time, where the generated future model acts as the prediciton itself. Generative adversarial networks are a type of these models. This is in contrast to the other main machine learning approach that is the discriminative model which is what we use mostly. Perceptrons such as NNs and CNNs, support vector machines fall into this category, however the distinction is not clear.</p>
+<p>For the purpouse of this thesis it is important to define what a system capabale of understanding scences in driving situations means. The essentials are the following:</p>
+<ul>
+<li><p>Lane and path detection</p></li>
+<li><p>Driveable area detection</p></li>
+<li><p>Object detection: cars, pedestrians, etc.</p></li>
+<li><p>Object localization in 3D real world space</p></li>
+<li><p>Object tracking and identification</p></li>
+<li><p>Foreign object detection: anything that shouldn’t be where it is</p></li>
+<li><p>Traffic light and sign understanding</p></li>
+<li><p>Handling occlusion of objects</p></li>
+<li><p>Pedestrian crossing detection</p></li>
+<li><p>Knowledge of surroundings and road for example with the help of high definition maps</p></li>
+</ul>
+<p>In an ideal world, where all cars are autonomous these perceptions would be enough, however the future of self-driving cars is going to be a transition, where both humans and machines will drive on the roads. We humans already account for each other (we try as we can), but self-driving cars will have to account for us too. We might not be smart but driving on the road sometimes requires improvization to save a situation and we might need a more general AI.</p>
+<p>For the vehicle to understand it’s surroundigs first of all it needs sensors. Each company goes differently about the sensor suite, and it is quite interesting to examine each solution. This will be discussed in the chapter Other solutions.</p>
+<h2 id="proposed-solution">Proposed solution</h2>
+<p>In order to develop the proposed system, a sizeable dataset is needed. There are many datasets available on the internet for car driving. They include object detections, segmentations, map data, LiDAR data. Some of the most notable ones are the nuScenes dataset <span class="citation">(Caesar et al. 2019)</span>, Waymo dataset <span class="citation">(Sun et al. 2019)</span> from Google’s self-driving car company or the Cityscapes dataset <span class="citation">(Cordts et al. 2016)</span> and more. Each of these datasets are good, however they are not really helpful for our case.</p>
+<p>In order to localize objects in 3D space I use stereo imaging. Each AD system today employs stereo camera setting because it is a simple and cheap but accurate way of estimating depth for each pixel in an image. In order to have the <em>freedom</em> to create a custom camera setting I cannot rely on these datasets. Furthermore, I want to measure the success rate of my detector however there is no dataset that contains all the necessary information, because in fact it is not possible to collect everything from the real world.</p>
+<p>This is why I choose to use a <em>simulation</em> instead to test the system. Using a simulation gives a huge ammount of freedom. My research work started in looking for simulators that let me extract data from the simulation in each frame and let’s me create custom world scenario and sensor settings.</p>
+<p>After an extensive research of self-driving car simulators I found CARLA Simulator <span class="citation">(Dosovitskiy et al. 2017)</span> (a screenshot is seen on ) to be the most advanced one that is also opensource. CARLA is a quite mature simulator with an API that fulfills our requirements.</p>
+<div class="figure">
+<img src="figures/carla.png" alt="A screenshot from CARLA" width="566" />
+<p class="caption">A screenshot from CARLA<span data-label="fig:carla"></span></p>
+</div>
+<p>I set up the virtual vehcile with 10 RGB cameras mounted on the roof creating 4 stereo sides as shown on . As the title of the thesis says, I only used RGB cameras and no other sensors. Tesla additionally uses radar and sonar sensors taking contrary to almost all other players in the field who also employ a LiDAR sensor for depth data including MobilEye and Waymo. LiDAR data is good for correction, but it is better if the AI can equally perform using only RGB cameras, since it is a more general solution that is closer to how we humans percieve the environment.</p>
+<div class="figure">
+<img src="figures/3dmodel2.png" alt="How the cameras are set up on the roof" width="566" />
+<p class="caption">How the cameras are set up on the roof<span data-label="fig:3dmodel2"></span></p>
+</div>
+<p>The detector uses state-of-the-art detection, localization and segmentation model Detectron2 <span class="citation">(Wu et al. 2019)</span> a MASK R-CNN conv net model based on Residual neural networks and Feature Pyramid Networks trained on the COCO <span class="citation">(Lin et al. 2014)</span> general dataset.</p>
+<p>Finally I develop a 3D webvisualizer that lets us replay the ground truth and detection log simultaneously and compare the error between the two. depicts this taskflow.</p>
+<div class="figure">
+<img src="figures/flowchart.png" alt="Task flow" width="566" />
+<p class="caption">Task flow<span data-label="fig:flow"></span></p>
+</div>
+<h2 id="summary-of-results">Summary of results</h2>
+<p>The result is a detector that is capable of localizing vehicles, and pedestrians on the road up to 100 meters with an accuracy of ~1m in an angle of 270centered to the front. The algorithm is written in Python and uses PyTorch, with that on an NVIDIA Titan X GPU the detector can perform in 2.7FPS for one side, ie. for two cameras. In an embedded optimized system using C or C++ code this can easily be improved to even 60FPS creating a real-time system. The code cannot perform lane detection yet, but that would have been the easier part. The webvisualizer let’s us relplay the simulation frame by frame and see the detection error for each actor in the scene. It also shows a montage the original, detection and depthmap. Below, shows a screenshot of the webvisualizer in action.</p>
+<div class="figure">
+<img src="figures/webviz2.png" alt="3D wevisualizer" width="566" />
+<p class="caption">3D wevisualizer<span data-label="fig:webviz1"></span></p>
+</div>
+<p>All of the code for the thesis, detector, simulator configuration and webvisualizer is available on <a href="https://github.com/najibghadri/msc-thesis" class="uri">https://github.com/najibghadri/msc-thesis</a> and you can access the webvisualizer and interactively replay and test simulations on <a href="https://najibghadri.com/msc-thesis/" class="uri">https://najibghadri.com/msc-thesis/</a>.</p>
+<h2 id="thesis-structure">Thesis structure</h2>
+<p>In I give an overview of the widely used sensors for peception in the automotive industry: RGB cameras, radar, LiDAR and ultrasonic sensors. In I talk about different kinds of perceptions, state-of-the-art Convolutional Networks and computer vision algorithms that are useful for our use-case.</p>
+<p>In , I analyze and compare different self-driving car solutions: Tesla and Waymo self-driving cars and MobilEye autopilot. In , I introduce CARLA Simulator and some notable features of it.</p>
+<p>In I define the technical assumptions that I made in order to simplify the task and the resulting limitations.</p>
+<p>details the design and implementation of the simulator configuration, the detector algorithm and the webvisualizer.</p>
+<p>Then in I present different measurements and results, I discuss ways to improve the system in . In I present experimentations that ended up not being part of the detection and finally close with a conclusion.</p>
+<h1 id="chap:sensors">Sensors</h1>
+<p>Selecting the right sensors to understand the environment is half the task. Combining multiple sensors to collect data for further information extraction is called sensor fusion. This chapter details the most widely used sensors for scene understanding for autonomous vehicles and compare them.</p>
+<p>Radar, utrasonic and LiDAR sensors basically all work the same: emit a wave, wait until it returns and estimate the distance based on the time difference, and estimate the speed calculating the frequency shift - this is the Doppler effect: an increase in frequency corresponds to an object approaching and vice versa. A visualization is seen on .</p>
+<div class="figure">
+<img src="figures/sensors.png" alt="Sensing object with wave emission and reflection" width="566" />
+<p class="caption">Sensing object with wave emission and reflection<span data-label="fig:sensors"></span></p>
+</div>
+<p>Thus calculating the distance is a simple equation:</p>
+<p><span class="math display">\[\begin{aligned}
+    Distance=\frac{Speed\; of\; wavefrom * Time\; of\; Flight}{2}\end{aligned}\]</span></p>
+<p>However they use different waves: Radar works with electromagnetic waves, ultrasonic sensors work with sound waves and LiDAR works with laser light.</p>
+<h2 id="radar">Radar</h2>
+<p>Radar sensors at the front, rear and sides have become an essential component in modern production vehicles. Though most frequently used as part of features like parking assistance and blind-spot detection, they have the capability to detect objects at much greater range – several hundred meters in fact.</p>
+<p>Radar sensors are excellent at detecting objects, but they’re also excellent for backing up other sensors. For instance, a front-facing camera can’t see through heavy weather. On the other hand, radar sensors can easily penetrate fog and snow, and can alert a driver about conditions obscured by poor conditions. Radar is robust in harsh environments (bad light, bad weather, extreme temperatures).</p>
+<p>Automotive radar sensors can be divided into two categories: short-range radar (SRR), and long-range radar (LRR). The combination of these types of radar provides valuable data for advanced driver assistance systems.</p>
+<p><strong>Short-range radar (SRR)</strong> Short-range radar (SRR): Short-range radars (SRR) use the 24 GHz frequency and are used for short range applications like blind-spot detection, parking aid or obstacle detection and collision avoidance. These radars need a steerable antenna with a large scanning angle, creating a wide field of view.</p>
+<p><strong>Long-range radar (LRR)</strong> Long-range radar (LRR): Long-range radars (LRR) using the 77 GHz band (from 76-81GHz) provide better accuracy and better resolution in a smaller package. They are used for measuring the distance to, speed of other vehicles and detecting objects within a wider field of view. Long range applications need directive antennas that provide a higher resolution within a more limited scanning range. Long-range radar (LRR) systems provide ranges of 80 m to 200 m or greater.</p>
+<h2 id="ultrasonic">Ultrasonic</h2>
+<p>Ultrasonic (or sonar) sensors, alike radar, can detect objects in the space around the car. Ultrasonic sensors are much more inexpensive than radar sensors, but have a limited effective range of detection. Because they’re effective at short range, sonar sensors are frequently used for parking assistance features and anti-collision safety systems. Ultrasonic sensors are also used in robotic obstacle detection systems, as well as manufacturing technology. Ultrasonic sensors are not as susceptible to interference of smoke, gas, and other airborne particles (though the physical components are still affected by variables such as heat), and they are independent of light conditions. They also work based on the reflection of emission principle.</p>
+<p>Ultrasound signals refer to those above the human hearing range, roughly from 30 to 480 kHz. For ultrasonic sensing, the most widely used range is 40 to 70 kHz. At 58 kHz, a commonly used frequency, the measurement resolution is one centimeter, and range is up to 11 meters. At 300 kHz, the resolution can be as low as one millimeter; however, range suffers at this frequency with a maximum of about 30 cm.</p>
+<h2 id="lidar">LiDAR</h2>
+<p>As Radar is to radio waves, and sonar is to sound, LiDAR (Light Detection and Ranging) uses lasers to determine distance to objects. LiDAR sometimes is called 3D laser scanning. It does this by spinning a laser across its field of view and measuring the individual distances to each point that the laser detects. This creates an extremely accurate (within 2 centimeters) 3D scan of the world around the car.</p>
+<p>The principle behind LiDAR is really quite simple. Shine a small light at a surface and measure the time difference it takes to return to its source. The equipment required to measure this needs to operate extremely fast. The LiDAR instrument fires rapid pulses of laser light at a surface, some at up to 150,000 pulses per second. A sensor on the instrument measures the amount of time it takes for each pulse to bounce back. Light moves at a constant and known speed so the LiDAR instrument can calculate the distance between itself and the target with high accuracy. By repeating this in quick succession the insturment builds up a complex ’map’ of the surface it is measuring.</p>
+<p>The three most common currently used or explored wavelengths for automotive LiDAR are 905 nm, 940 nm and 1550 nm, each with its own advantages and drawbacks.</p>
+<p>LiDAR sensors are able to paint a detailed 3D point cloud of their environment from the signals that bounce back instantaneously. It provides shape and depth to surrounding cars and pedestrians as well as the road geography. And, like radar, it works just as well in low-light conditions.</p>
+<p>You can see how a LiDAR sensor from Luminar<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> reconstructs the environment in .</p>
+<div class="figure">
+<img src="figures/luminar.png" alt="Luminar LiDAR in action" width="566" />
+<p class="caption">Luminar LiDAR in action<span data-label="fig:luminar"></span></p>
+</div>
+<p>Currently, LiDAR units are big, and fairly expensive - as much as 10 times the cost of camera and radar — and have a more limited range. You will most often see them mounted on Mapping Vehicles, but as the technology becomes cheaper, we might see them on trucks and high-end cars in the near future.</p>
+<h2 id="rgb-cameras">RGB Cameras</h2>
+<p>Cameras are the essential sensors for self-driving cars. Most imaging sensors are sensitive from about 350 nm to 1000 nm wavelengths. The most common types of sensors for cameras are CCD (charged coupled device) and CMOS (complementary metal–oxide–semiconductor). The main difference between CCD and CMOS is how they transfer the charge out of the pixel and into the camera’s electronics.</p>
+<p>CCD-based image sensors currently offer the best available image quality, and are capable of high resolutionsm making them the prevalent technology for still cameras and camcorders.</p>
+<p>An important aspect of cameras is the camera model that describes how points of the world translate to pixels in the image. That is going to be essential when we want to apply the inverse projection to determine the world-position of objects in the picture. This will be discussed in the following chapters.</p>
+<h2 id="gps-wps">GPS &amp; WPS</h2>
+<p>Originally introduced for military applications in 1974, GPS probes today can be found in cameras, watches, key fobs, and of course, the smartphone in our pockets.</p>
+<p>The lesser-known WPS stands for Wi-Fi Positioning System, which operates similarly. When a probe detects satellites (GPS) or Wi-Fi networks (WPS), it can determine the distance between itself and each of those items to render a latitude and longitude. The more devices a GPS/WPS probe can detect, the more accurate the results. On average, GPS is only accurate to around 20 meters.</p>
+<p>For WPS the most common and widespread localization technique is based on measuring the intensity of the received signal, and the method of “fingerprinting”. Typical parameters useful to geolocate the wireless access point include its SSID and MAC address. The accuracy depends on the number of nearby access points whose positions have been entered into the database. The Wi-Fi hotspot database gets filled by correlating mobile device GPS location data with Wi-Fi hotspot MAC addresses.</p>
+<h1 id="chap:perceptions">Computer vision</h1>
+<p>After collecting data from the sensors we choose we need to implement the right algorithms to extract information from the sensor data. In this chapter I start with explaining the basics of computer vision and then move on to advanced convolutional neural netowrks that will help our goal.</p>
+<p>Computer Vision, often abbreviated as CV, is defined as a field of study that seeks to develop techniques to help computers “see” and understand the content of digital images such as photographs and videos.</p>
+<p>The problem of computer vision appears simple because it is trivially solved by people, even babies. Nevertheless, it largely remains an unsolved problem based both on the limited understanding of biological vision and because of the complexity of vision perception in a dynamic and nearly infinitely varying physical world.</p>
+<h2 id="challenges-in-computer-vision">Challenges in Computer Vision</h2>
+<p>Image classification is considered to be the most basic application of computer vision. The rest of the developments in computer vision are achieved by making small enhancements on top of this. Since this task is intuitive for us, we fail to appreciate the key challenges involved when we try to design systems similar to our eye. Some challenges for computers are:</p>
+<ul>
+<li><p>Variations in viewpoint</p></li>
+<li><p>Difference in illumination</p></li>
+<li><p>Hidden parts of images, occulsion</p></li>
+<li><p>Background Clutter</p></li>
+</ul>
+<h2 id="traditional-approaches">Traditional approaches</h2>
+<p>Various techniques, other than deep learning are available in computer vision. They work well for simpler problems, but as the data becomes huge and the task becomes more complex, they are no substitute for deep CNNs. Let’s briefly discuss two simple approaches.</p>
+<h3 id="knn-k-nearest-neighbours">KNN (K-Nearest Neighbours)</h3>
+<p>In the KNN algorithm each image is matched with all images in training data. The top K with minimum distances are selected. The majority class of those top K is predicted as output class of the image. Various distance metrics can be used like L1 distance (sum of absolute distance), L2 distance (sum of squares), etc. However KNN performs poorly - qute expectedly - they have a high error rate on complex images, because all they do is compare pixel values among other images, without any use of image patterns.</p>
+<h3 id="linear-classifiers">Linear Classifiers</h3>
+<p>They use a parametric approach where each pixel value is considered as a parameter. It’s like a weighted sum of the pixel values with the dimension of the weights matrix depending on the number of outcomes. Intuitively, we can understand this in terms of a template. The weighted sum of pixels forms a template image which is matched with every image. This will also face difficulty in overcoming the challenges discussed in earlier as it is difficult to design a single template for all the different cases.</p>
+<h2 id="convolutional-neural-networks">Convolutional Neural Networks</h2>
+<p>Visual recognition tasks such as image classification, localization, and detection are key components of computer vision. However these are not possible to achieve with traditional vision.</p>
+<p>Recent developments in neural networks and deep learning approaches have greatly advanced the performance of these state-of-the-art visual recognition systems.</p>
+<p>Neural networks are the basis of deep learning methods. They are made up of multiple layers, each layer containing multiple perceptrons. Layers can be fully-connected or sparsely if possible, providing some performance benefits. Each perceptron is an activation function whose input is the weighted output of perceptrons from previous layers, and the function is usually a sigmoid function. A neural network’s first layer is the input layer and the last layer is the output, which could be an array of perceptron where only one yields a high output creating a classifier. Layer in-between are called hidden layers and it is up to design and experimentation the determine what is the right configuration of hidden layers.</p>
+<div class="figure">
+<img src="figures/nn.png" alt="Neural network visualization. Image taken from CS231N Notes" width="302" />
+<p class="caption">Neural network visualization. Image taken from CS231N Notes<span data-label="fig:convnet"></span></p>
+</div>
+<p>Neural Networks (NN) are good at classifying different patterns recieved in the input layers however they are not sufficient for even image classification, because in one part the number of inputs is way to high. Consider a high resolution image with <span class="math inline">\(1000\times 1000\times 3\)</span> pixels, then the NN has 3million input parameters to process. This takes a long time and too much computational power.</p>
+<p>Secondly the neural network architecture in itself is not a general-enough solution (if you think about it, it is similar to a linear classifier or a KNN).</p>
+<p>Convolutional Neural Network (CNNs) however solve image classification and more. A CNN is able to capture the spatial features in an image through the application of relevant filters. The architecture performs a better fitting to an image dataset due to the reduction in the number of parameters involved and reusability of weights.</p>
+<p>There is material on the internet in abundance about how convolutional neural networks work, and I have read many of them, but the one I recommend most is the Stanford course CS231N<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>.</p>
+<p>The general architecture of CNN is similar to a cone, where the first layer is the widest and each layer first convolves multiple filters (which in the beginning of the CNN correspond to edges and corners) applying ReLU (rectifier, non-linearity function) then it downsizes the input which is called the max pooling. This repeated over and over in the end results in a small tensor which can <em>then</em> be fed to the fully-connected (FC) layers (i.e. a neural network) which acts as the classifier.</p>
+<p>Why is this the winner architecture? Because if you think about it the neural network in the end only has to vote for the presence of the right features in roughly the right image position, not for each pixel. A visualization of a CNN’s architecture can be seen in .</p>
+<div class="figure">
+<img src="figures/convnet.png" alt="Architecture of a CNN" width="566" />
+<p class="caption">Architecture of a CNN<span data-label="fig:convnet"></span></p>
+</div>
+<div class="figure">
+<img src="figures/filters.png" alt="A visualization of the features learned in the first convnet layer in AlexNet (Krizhevsky, Sutskever, and Hinton 2012). AlexNet was a CNN which revolutionized the field of Deep Learning, and is built from conv layers, max-pooling layers and FC layers. Image taken from CS231N notes." width="226" />
+<p class="caption">A visualization of the features learned in the first convnet layer in AlexNet <span class="citation">(Krizhevsky, Sutskever, and Hinton 2012)</span>. AlexNet was a CNN which revolutionized the field of Deep Learning, and is built from conv layers, max-pooling layers and FC layers. Image taken from CS231N notes.<span data-label="fig:filters"></span></p>
+</div>
+<p>There are various architectures that have emerged each incrementally improving on the previous ones: LeNet <span class="citation">(Lecun et al. 1998)</span> - the work of Yann LeCun himself, AlexNet <span class="citation">(Krizhevsky, Sutskever, and Hinton 2012)</span> VGGNet <span class="citation">(Simonyan and Zisserman 2014)</span> GoogLeNet <span class="citation">(Szegedy et al. 2014)</span> ResNet <span class="citation">(He et al. 2015)</span></p>
+<h3 id="deep-learning">Deep Learning</h3>
+<p>Deep learning referes to the procedure of training neural networks and convolutional neural networks to perform the task at hand accurately. During deep learning first a dataset is created with training images coupled with “ground truth” data that is the required prediction for each image. The neural networks are then fed with the images in batches for a certain number of iterations - epochs. The weights of the neural network and the filters are adjusted with the loss function that comes from calculating the error of the current prediction and the ground truth for each image. This error is then “backpropagated” which is just another way of saying it is multiplied with the derivative of each weight in the network and subtracted from it. For filters this means “filtering filters”, so only those filters will stay in the convnet which resulted in a non-zero gradient in the neural network.</p>
+<h2 id="detection-and-segmentation">Detection and Segmentation</h2>
+<h3 id="object-detection-localization">Object Detection, Localization</h3>
+<p>The task to define objects within images usually involves outputting bounding boxes and labels for individual objects. This differs from the classification / localization task by applying classification and localization to many objects instead of just a single dominant object.</p>
+<p>If we use the Sliding Window technique like the way we classify and localize images, we need to apply a CNN to many different crops of the image.</p>
+<p>In order to cope with this, researchers have proposed to use regions instead, which are suggestions of regions that are likely to contain objects. The first such convnet is called <strong>R-CNN</strong> <span class="citation">(Girshick et al. 2013)</span> (Region-based Convolutional Neural Network).</p>
+<div class="figure">
+<img src="figures/rcnn.jpeg" alt="R-CNN architecture" width="302" />
+<p class="caption">R-CNN architecture<span data-label="fig:rcnn"></span></p>
+</div>
+<p>An immediate descendant to R-CNN is <strong>Fast R-CNN</strong> <span class="citation">(Girshick 2015)</span>, which improves the detection speed through 2 augmentations: 1) Performing feature extraction before proposing regions, thus only running one CNN over the entire image, and 2) Replacing SVM with a softmax layer, thus extending the neural network for predictions instead of creating a new model.</p>
+<p>There are other methods for object detection and localization but in general they are all based on first feature extraction then classification with different intermediate procedures.</p>
+<ul>
+<li><p>You Only Look Once (YOLOv4 <span class="citation">(Bochkovskiy, Wang, and Liao 2020)</span> being the latest)</p></li>
+<li><p>Single Shot MultiBox Detector (SSD) <span class="citation">(Liu et al. 2015)</span></p></li>
+</ul>
+<h3 id="segmentation">Segmentation</h3>
+<p>Central to Computer Vision is the process of segmentation, which divides whole images into pixel groupings which can then be labelled and classified. Particularly, Semantic Segmentation tries to semantically understand the role of each pixel in the image (e.g. is it a car, a motorbike, or some other type of class?). Therefore, unlike classification, we need dense pixel-wise predictions from the models.</p>
+<p>One of the earlier approaches was patch classification through a sliding window, where each pixel was separately classified into classes using a patch of images around it. This, however, is very inefficient computationally because we don’t reuse the shared features between overlapping patches. The solution, instead, is Fully Convolutional Networks (FCN) <span class="citation">(Long, Shelhamer, and Darrell 2014)</span>.</p>
+<h3 id="instance-segmentation">Instance Segmentation</h3>
+<p>Beyond Semantic Segmentation, Instance Segmentation segments different instances of classes, such as labelling 4 cars with 4 different colors. Instance segmentation problem is explored at Facebook AI using an architecture known as Mask R-CNN <span class="citation">(He et al. 2017)</span>.</p>
+<p>The idea is that since Faster R-CNN works so well for object detection is it possible to extend it to that is also performs pixel-level segmentation.</p>
+<p>Mask R-CNN adss a branch to Faster R-CNN that outputs a binary mask that says whether or not a given pixel is part of an object. The branch is a Fully Convolutional Network on top of a CNN-based feature map. Detectron2 <span class="citation">(Wu et al. 2019)</span> a detection framework developed by Facebook, is based on Mask R-CNN and it is the framework I ended up using.</p>
+<h2 id="tracking">Tracking</h2>
+<p>Object Tracking refers to the process of following a specific object of interest, or multiple objects, in a given scene. It traditionally has applications in video and real-world interactions where observations are made following an initial object detection. Now, it’s crucial to autonomous driving systems.</p>
+<p>Simple Online and Realtime Tracking - SORT <span class="citation">(Wojke, Bewley, and Paulus 2017)</span> and Deep SORT <span class="citation">(Wojke and Bewley 2018)</span> Are both based on Kalman filters to use the available detections and previous predictions to arrive at a best guess of the current state. Deep SORT extends SORT with the use feature extraction with encoders. These features are then kept in a dictionary for each object. For each detection throughout the tracking process a distance is calculated between signatures in the dictionary and the current object’s feature model this way tracking previously identified objects.</p>
+<h1 id="chap:relatedwork">Other solutions</h1>
+<p>It is important for a self-driving company to openly detail their technical solution because it let’s people trust their autopilot solution. However it wasn’t easy to find open information about the details of different companies, because the technology itself is in early stages. The details I found did provide inspiration on how to combine different algorithms.</p>
+<h2 id="tesla">Tesla</h2>
+<p>The only open information I found about Tesla’s autopilot technology is their own keynote about autopilot.<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></p>
+<p>The sensor suite for tesla vehicles is seen on . Tesla uses 360RGB camera vision and sonar sensing with a radar facing forward. The sonar sensors provide depth information for the surrounding objects and the radar provides depth data for further distances.</p>
+<p>The algorithms they use was not clear from the keynote, however I found two clips on the internet that claim to be the output of Tesla’s detection system. Based on that and the keynote it is safe to assume that they integrate the following tasks.</p>
+<ul>
+<li><p>Object detection and 3D bounding box detection</p></li>
+<li><p>Lane detection and path estimation</p></li>
+<li><p>Tracking</p></li>
+<li><p>Possibly some kind of segmentation</p></li>
+<li><p>Traffic sign detection and understanding</p></li>
+</ul>
+<div class="figure">
+<img src="figures/teslaoutput.png" alt="A screenshot form a clip that shows Tesla Autopilot’s perception output https://www.youtube.com/watch?v=fKXztwtXaGo" width="566" />
+<p class="caption">A screenshot form a clip that shows Tesla Autopilot’s perception output <a href="https://www.youtube.com/watch?v=fKXztwtXaGo" class="uri">https://www.youtube.com/watch?v=fKXztwtXaGo</a><span data-label="fig:teslaoutput"></span></p>
+</div>
+<div class="figure">
+<img src="figures/teslaoutput2.jpeg" alt="Another screenshot form a clip that shows Tesla Autopilot’s perception output https://www.youtube.com/watch?v=_1MHGUC_BzQ&amp;t=225s" width="566" />
+<p class="caption">Another screenshot form a clip that shows Tesla Autopilot’s perception output <a href="https://www.youtube.com/watch?v=_1MHGUC_BzQ&amp;t=225s" class="uri">https://www.youtube.com/watch?v=_1MHGUC_BzQ&amp;t=225s</a><span data-label="fig:teslaoutput"></span></p>
+</div>
+<div class="figure">
+<img src="figures/teslasensors.png" alt="Tesla sensor suite infographic from https://www.tesla.com/autopilot" width="566" />
+<p class="caption">Tesla sensor suite infographic from <a href="https://www.tesla.com/autopilot" class="uri">https://www.tesla.com/autopilot</a><span data-label="fig:teslasensors"></span></p>
+</div>
+<p>With sensor fusion they achieve depth estimation and detection thus they are able to reconstruct the scenes around the vehicle.</p>
+<h1 id="chap:carlasim">CARLA Simulator</h1>
+<p>CARLA’s mission is to create a simulator that can simulate sufficient-enough real-world traffic scenarios so that it is more accessible for researchers like myself to research, develop and test computer vision algorithms for self-driving car.</p>
+<p>CARLA <span class="citation">(Dosovitskiy et al. 2017)</span> is an open-source simulator for autonomous driving research. It is written in C++ and provides an accessible Python API to control the simulaton execution. It has been developed from the ground up to support development, training, and validation of autonomous driving systems. In addition to open-source code and protocols, CARLA provides open digital assets (urban layouts, buildings, vehicles) that were created for this purpose and can be used freely. The simulation platform supports flexible specification of sensor suites, environmental conditions, full control of all static and dynamic actors, maps generation and much more. It is developed by the Barcelonian university UAB’s computer vision CVC Lab and supported by companies such as Intel, Toyota, GM and others. The repository for the project is at <a href="https://github.com/carla-simulator" class="uri">https://github.com/carla-simulator</a></p>
+<p>It provides scalability via a server multi-client architecture: multiple clients in the same or in different nodes can control different actors. Carla exposes a powerful API that allows users to control all aspects related to the simulation, including traffic generation, pedestrian behaviors, weathers, sensors, and much more. Users can configure diverse sensor suites including LiDARs, multiple cameras, depth sensors and GPS among others. Users can easily create their own maps following the OpenDrive standard via tools like RoadRunner. Furthermore it provides integration with ROS<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> via their ROS-bridge</p>
+<p>I used CARLA 9.8.0 in the project that was the latest at the time (2020 March 09). Carla has a primary support for Linux so I could run it easly on Ubuntu. It requires a decent GPU otherwise the simulation is going to be slow.</p>
+<p>It’s important to mind the coordinate system used in Carla, because later when we will extract data the axes must be mapped to the correct data points. Since Carla is built with Unreal Engine<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a> it uses the coordinate system as in : X coordinate is to the front of the ego actor, Y is to the right of ego and Z is to the top.</p>
+<div class="figure">
+<img src="figures/carlacoords.jpg" alt="Carla coordinate system" width="566" />
+<p class="caption">Carla coordinate system<span data-label="fig:carlacoords"></span></p>
+</div>
+<h2 id="is-a-simulation-enough">Is a simulation enough?</h2>
+<p>I believe the future of self-driving car research and development is in part with simulations and in part with real-world training as well. To develop a self-driving AI from ground up it is certainly advisable to first develop and test the algorithms in a simulation.</p>
+<p>In order to create simulations that are rich and different Carla provides a large variety of actors and maps. The traffic manager can also be parametrized to control how pedestrians and vehicles move: their speed, minimum distance, and even “aggressivity” towards each other, which means how willing are they to collide instead of waiting until the actor in front moves away. This is actually useful as it helps unlock possible traffic deadlocks. The latest CARLA provides 8 maps but in newer versions they will be adding new maps. You can see a screenshot of each rendering in the 6 maps I used in .</p>
+<div class="figure">
+<img src="figures/maps.jpg" alt="Variety of maps in Carla" width="566" />
+<p class="caption">Variety of maps in Carla<span data-label="fig:maps"></span></p>
+</div>
+<p>A simulation obviously can’t return the variety and exact nature of scenarios that happen in <em>nature</em>. However I believe they are sufficient for testing an entry-level self-driving system and that with the use of simulations a company can lower the costs of development. The rise of simulators itself shows there is a need for the market.</p>
+<h2 id="carla-simulation-sensors">CARLA Simulation sensors</h2>
+<p>The Carla simulator’s API support a wide range of sensors: RGB Cameras, LiDAR, Radar, GPS, gyroscope, accelerometer, compass and more. These are easy to use, If you are interested I recommend reading the sensors reference in their documentation<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a></p>
+<p>Carla also provides miscellaneous sensors that help collecting ground-truth data for deep learning applications. This includes semantic segmentation camera, depthmap camera and other simple ones such as collision detector as seen in .</p>
+<div class="figure">
+<img src="figures/carlaseg.png" alt="Different sensors and cameras in Carla (semantic segmentation, LiDAR, depthmap)" width="566" />
+<p class="caption">Different sensors and cameras in Carla (semantic segmentation, LiDAR, depthmap)<span data-label="fig:carlaseg"></span></p>
+</div>
+<h3 id="other-simulators">Other simulators</h3>
+<p>There are a couple of other dedicated projects for simulators. There is Deepdrive from Voyage auto<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a>, an American AD supplier, NVIDIA has a project going on called Drive Constellation<a href="#fn8" class="footnoteRef" id="fnref8"><sup>8</sup></a> which is said to be advanced but is not opensource. Nvidia provides Harware In the Loop simulation for Drive Constellation which is an even more advanced simulation infrastructure that allows for testing the systems real-timeness. There is another project called RFPro<a href="#fn9" class="footnoteRef" id="fnref9"><sup>9</sup></a>. However these are either not opensource or not mature enough. CARLA Simulator <span class="citation">(Dosovitskiy et al. 2017)</span> was by far the best one for my case.</p>
+<h1 id="chap:assumptions">Assumptions made and limitations</h1>
+<p>In order to simply the task of scene understanding we need to define boundaries to measure the success of the detector.</p>
+<h2 id="ideal-traffic-situations---only-known-actors">Ideal traffic situations - only known actors</h2>
+<p>The first essential assumption is that there will only be ideal situations which means that we will only need to detect actors that we expect on the road: vehicles, bicycles, pedestrians. In the real world foreign objects on the road are a usual and dangerous phenomenon, however here I won’t take that into account.</p>
+<h2 id="daylight-situation">Daylight situation</h2>
+<p>First of all we are going to specialize to day-light situations only. This detection with RGB cameras at night is difficult, in order to achieve that we need other sensors such as Radar, Sonar or LiDAR. As we are only using RGB cameras we arge going to assume that all driving situations occur in daylight.</p>
+<h2 id="flat-plane-assumption">Flat plane assumption</h2>
+<p>Another important assumption is that the driving field and landscape area is flat. It isn’t difficult to detect object that are a bit higher on the picture but it is difficult to recognize the curvature of the plane on the image. In case the detector can interpret curvature and the ego car is on an angled road the angle data from the gyroscope sensors has to be take into account and subtracted from the percieved angles. It is generally true that inorder to recognize true information about the world the relative position and orientation has to be taken into account.</p>
+<p>In order to reduce this complexity, we are going to only take into account the objects’ position on the x,y surface coordinates and disregard the Z coordinate on evaluating the detection. This will be discussed further in about improvements.</p>
+<h2 id="path-lane-and-road-detection">Path, lane and road detection</h2>
+<p>As described before there are many ways of detecting lane and the easiest is to use the Hough transform and detect the lanes directly in front of the car. However this is not a robust solution: this only gives good results in good illumination and weather situations. It is true that most situations are like this but there are still many unpainted roads, dirt roads or simply due to lightning and weather the lane edges won’t be clear.</p>
+<p>One robust solution would be to take into account the vehicles in front and behind us and interpret their path as the right path and regress the lane to their path.</p>
+<p>Another solution is to take into account previously driven paths. This is the approach Tesla takes however it is not clear how exactly.</p>
+<h2 id="keypoint-detection-and-orientation">Keypoint detection and orientation</h2>
+<p>It is important to determine the orientation of the detected cars on the road, so that the algorithm knows the depth data corresponds to which side of the detected vehicle. It is also a clue that helps in determining the direction of the car. Detecting keypoints could be done with an algorithm similar to Latent 3D Keypoints <span class="citation">(Suwajanakorn et al. 2018)</span> that I experimented with (see ).</p>
+<p>Because the algorithm doesn’t take into account orientation the most straightforward way to localize an object upon detection is to take the center of it’s bounding box. We will see in the results chapter how big the resulting error is.</p>
+<h2 id="tracking-1">Tracking</h2>
+<p>The final algorithm does not include tracking, this means that the identity of each detected actor/object is inconsistent throughout time. Tracking helps handling occlusion of previously detected pedestrians/vehicles and also in building up a knowledge base for each actor throughout it’s presence in the scene. This can help in estimating the actor’s velocity, acceleration and it provides a base for interpreting intentions. I simplified the task by not considering identity throughout time an important factor, eventhough in a real system it is a must-have.</p>
+<h2 id="only-detection-and-localization">Only detection and localization</h2>
+<p>The final product will be a detector that can detect vehicles and pedestrians up more than a 100 meters and localize them using stereo vison. The detector work with a reasonable accuracy error and is built in an extensible way so that tracking, and improved instance segmentator and lane detection can be plugged in. The webvisualizer then can be easily extended to show futher information by a newer version of the detector.</p>
+<h1 id="chap:designimplementation">Design and implementation</h1>
+<p>Let’s recap the task flow of the task I described in the Introduction: After configuring the simulator with the designed camera setting I render multiple traffic scenarios in different maps provided by CARLA while extracting all necessary information into a log file to later compare the detection log with</p>
+<div class="figure">
+<img src="figures/flowchart.png" alt="Task flow" width="566" />
+<p class="caption">Task flow<span data-label="fig:flow2"></span></p>
+</div>
+<h2 id="tools-used">Tools used</h2>
+<p>Soon it became obvious that Linux operating system is the right tool to use for development. I have been using Ubuntu before this project as well so I was already familiar with everything. The main IDE I used throughout the project is Visual Studio Code, which thanks to it’s openness and community has many useful extensions that helped me develop in fact every part of the thesis: Python, Nodejs and Javascript for the webvisualizer and finally LaTeX and ofcourse git support.</p>
+<p>I also used Conda which is I think an essential tool when you want to develop ML and AI projects with Python. Conda makes it easy to create and use separate Python environments. This is important because different implementations of algorithms require different versions of the same packages thus it keeps a clean separation. The drawback is that consecuently it requires an excessive ammount of hard-drive space.</p>
+<p>Upon developing the algorithm and experimenting with it I used Jupyter Notebook which is a Python runtime on top of the bare one and a web-based IDE at the same time. With Jupyter Notebook it is easy to change and re run the code thanks to it’s “kernel” system, which keeps the value of variable and imported packages between executions.</p>
+<p>For the GPU-intensive tasks such as simulation and convnet calculations in the detector I was provided with a remote Titan X GPU<a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a> by my university.</p>
+<h2 id="choosing-the-sensor-suite">Choosing the sensor suite</h2>
+<p>Mounting cameras around the vehicle to have an all around vision is an essential design strategy, as we have seen in the work of other companies in . However we will need to determine depth as well. I decided to use only cameras in a stereoscopic structure to create 5 stereo sides around the vehicle. The following image shows the design setting with field of views visualized in .</p>
+<div class="figure">
+<img src="figures/3dmodel3.png" alt="The stereo camera setting I used on top of the virtual Tesla Model 3" width="566" />
+<p class="caption">The stereo camera setting I used on top of the virtual Tesla Model 3<span data-label="fig:3dmodel3"></span></p>
+</div>
+<p>In details:</p>
+<ul>
+<li><p>Front stereo: two cameras looking straight to the front 0.8 meters apart</p></li>
+<li><p>Right corner and left corner stereo cameras: the cameras are on the diagonal corners of a 20 cm wide 20cm tall triangle creating two 45 angled stero vision.</p></li>
+<li><p>Right and left side stereos are turned 90to the sides and they are apart 0.5 meter.</p></li>
+</ul>
+<p>The cameras are 1.5 meters above the ground and they are mounted relative to the bottom center-point of the vehicle.</p>
+<p>The advantage of puting stereo cameras apart to a relatively large distance is that it increases the accuracy of the stereo block matching algorithm to a further distances. The drawback however is that a smaller portion of the right and left side images are going to intersect hence creating a smaller field of view. However due to the corner stereo cameras this is not a problem for us.</p>
+<h2 id="configuring-the-simulation">Configuring the simulation</h2>
+<p>Carla simulator can be ran in two time-step settings: variable and synchronous. In real-world perception it is a complex task by itself to synchronize multiple cameras with each other so that when the algorithm calculates information based on data from multiple sensors they all correspond to the same moment in time with an error boundary. In a simulation however we can have the freedom to synchronize the simulation timesteps themselves and collect all imaging data between each timestep. Setting Carla to synchronous timestep ensures that all images in a certain frame are collected and respond to the same moment.</p>
+<p>I used 30FPS timestep setting so that physics calculations are still realistic but the performance is not too bad. We also have to account for the size of the generated images: it was good to half the size of the image datasets from a 60FPS setting. Increasing the traffic participants also degrades the performance. I usually used 200 vehicles and 100 pedestrians for each map, that resulted in realistic traffic scenarios.</p>
+<p>I recorded different scenarios of approximately 1 minute, which means 1800 frames on 30FPS. On the Titan X machine it it took 15 minutes to render 1 simulation minute, i.e. it ran the simulation with 2FPS. Note, this is different from the simulation time-step which we fixed to 30FPS. Since I collect 10 images in each frame it results in a dataset of 18000 images.</p>
+<p>The camera setting I used is an undistorted camera that takes <span class="math inline">\(1280\times720\)</span> resolution images, i.e. HD 720p images, compressed with JPEG to yield a reasonable size. This way one image is on average 215 kilobytes instead of 1MB which is a good compression rate and this was the limit where I did not see any difference in detection accuracy.</p>
+<p>In a real-world systems images go straight to the GPU and CPU unit and they get downscaled to the choosen size before feeding into the algorithm. I had to resort to compression because of the research nature of the project: I reran and tested the accuracy of the detector many times on the same dataset.</p>
+<p>Using an undistorted camera matrix only means that we need to use one less back transformation matrix in the detection calculations. In real-world the intrinsic camera matrix is calculated and corrected for cameras that are mounted on cars and it is part of the calculation.</p>
+<p>Besides imaging we have the ground truth log data. During the simulation, besides rendering images I coded a logger that logs the necessary information of the state of the simulator for each frame. This information is built up in a json-like dictionary, and at the end of the simulation it is saved to one file, that I call the framelist.</p>
+<h2 id="extracted-data">Extracted data</h2>
+<p>Naming the images in an organized way is important to make it easy to read the images in a structured way upon detection. Each image starts with the number of the frame it was taken in. Starting the simulator server Carla increases a frame counter starting with 1. To know which image corresponds to which camera, the framenumbers are postfixed with a label. shows the postfixes for each image.</p>
+<div class="figure">
+<img src="figures/labeling.jpg" alt="L2/1, R1/2: Right side/Left side first and second cameras, LC(2/1), RC(1/2): Right corner, left corner cameras, FL FR: Front left, front right cameras" width="566" />
+<p class="caption">L2/1, R1/2: Right side/Left side first and second cameras, LC(2/1), RC(1/2): Right corner, left corner cameras, FL FR: Front left, front right cameras<span data-label="fig:labeling"></span></p>
+</div>
+<p>In each frame I log information about the current state of the simulation. For the purpouses of the final detector the following information gets logged in each frame:</p>
+<ul>
+<li><p>Frame’s number: the value of the frame counter at each frame</p></li>
+<li><p>For all walker and vehicle actors in a 100 meter radius from the ego car:</p>
+<ul>
+<li><p>Id: corresponds to the actor’s unique id among other actors.</p></li>
+<li><p>Relative position: X, Y, Z coordinate of the actor in the CARLA coordinate system (see )</p></li>
+<li><p>Distance: Euclidean distance from the ego car</p></li>
+</ul></li>
+<li><p>Waypoints: these are center and left-right points of the lane the egocar is currently in up to 30 points forward. These were meant to be the ground-truth data for lane-detection</p></li>
+</ul>
+<p>This information is then exported into a JSON file with the following format:</p>
+<pre><code>frameList: [
+    {
+        frame: Number,
+        actors: [
+            {
+                type: car|pedestrian,
+                id: Number,
+                relative_position: {
+                    x: Number,
+                    y: Number,
+                    z: Number,
+                }
+            },
+        ],
+    },
+]</code></pre>
+<p>For a one-minute simulation the ground-truth json file is approximately 20 megabytes. It isn’t optimal to save information like this for longer simulations. In those cases it is recommended to use a binary format. Carla provides a way to save binary information of the recording but unfortunately there were issues with recording that way, so I ended up with this custom log format. However it ended up being beneficial, because the webvisualizer simply loads the json files (detection and ground truth) into two JavaScript objects.</p>
+<h2 id="detector">Detector</h2>
+<p>The algorithm plan is the following: for each stereo pair of images calculate the disparity map with a stereo block matching algorithm. Then detetect objects and their segmentation mask (instance segmentation) with a state-of-the-art convnet and then extract the disparity data using the segmentaiton mask. Then use the extracted disparity data to estimate the depth of the detected object and then reproject to Carla-world coordinates to match the logfile coordinate system.</p>
+<h3 id="detectron2">Detectron2</h3>
+<p>Detectron2’s <span class="citation">(Wu et al. 2019)</span> Mask R-CNN model provides both object detection and instance segmentation so I decided to use it. Detectron is built with PyTorch, Facebook’s own GPU-aided ML library.</p>
+<p>The algorithm runs the detecton prediction only on the left image of each side, because later on we will need the segmentation mask of the left image to extract the depth data from the disparity map generated by the stereo block matching algorithm.</p>
+<p>Before prediction if our ego car falls into the image it is filled with zeros, i.e. it is occluded ith black color. It is better to use black since it is all zeros, and therefore convnet is not going to be sensitive for those parts of the image.</p>
+<p>A visualization of the detection results can be seen on</p>
+<div class="figure">
+<img src="figures/335DET.jpg" alt="A visualization of the Detectron2 detections and instance segmentation on an ego-occluded image" width="566" />
+<p class="caption">A visualization of the Detectron2 detections and instance segmentation on an ego-occluded image<span data-label="fig:detection"></span></p>
+</div>
+<h3 id="depth-estimation">Depth estimation</h3>
+<p>To perform depth estimation I found to easiest way is to use OpenCV a widely used library in computer vision that includes the stereo processing tools I needed.</p>
+<h4 id="opencv">OpenCV</h4>
+<p>OpenCV is a library of programming functions mainly aimed at real-time computer vision originally developed by Intel. The library is cross-platform and free for use. It provides traditional Computer Vision tools such as the stereo correspondence algorithm using block matching <span class="citation">(Hamzah, Hamid, and Salim 2010)</span> and an advanced version of it the Semi-Global Block Matching method (SGBM) <span class="citation">(Hirschmuller 2008)</span> that I used for the stereo disparity map calculation.</p>
+<h4 id="stereo-block-matching-algorithm">Stereo Block Matching Algorithm</h4>
+<p>The Stereo Block Matching Algorithm works by comparing the neighborhood of a pixel to each neighborhood of the row of the other image - the measure of similarity can be different, but usually the mean squared error is used. Usually before using the stereo block matchin algorithm a camera calibration is required. This happens with the chessboard calibration method<a href="#fn11" class="footnoteRef" id="fnref11"><sup>11</sup></a> where a flat checkerboard is displayed in front of the two stereo cameras. The calibration algorithm then calculates the distortion for each camera and rotation difference between the two cameras to calculate the intrinsic matrix.</p>
+<p>In our case since we record images in a super ideal way: no distortion and perfectly parallel cameras we don’t need any calibration and application of inverse intrinsic matrix before using the SGBM algorithm.</p>
+<div class="figure">
+<img src="figures/335DP.jpg" alt="A visualized disparity map result after using OpenCV’s StereoSGBM algorithm on the front stereo side" width="566" />
+<p class="caption">A visualized disparity map result after using OpenCV’s StereoSGBM algorithm on the front stereo side<span data-label="fig:disparitymap"></span></p>
+</div>
+<p>The StereoBM algorithm considers the left image as the primary, so it will return a disparitymap that corresponds to the pixels of the left image.</p>
+<h4 id="triangulation">Triangulation</h4>
+<p>Triangulation is a simple method of deriving the depth coordinate when we have two parallel cameras. shows the camera setting of an ideal stereo setting. Recall, that each stereo side in our setting is like this.</p>
+<div class="figure">
+<img src="figures/triangulation.png" alt="An ideal parallel stereo camera model." width="566" />
+<p class="caption">An ideal parallel stereo camera model.<span data-label="fig:triangulation"></span></p>
+</div>
+<p>If there is a point P in the real world in the field of view of the stereo camerase, the point will be projected onto different points of both camera’s image plane. If the cameras are set in an ideal parallel stereoscopic setting then we can easily calculate the depth of the point. The pixel difference between between pixels correspoonding to the same block can be calculated with xr-xl. The OpenCV Stereo BM algorithm provides this value for each matched pixel. From now on all we have to do is use triangulation to calculate the depth of each pixel. The f corresponds to the focus length and Z corresponds to the real depth of the point.</p>
+<p>The following equations hold true for the figure above from similar triangles. <span class="math display">\[\begin{aligned}
+    \begin{split}
+        \frac{z}{f} = \frac{x}{xl} =  \frac{x-b}{xr} \\
+        \frac{z}{f} = \frac{y}{yl} =  \frac{y-b}{yr}
+    \end{split}\end{aligned}\]</span></p>
+<p>From this the triangulation is as follows:</p>
+<p><span class="math display">\[\begin{aligned}
+    \begin{split}
+        \text{Depth}\;\; Z = \frac{f \cdot b}{xl - xr} =  \frac{f \cdot b}{disparity} \\
+        X = \frac{xl \cdot z}{f} \\
+        Y = \frac{yl \cdot z}{f}
+    \end{split}
+    \label{eq:depthcalc}\end{aligned}\]</span></p>
+<p>Where xl and yl refers to to distance from the center of the image to the center points of the detection boundingbox (in the left image).</p>
+<h4 id="depth-calculation">Depth calculation</h4>
+<p>Now we know the way to calculate the depth knowing the disparity. The result of the SGBM, seen on , is a 2D array containg valid and invalid data values. In order to determine the right disparity value for a detection it is not enough to simple take the values under the mask. The disparities under a mask contain values for the same object’s closest point and farthest point from the camera. Taking into account the simplifications we established in the previous chapter there are two solutions to find the distance of the object: 1.) take the average of the valid disparities under a mask 2.) take the mode of the disparities. By intuition we would choose taking the average, however that is going to result in high error and high variance. The reason is, that the segmentation itself is going to mask values that might not correspond to the object’s disparities. Even a few values that are far from the average the object’s disparities can change the average of the masked disparities drastically. Using the mode the algorithm yielded much more stable results, that way it simply is ignores the small inaccuracies of the masking and disparity error and takes the most dominant disparity value. The visualization of masking can be seen on .</p>
+<div class="figure">
+<img src="figures/335merged.jpg" alt="Masking the instance segmentation with the disparitymap filters the necessary values for estimating the vehcile’s depth" width="566" />
+<p class="caption">Masking the instance segmentation with the disparitymap filters the necessary values for estimating the vehcile’s depth<span data-label="fig:merged"></span></p>
+</div>
+<h3 id="back-projection">Back projection</h3>
+<p>Each stereo side has a transformation matrix initialized before running the algorithm. Each matrix is an affine 4x4 transformation matrix, that does the following in this order:</p>
+<ol>
+<li><p>It swapes the axes from the image coordinate system to Carla’s coordinate system z-&gt;x, x-&gt;y, y-&gt;z</p></li>
+<li><p>It rotates the points with the same rotation as the camera</p></li>
+<li><p>It translates the camera with the same translation for the camerase relative to the vehcile’s bottom center point.</p></li>
+</ol>
+<p>The resulting x, y, z coordinates are the final detection coordinates that go into the detection log.</p>
+<h3 id="final-pseudo-code">Final pseudo-code</h3>
+<p>The final algorithm pseudo-code:</p>
+<pre><code>for each frame:
+    for each stereo side:
+        1. read left and right image
+        2. occlude ego from image
+        3. compute disparity map using stereo bm.
+        4. predict detections and instance segmentation
+        for each detection:
+            mask disparity map with detection segmentation
+            calculate mode of the masked disparity
+            apply triangulation and inverse projection
+            add actor to frame
+    add frame to framelist
+save detection list</code></pre>
+<h2 id="web-visualizer">Web visualizer</h2>
+<p>As I mentioned before in order to compare the detection result and the ground truth log of each rendering scenario it would be useful to have a visusalization of the detection replayed. This is similar to the information shown on a monitor of a self-driving car.</p>
+<p>Since I already had experience in Javascript and in ReactJs<a href="#fn12" class="footnoteRef" id="fnref12"><sup>12</sup></a> - an easy-to-use web application framework developed by Facebook - I decided to look for options in 3D visualization. I found WebViz<a href="#fn13" class="footnoteRef" id="fnref13"><sup>13</sup></a>, a React library specifically made for 3D visualization of traffic scenarios. It has a compelling declarative API.</p>
+<p>There are two main views in the end product webvisualizer: The video montage and the 3D visualization ()</p>
+<p>The main feature of the webvisualizer is to replay each simulation and see the original, detection and depthmap videos in synchronization with the 3D visualizer that displays both the detection log and the ground truth log for each frame. The webapp is equipped with control buttons that help the control of the playback.</p>
+<div class="figure">
+<img src="figures/webviz3.png" alt="Screenshot of the webvisualizer" width="566" />
+<p class="caption">Screenshot of the webvisualizer<span data-label="fig:webviz2"></span></p>
+</div>
+<div class="figure">
+<img src="figures/detmontage.jpg" alt="The montage videos in the webvisalization: original, depthmap, detections" width="566" />
+<p class="caption">The montage videos in the webvisalization: original, depthmap, detections<span data-label="fig:detmontage"></span></p>
+</div>
+<h2 id="additonal-scripts">Additonal scripts</h2>
+<p>In order to simplify some tasks that included multiple repetitive commands I had to create some scripts that let me invoke them in one command. One script was to start the simulator, the ego controller and spawn actors in a choosen map all in one script. Another useful script was to create a montage of all frames and immediately create a video and compress it multiple times.</p>
+<h1 id="chap:results">Results</h1>
+<h2 id="accuracy">Accuracy</h2>
+<p>The best way to see the accuracy of the detector is through the webvisualizer. The reader is encouraged to visit <a href="https://najibghadri.com/msc-thesis/" class="uri">https://najibghadri.com/msc-thesis/</a> where you can interact with with the simulation playback and see each detection.</p>
+<p>The reader might notice that most of the time the detected objects are located closer than the ground truth. Recall, that the depth estimation happens on the surface of the object. Estimating the centerpoint is difficult. If instead of working with centerpoints I would have worked with a more complex approach of first detection orientation or 3D bounding box, ther would be no need for working with center points. I discuss improvements later on.</p>
+<div class="figure">
+<img src="figures/accuracy.png" alt="General accuraccy of the detector visualized in the webviewer" width="566" />
+<p class="caption">General accuraccy of the detector visualized in the webviewer<span data-label="fig:accuracy"></span></p>
+</div>
+<p>Genearlly there are no missed objects but there are false positives. Most of the detections are accurate within  0.5meters.</p>
+<div class="figure">
+<img src="figures/accfalsepositive.png" alt="False positive detection where a building is detected as a train" width="566" />
+<p class="caption">False positive detection where a building is detected as a train<span data-label="fig:accfalsepositive"></span></p>
+</div>
+<p>Depth estimation is not accurate enough due to the inaccuracy of the blockmatching algorithm. This can be fixed with the use of LiDAR or radio sensors instead of stereo imaging. Optimal sensor suite is discussed in Improvements .</p>
+<p>Since the setero sides overlap and they see different sides of the detect objects in the detection log the objects appear as many times as many sides it appears on as seen on . This can be fixed by using tracking and using a shared feature dictionary. Another solution is to abandon stereo camera based depth estimation and use mono cameras with radio or LiDAR sensors for depth estimation with cameras having a small overlapping region. This would be similar to Tesla’s approach.</p>
+<div class="figure">
+<img src="figures/accmultidet.png" alt="Multiple detections of the same object due to overlapping stereo sides" width="566" />
+<p class="caption">Multiple detections of the same object due to overlapping stereo sides<span data-label="fig:accmultidet"></span></p>
+</div>
+<p>Despite these depth estimation can be accurate to 70 meters even as seen on .</p>
+<div class="figure">
+<img src="figures/accfar.png" alt="Relatively accurate depth estimation for far distances of ~70 meters" width="566" />
+<p class="caption">Relatively accurate depth estimation for far distances of ~70 meters<span data-label="fig:accfar"></span></p>
+</div>
+<p>An automatic quantification method for the error will be discussed in .</p>
+<h3 id="fine-tuning">Fine tuning</h3>
+<p>Choosing different convnet models for Detectron2 can change the performance and accuracy of the detector. I used the ResNet-101 model <span class="citation">(He et al. 2015)</span>. ResNet50 is faster but I experienced more detection misses.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Sides</th>
+<th align="center">FPS average</th>
+<th align="center"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">All 5 sides</td>
+<td align="center">0.53 FPS</td>
+<td align="center"></td>
+</tr>
+<tr class="even">
+<td align="left">One side</td>
+<td align="center">2.73 FPS</td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+<p>[tab:TabularExample]</p>
+<p>In imporvements on instance segmentation research will be discussed that might lead to an improved detection speed over Detectron2.</p>
+<h2 id="z-coordinate-ignored">Z coordinate ignored</h2>
+<p>As discussed earlier in about assumptions, the Z coordinate (in Carla UE coordinates ) is disgregarded in the webvisualization. The accuracy of the Z coordinate is not worse or better the X and Y coordinates but it doesn’t add information and due to an inconsistency in CARLA simulator when returning the location of actors for vehicles and pedestriands the center point is interpreted differently. Hence it showed a false inaccuracy in the Z direction, however not significant as seen on .</p>
+<div class="figure">
+<img src="figures/acczcoord2.png" alt="Inaccuracies on the Z coordinates are not significant" width="566" />
+<p class="caption">Inaccuracies on the Z coordinates are not significant<span data-label="fig:acczcoord"></span></p>
+</div>
+<p>In on imporvements a different more complex and robust approach to position estimation is discussed that doesn’t use detected bounding box centerpoints.</p>
+<h2 id="dark-results">Dark results</h2>
+<p>There is only one map with a “night” situation, and it takes place in a city that is well-luminated, hence I don’t consider it a night light test, but it is darker than other scenarios. The results are good no significant objects were missed.</p>
+<div class="figure">
+<img src="figures/nightresult.png" alt="Night situation yields good performance" width="566" />
+<p class="caption">Night situation yields good performance<span data-label="fig:nightresult"></span></p>
+</div>
+<h2 id="hardware-requirements">Hardware requirements</h2>
+<p>It wasn’t possible for me to evalute the real-timeness of the system simply because the architecture doesn’t allow that. As discussed earlier in Nvidia Drive Consteallation has support for HIL simulation that could be used to test the real-timeness of systems.</p>
+<h1 id="chap:improvement">Improvement notes</h1>
+<p>In I established some simplifications to the system. In order to create a fully capable scene understanding algorithm the following improvements are necessary.</p>
+<h2 id="tracking-and-correlation">Tracking and correlation</h2>
+<p>In order to measure the accuracy of detections (false positives, false negatives), it is important to correlate the positive detections with the most likely ground truth actor. This could be done by finding the closest truth actor to each detection. There is no point in implementing more robust solutions, because if the error is so high that there are conflicting possibilities for the nearest possible truth object then the depth estimation is fundamentally flawed.</p>
+<h2 id="faster-instance-segmentation-with-yolact">Faster instance segmentation with Yolact++</h2>
+<p>A new research has emerged relating instance segmentation, YOLACT <span class="citation">(Bolya et al. 2019a)</span> and YOLACT++ <span class="citation">(Bolya et al. 2019b)</span><a href="#fn14" class="footnoteRef" id="fnref14"><sup>14</sup></a>, that achieves 30+fps on Titan X for instance segmentation and detection. It is based on YOLO and uses the same resnet50 model that Detectron2 uses. If this convnet achieves the same accuracy with a higher fps than it is replaceable with Detectron2.</p>
+<h2 id="optimal-sensor-suite">Optimal sensor suite</h2>
+<p>We have seen that companies use many sensors combined not only rgb cameras. In an optimal setting I would use only one stereo camera setting to the front and rely on radar and ultrasonic sensors for depth data. Monodepth <span class="citation">(Godard, Mac Aodha, and Brostow 2017)</span> is also an option to estimate or correct depth however it might not be a stable method.</p>
+<h2 id="keypoint-based-detection-and-orientation">Keypoint based detection and orientation</h2>
+<p>Keypoint or landmark based orientation estimation would be a robust method to determine the orientation of vehicle in an image. This is imporant in order to determine which side is visible to the depth map, and assign the depth data to that side of the object and reconstruct knowing this information. In the next chapter I describe to methods I experimented with to estimate orientation.</p>
+<h2 id="data-correction">Data correction</h2>
+<p>The percieved information must be corrected with the car’s gyroscopic data, because cameras get tilted. This is important when the road we are on or the road ahed of us has a high difference in inclination.</p>
+<h2 id="lane-path-and-road-detection">Lane, path and road detection</h2>
+<p>Lane detection can be done with the prevalent methods such a Hough transform combined with sliding window curve fit. Another possibility is to take into account the vehicles in front and behind us and interpret their path as the right path and regress the lane to their path. However this might lead to uninteded results.</p>
+<h2 id="foreign-object-detection">Foreign object detection</h2>
+<p>With the usage of sonar and radar sensors and even more so with LiDAR it is possible to detect object on the road. However it is more robust if the algorithm can detect when there is an object on the road independent of what it is exactly. A solution to this would be to use road segmentation which has to exclude segmenting the foreign object on the road creating a hole in the segmentation.</p>
+<h2 id="traffic-light-understanding">Traffic light understanding</h2>
+<p>Traffic light understanding is a straightforward problem to have. Detection algorithm trained on the COCO <span class="citation">(Lin et al. 2014)</span> dataset are already able to detect traffic lights. A difficult problem to solve is if there are multiple traffic lights visible to the camera, but even then, usually the closest one facing towards the vehicle is the one to follow. After determining the traffic light we have to read the current value, which is a simple image processing procedure. Optionally if this is not enough the algorithm can be made more robust by teaching a convnet to be able to determine the position of the three light circles.</p>
+<h3 id="traffic-officer-detection">Traffic officer detection</h3>
+<p>Detecting traffic officers could also be a useful part of the algorithm. There are new human pose estimation algorithms that could even help in understanding the gestures of an officer controlling the road.</p>
+<h2 id="unsupervised-learning-methods">Unsupervised learning methods</h2>
+<p>One of the most exciting improvement after all improvements above have been achieved is to research and implement Energy based models for self-driving cars, I recommend reading the paper “A tutorial on energy-based learning” <span class="citation">(Lecun et al. 1998)</span> by Yann LeCun et al.</p>
+<h1 id="chap:experimental">Experimental results</h1>
+<h2 id="yolo">YOLO</h2>
+<p>Initially I wanted to use YOLOv4 <span class="citation">(Bochkovskiy, Wang, and Liao 2020)</span> as the sole detection algorithm. YOLO is indeed realtime however it only provides 2D bounding boxes of the detections which is not enough when we need to mask the depth map with an instance segmentation.</p>
+<div class="figure">
+<img src="figures/yolo.jpg" alt="YOLOv4 under evaluation" width="566" />
+<p class="caption">YOLOv4 under evaluation<span data-label="fig:yolo"></span></p>
+</div>
+<h2 id="tracking-2">Tracking</h2>
+<p>As mentioned previously it is essential to track objects throught time. I tested Deep SORT <span class="citation">(Wojke and Bewley 2018)</span> algorithm which is an improvement over Simple Online and Realtime Tracking (SORT) <span class="citation">(Wojke, Bewley, and Paulus 2017)</span>. This building block ended upnot being in the detector however a following version will certainly need a tracker method.</p>
+<p>Deep SORT also works with Kalman filters and it needs detection instances to predict identites over time. Each bounding box is provided to the tracker which then creates a signature of the detection based on it’s pixel values and then calculates distances with other previously dtected object from a dictionary. A single counter is incremented for each new object that couldn’t be correlated with the previously detected objects.</p>
+<p>I evaluated test using YOLOv4 as the detector. Results of a test video can be seen in</p>
+<div class="figure">
+<img src="figures/deepsort.png" alt="Screenshot during a video being processed by the tracker." width="566" />
+<p class="caption">Screenshot during a video being processed by the tracker.<span data-label="fig:deepsort"></span></p>
+</div>
+<h2 id="lane-detection">Lane detection</h2>
+<p>When I experimented with lane detection I once tried to use a neural network for the task. Hough transform and sliding window technique could have been enough but I was curious of the accuracy on the simulator.</p>
+<p>“Towards End-to-End Lane Detection: an Instance Segmentation Approach” <span class="citation">(Caesar et al. 2019)</span> is a neural network that basically works as an edge detector that is directed towards the vanishing point in the image. Note the if the network had been trained it might have yielded better results! In the results of the original paper the results were better but the training data was specific to a certain road.</p>
+<div class="figure">
+<img src="figures/lanedet.png" alt="Lane detection performed well without training" width="566" />
+<p class="caption">Lane detection performed well without training<span data-label="fig:lanedet"></span></p>
+</div>
+<h2 id="orientation-estimation">Orientation estimation</h2>
+<p>As mentioned earlier as an essential imporvement over the current algorithm. I evaluated two approaches. The first approach is direct 3D bounding box detection the second is keypoint detection.</p>
+<h3 id="d-bounding-box-detection">3D Bounding box detection</h3>
+<p>Direct orientation estimation would be an important part of the detector as mentioned previously in improvements. Before implementing the detector I tried a CNN implementation<a href="#fn15" class="footnoteRef" id="fnref15"><sup>15</sup></a> based on the paper “3D Bounding Box Estimation Using Deep Learning and Geometry” <span class="citation">(Mousavian et al. 2016)</span>. This network works similarly to landmark detection but it adds geometric constraints to regress the orientation of the bounding boxes.</p>
+<div class="figure">
+<img src="figures/boundingbox.png" alt="Bounding box detection performed poorly. Note, that YOLOv3 missed the motorcycle, thus it is not predicted" width="566" />
+<p class="caption">Bounding box detection performed poorly. Note, that YOLOv3 missed the motorcycle, thus it is not predicted<span data-label="fig:boundingbox"></span></p>
+</div>
+<h3 id="keypoint-detection">Keypoint detection</h3>
+<p>After the previous approach failed next idea was that we could derive the orientation of the vehicles if we knew the position of it’s keypoints/landmarks in the images. After some research I found a research developed at Google AI “Discovery of Latent 3D Keypoints via End-to-end Geometric Reasoning” or KeypointNet <span class="citation">(Suwajanakorn et al. 2018)</span>.</p>
+<p>The netowrk performed poorly on CARLA vehicles. I tried with and without instance segmentation but the results seemed independent.</p>
+<div class="figure">
+<img src="figures/keypoints.jpg" alt="Keypoint detection on CARLA vehicles was inaccurate" width="566" />
+<p class="caption">Keypoint detection on CARLA vehicles was inaccurate<span data-label="fig:keypoints"></span></p>
+</div>
+<div class="figure">
+<img src="figures/keypointnet.png" alt="Expected results (from https://keypointnet.github.io/)" width="566" />
+<p class="caption">Expected results (from <a href="https://keypointnet.github.io/" class="uri">https://keypointnet.github.io/</a>)<span data-label="fig:keypointnet"></span></p>
+</div>
+<h1 id="chap:conclusion">Conclusion</h1>
+<p>The final scene understanding algorithm is not a system that can be applied by itself in a real scenaro, however it builds on the same basic ideas for scene understanding for cars. More importantly this thesis help me understand all the building block required for autonomous driving. The work of companies like Tesla and Waymo constitues many top researchers in the field. In Hungary this market is yet in early stages but companies like BOSCH or a smaller company like AIMotive are already present and working on the field with a good pace.</p>
+<p>Working on this thesis has been a unique experience because the whole field was new to me before diving into it. Usually thesis projects require that the student works on the same project for 4 semesters, however I had to take a different path. I did my previous research work in Web Applications and applied blockchain technology. Then I took an optional a deep learning class and it sparked my interest for AI even more. Taking this project was a risk and I had to learn about basic computer vision processing methods, algorithms, 3D vision, the camera model, convolutional neural networks and deep learning and even a little bit of game engines because of the simulator. But in the end I learned valueable things and I hope I can use this knowledge soon in an AI company perhaps one that works on autopilots.</p>
+<h1 id="acknowledgements" class="unnumbered"><span>Acknowledgements</span></h1>
+<p>Most importantly I want to thank my family for the all-time support. I would also like to thank my closest friends. I would like to thank my supervisor, PhD student, Márton Szemenyei for the help, trust, and the counseling I got during creating this project. I would also like to thank my previous supervisor Dr. Balázs Goldschmidt for his support in work I had done before starting this project.</p>
+<div id="refs" class="references">
+<div id="ref-Bochkovskiy2020YOLOv4OS">
+<p>Bochkovskiy, Alexey, Chien-Yao Wang, and Hong-Yuan Mark Liao. 2020. “YOLOv4: Optimal Speed and Accuracy of Object Detection.” <em>ArXiv</em> abs/2004.10934.</p>
+</div>
+<div id="ref-yolact-iccv2019">
+<p>Bolya, Daniel, Chong Zhou, Fanyi Xiao, and Yong Jae Lee. 2019a. “YOLACT: Real-time Instance Segmentation.” In <em>ICCV</em>.</p>
+</div>
+<div id="ref-yolact-plus-arxiv2019">
+<p>———. 2019b. “YOLACT++: Better Real-Time Instance Segmentation.”</p>
+</div>
+<div id="ref-DBLP:journals/corr/abs-1903-11027">
+<p>Caesar, Holger, Varun Bankiti, Alex H. Lang, Sourabh Vora, Venice Erin Liong, Qiang Xu, Anush Krishnan, Yu Pan, Giancarlo Baldan, and Oscar Beijbom. 2019. “NuScenes: A Multimodal Dataset for Autonomous Driving.” <em>CoRR</em> abs/1903.11027. <a href="http://arxiv.org/abs/1903.11027" class="uri">http://arxiv.org/abs/1903.11027</a>.</p>
+</div>
+<div id="ref-Cordts2016Cityscapes">
+<p>Cordts, Marius, Mohamed Omran, Sebastian Ramos, Timo Rehfeld, Markus Enzweiler, Rodrigo Benenson, Uwe Franke, Stefan Roth, and Bernt Schiele. 2016. “The Cityscapes Dataset for Semantic Urban Scene Understanding.” In <em>Proc. of the Ieee Conference on Computer Vision and Pattern Recognition (Cvpr)</em>.</p>
+</div>
+<div id="ref-Dosovitskiy17">
+<p>Dosovitskiy, Alexey, German Ros, Felipe Codevilla, Antonio Lopez, and Vladlen Koltun. 2017. “CARLA: An Open Urban Driving Simulator.” In <em>Proceedings of the 1st Annual Conference on Robot Learning</em>, 1–16.</p>
+</div>
+<div id="ref-DBLP:journals/corr/Girshick15">
+<p>Girshick, Ross B. 2015. “Fast R-CNN.” <em>CoRR</em> abs/1504.08083. <a href="http://arxiv.org/abs/1504.08083" class="uri">http://arxiv.org/abs/1504.08083</a>.</p>
+</div>
+<div id="ref-DBLP:journals/corr/GirshickDDM13">
+<p>Girshick, Ross B., Jeff Donahue, Trevor Darrell, and Jitendra Malik. 2013. “Rich Feature Hierarchies for Accurate Object Detection and Semantic Segmentation.” <em>CoRR</em> abs/1311.2524. <a href="http://arxiv.org/abs/1311.2524" class="uri">http://arxiv.org/abs/1311.2524</a>.</p>
+</div>
+<div id="ref-monodepth17">
+<p>Godard, Clément, Oisin Mac Aodha, and Gabriel J. Brostow. 2017. “Unsupervised Monocular Depth Estimation with Left-Right Consistency.” In <em>CVPR</em>.</p>
+</div>
+<div id="ref-5489515">
+<p>Hamzah, R. A., A. M. A. Hamid, and S. I. M. Salim. 2010. “The Solution of Stereo Correspondence Problem Using Block Matching Algorithm in Stereo Vision Mobile Robot.” In <em>2010 Second International Conference on Computer Research and Development</em>, 733–37.</p>
+</div>
+<div id="ref-DBLP:journals/corr/HeGDG17">
+<p>He, Kaiming, Georgia Gkioxari, Piotr Dollár, and Ross B. Girshick. 2017. “Mask R-CNN.” <em>CoRR</em> abs/1703.06870. <a href="http://arxiv.org/abs/1703.06870" class="uri">http://arxiv.org/abs/1703.06870</a>.</p>
+</div>
+<div id="ref-DBLP:journals/corr/HeZRS15">
+<p>He, Kaiming, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. 2015. “Deep Residual Learning for Image Recognition.” <em>CoRR</em> abs/1512.03385. <a href="http://arxiv.org/abs/1512.03385" class="uri">http://arxiv.org/abs/1512.03385</a>.</p>
+</div>
+<div id="ref-4359315">
+<p>Hirschmuller, H. 2008. “Stereo Processing by Semiglobal Matching and Mutual Information.” <em>IEEE Transactions on Pattern Analysis and Machine Intelligence</em> 30 (2): 328–41.</p>
+</div>
+<div id="ref-j3016b">
+<p>“J3016B: Taxonomy and Definitions for Terms Related to Driving Automation Systems for on-Road Motor Vehicles - SAE International.” 2020. Accessed May 28. <a href="https://www.sae.org/standards/content/j3016_201806/" class="uri">https://www.sae.org/standards/content/j3016_201806/</a>.</p>
+</div>
+<div id="ref-NIPS2012_4824">
+<p>Krizhevsky, Alex, Ilya Sutskever, and Geoffrey E Hinton. 2012. “ImageNet Classification with Deep Convolutional Neural Networks.” In <em>Advances in Neural Information Processing Systems 25</em>, edited by F. Pereira, C. J. C. Burges, L. Bottou, and K. Q. Weinberger, 1097–1105. Curran Associates, Inc. <a href="http://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf" class="uri">http://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf</a>.</p>
+</div>
+<div id="ref-Lecun98gradient-basedlearning">
+<p>Lecun, Yann, Léon Bottou, Yoshua Bengio, and Patrick Haffner. 1998. “Gradient-Based Learning Applied to Document Recognition.” In <em>Proceedings of the Ieee</em>, 2278–2324.</p>
+</div>
+<div id="ref-DBLP:journals/corr/LinMBHPRDZ14">
+<p>Lin, Tsung-Yi, Michael Maire, Serge J. Belongie, Lubomir D. Bourdev, Ross B. Girshick, James Hays, Pietro Perona, Deva Ramanan, Piotr Dollár, and C. Lawrence Zitnick. 2014. “Microsoft COCO: Common Objects in Context.” <em>CoRR</em> abs/1405.0312. <a href="http://arxiv.org/abs/1405.0312" class="uri">http://arxiv.org/abs/1405.0312</a>.</p>
+</div>
+<div id="ref-DBLP:journals/corr/LiuAESR15">
+<p>Liu, Wei, Dragomir Anguelov, Dumitru Erhan, Christian Szegedy, Scott E. Reed, Cheng-Yang Fu, and Alexander C. Berg. 2015. “SSD: Single Shot Multibox Detector.” <em>CoRR</em> abs/1512.02325. <a href="http://arxiv.org/abs/1512.02325" class="uri">http://arxiv.org/abs/1512.02325</a>.</p>
+</div>
+<div id="ref-DBLP:journals/corr/LongSD14">
+<p>Long, Jonathan, Evan Shelhamer, and Trevor Darrell. 2014. “Fully Convolutional Networks for Semantic Segmentation.” <em>CoRR</em> abs/1411.4038. <a href="http://arxiv.org/abs/1411.4038" class="uri">http://arxiv.org/abs/1411.4038</a>.</p>
+</div>
+<div id="ref-DBLP:journals/corr/MousavianAFK16">
+<p>Mousavian, Arsalan, Dragomir Anguelov, John Flynn, and Jana Kosecka. 2016. “3D Bounding Box Estimation Using Deep Learning and Geometry.” <em>CoRR</em> abs/1612.00496. <a href="http://arxiv.org/abs/1612.00496" class="uri">http://arxiv.org/abs/1612.00496</a>.</p>
+</div>
+<div id="ref-DBLP:journals/corr/SimonyanZ14a">
+<p>Simonyan, Karen, and Andrew Zisserman. 2014. “Very Deep Convolutional Networks for Large-Scale Image Recognition.” <em>CoRR</em> abs/1409.1556. <a href="http://arxiv.org/abs/1409.1556" class="uri">http://arxiv.org/abs/1409.1556</a>.</p>
+</div>
+<div id="ref-sun2019scalability">
+<p>Sun, Pei, Henrik Kretzschmar, Xerxes Dotiwalla, Aurelien Chouard, Vijaysai Patnaik, Paul Tsui, James Guo, et al. 2019. “Scalability in Perception for Autonomous Driving: Waymo Open Dataset.”</p>
+</div>
+<div id="ref-suwajanakorn_discovery_2018">
+<p>Suwajanakorn, Supasorn, Noah Snavely, Jonathan Tompson, and Mohammad Norouzi. 2018. “Discovery of Latent 3d Keypoints via End-to-End Geometric Reasoning.” <em>arXiv:1807.03146 [Cs, Stat]</em>, November. <a href="http://arxiv.org/abs/1807.03146" class="uri">http://arxiv.org/abs/1807.03146</a>.</p>
+</div>
+<div id="ref-DBLP:journals/corr/SzegedyLJSRAEVR14">
+<p>Szegedy, Christian, Wei Liu, Yangqing Jia, Pierre Sermanet, Scott E. Reed, Dragomir Anguelov, Dumitru Erhan, Vincent Vanhoucke, and Andrew Rabinovich. 2014. “Going Deeper with Convolutions.” <em>CoRR</em> abs/1409.4842. <a href="http://arxiv.org/abs/1409.4842" class="uri">http://arxiv.org/abs/1409.4842</a>.</p>
+</div>
+<div id="ref-Wojke2018deep">
+<p>Wojke, Nicolai, and Alex Bewley. 2018. “Deep Cosine Metric Learning for Person Re-Identification.” In <em>2018 Ieee Winter Conference on Applications of Computer Vision (Wacv)</em>, 748–56. IEEE. doi:<a href="https://doi.org/10.1109/WACV.2018.00087">10.1109/WACV.2018.00087</a>.</p>
+</div>
+<div id="ref-Wojke2017simple">
+<p>Wojke, Nicolai, Alex Bewley, and Dietrich Paulus. 2017. “Simple Online and Realtime Tracking with a Deep Association Metric.” In <em>2017 Ieee International Conference on Image Processing (Icip)</em>, 3645–9. IEEE. doi:<a href="https://doi.org/10.1109/ICIP.2017.8296962">10.1109/ICIP.2017.8296962</a>.</p>
+</div>
+<div id="ref-wu2019detectron2">
+<p>Wu, Yuxin, Alexander Kirillov, Francisco Massa, Wan-Yen Lo, and Ross Girshick. 2019. “Detectron2.” <a href="https://github.com/facebookresearch/detectron2" class="uri">https://github.com/facebookresearch/detectron2</a>.</p>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Luminar <a href="https://www.luminartech.com/" class="uri">https://www.luminartech.com/</a><a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>Stanford CV course CS231N <a href="https://cs231n.github.io/" class="uri">https://cs231n.github.io/</a><a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>Tesla Autonomy Day <a href="https://www.youtube.com/watch?v=Ucp0TTmvqOE" class="uri">https://www.youtube.com/watch?v=Ucp0TTmvqOE</a><a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>Robot Operating System (ROS) <a href="https://www.ros.org/" class="uri">https://www.ros.org/</a><a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p>Unreal Engine <a href="https://www.unrealengine.com/" class="uri">https://www.unrealengine.com/</a><a href="#fnref5">↩</a></p></li>
+<li id="fn6"><p>CARLA sensors reference <a href="https://carla.readthedocs.io/en/latest/ref_sensors/" class="uri">https://carla.readthedocs.io/en/latest/ref_sensors/</a><a href="#fnref6">↩</a></p></li>
+<li id="fn7"><p>Deepdrive Voyage <a href="https://deepdrive.voyage.auto/" class="uri">https://deepdrive.voyage.auto/</a><a href="#fnref7">↩</a></p></li>
+<li id="fn8"><p>NVIDIA Drive Constellation <a href="https://developer.nvidia.com/drive/drive-constellation" class="uri">https://developer.nvidia.com/drive/drive-constellation</a><a href="#fnref8">↩</a></p></li>
+<li id="fn9"><p>RFPro <a href="http://www.rfpro.com/" class="uri">http://www.rfpro.com/</a><a href="#fnref9">↩</a></p></li>
+<li id="fn10"><p>Titan X GPU <a href="https://www.nvidia.com/en-us/geforce/products/10series/titan-x-pascal/" class="uri">https://www.nvidia.com/en-us/geforce/products/10series/titan-x-pascal/</a><a href="#fnref10">↩</a></p></li>
+<li id="fn11"><p>Chessboard calibration in OpenCV <a href="https://docs.opencv.org/master/dc/dbb/tutorial_py_calibration.html" class="uri">https://docs.opencv.org/master/dc/dbb/tutorial_py_calibration.html</a><a href="#fnref11">↩</a></p></li>
+<li id="fn12"><p>ReactJs <a href="https://reactjs.org/" class="uri">https://reactjs.org/</a><a href="#fnref12">↩</a></p></li>
+<li id="fn13"><p>WorldView WebViz <a href="https://webviz.io/worldview/" class="uri">https://webviz.io/worldview/</a><a href="#fnref13">↩</a></p></li>
+<li id="fn14"><p>Yolact++ repository <a href="https://github.com/dbolya/yolact" class="uri">https://github.com/dbolya/yolact</a><a href="#fnref14">↩</a></p></li>
+<li id="fn15"><p>3D Bounding Box implementation <a href="https://github.com/skhadem/3D-BoundingBox" class="uri">https://github.com/skhadem/3D-BoundingBox</a><a href="#fnref15">↩</a></p></li>
+</ol>
+</div>
+</body>
+</html>

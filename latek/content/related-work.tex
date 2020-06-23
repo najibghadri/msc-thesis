@@ -20,6 +20,34 @@ RGB camera vision and sonar sensing with a radar facing forward. The sonar
 sensors provide depth information for the surrounding objects and the radar
 provides depth data for further distances.  
 
+The algorithms they use was not clear from the keynote, however I found two clips
+on the internet that claim to be the output of Tesla's detection system. Based
+on that and the keynote it is safe to assume that they integrate the following tasks.
+
+\begin{itemize}
+  \item Object detection and 3D bounding box detection
+  \item Lane detection and path estimation
+  \item Tracking
+  \item Possibly some kind of segmentation
+  \item Traffic sign detection and understanding
+\end{itemize}
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=150mm, keepaspectratio]{figures/teslaoutput.png}
+  \caption{A screenshot form a clip that shows Tesla Autopilot's perception
+  output \url{https://www.youtube.com/watch?v=fKXztwtXaGo}}
+  \label{fig:teslaoutput}
+\end{figure}
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=150mm, keepaspectratio]{figures/teslaoutput2.jpeg}
+  \caption{Another screenshot form a clip that shows Tesla Autopilot's perception
+  output \url{https://www.youtube.com/watch?v=_1MHGUC_BzQ&t=225s}}
+  \label{fig:teslaoutput}
+\end{figure}
+
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=150mm, keepaspectratio]{figures/teslasensors.png}
@@ -27,16 +55,5 @@ provides depth data for further distances.
   \label{fig:teslasensors}
 \end{figure}
 
-The algorithms they use was not clear from the keynote, but they clearly
-separate the following tasks.
-
-\begin{itemize}
-  \item Object detection
-  \item Lane detection and path estimation
-  \item Tracking
-  \item Possibly some kind of segmentation
-\end{itemize}
-
-With sensor fusion they achieve depth estimation and detection thus they are able to
 With sensor fusion they achieve depth estimation and detection thus they are able to
 reconstruct the scenes around the vehicle.

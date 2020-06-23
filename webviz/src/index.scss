@@ -7,6 +7,52 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.containter {
+  width: 50%;
+  margin: auto;
+  color: rgba(0, 0, 0, 0.9);
+  font-family: Georgia, serif;
+  font-size: 1.2rem;
+
+  &.title {
+    text-align: center;
+  }
+
+  .authors {
+    display: flex; 
+    justify-content: center;
+
+    div{
+      margin: 0 2rem;
+      h3{
+        margin: 0.5rem 0;
+      }
+    }
+
+  }
+  
+  p{
+    line-height: 1.5rem;
+  }
+
+  img{
+    width: 90%;
+  }
+
+  .figure {
+    text-align: center;
+  }
+
+  .caption {
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 1rem;
+    line-height: 1.5em;
+    margin-top: 0;
+  }
+}
+
+
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
